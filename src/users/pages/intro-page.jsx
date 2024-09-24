@@ -1,0 +1,32 @@
+import LogoWeb from '../assets/svg/icon_logoweb.svg';
+import HeaderHP from '../components/homepage/headerHP'
+import { Link } from "react-router-dom"; // Import Link từ react-router-dom
+
+function IntroPage(){
+    return(
+        <div>
+            <div>
+                <HeaderHP/>
+            </div>
+            <div className='flex justify-center'>
+                <div className='font-bold mt-20'>
+                    <h1 className='flex justify-center text-[40px]'>Chào mừng đến với siêu ứng dụng</h1>
+                    <div className='flex justify-center my-2'>
+                        <img src={LogoWeb} alt="logoWeb" />
+                    </div>
+                    <h1 className='flex justify-center text-[26px] mt-3 mb-1'>Ứng dụng giao đồ ăn tận giường cho bạn</h1>
+                    <h1 className='flex justify-center text-[22px]'>Chỉ cần vài cú nhấp chuột bạn sẽ có đồ ăn ngay</h1>
+
+                    <div className='mt-5 flex justify-center'>
+                        <Link 
+                            className='px-4 rounded-full py-1 border-2 border-[#ff7e00] text-[#ff7e00] hover:bg-[#ff7e00] hover:text-white'
+                            rel="stylesheet" to="/sign-in">
+                            Bắt đầu ngay
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+export default IntroPage
