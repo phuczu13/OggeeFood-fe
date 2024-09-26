@@ -10,7 +10,7 @@ function SignUp(){
                 <HeaderHP />
             </div>
             <div>
-                <div className="w-fit flex mr-auto ml-auto px-28 pb-20 pt-16 bg-white">
+                <div className="w-fit flex mr-auto ml-auto px-[130px] pb-[100px] pt-16 bg-white">
                     <FormSignUp />
                 </div>
             </div>

@@ -7,8 +7,10 @@ import SignUp from "./users/pages/sign-up";
 import HomePage from './users/pages/home-page';
 
 
-import SignInStore from "./stores/pages/signin-store";
 import SignUpStore from "./stores/pages/signup-store";
+import InforNewStore from "./stores/pages/infor-newstore";
+
+import SignInStore from "./stores/pages/signin-store";
 import HomeStore from "./stores/pages/home-store";
 
 
@@ -36,14 +38,18 @@ function App() {
           element:<HomePage></HomePage>
         },
         
+        {
+          path:'signup-store',
+          element:<SignUpStore></SignUpStore>
+        },
+        {
+          path:'infor-newstore',
+          element:<InforNewStore></InforNewStore>
+        },
 
         {
           path:'signin-store',
           element:<SignInStore></SignInStore>
-        },
-        {
-          path:'signup-store',
-          element:<SignUpStore></SignUpStore>
         },
         {
           path:'home-store',

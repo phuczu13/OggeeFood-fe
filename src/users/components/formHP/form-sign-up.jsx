@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom"; // Import Link từ react-router-dom
 
-
 function FormSignUp() {
     // State để lưu email, mật khẩu, nhập lại mật khẩu và thông báo lỗi
     const [email, setEmail] = useState('');
@@ -20,17 +19,16 @@ function FormSignUp() {
             setError('Mật khẩu không khớp');
         } else {
             setError(''); // Xóa lỗi nếu đã nhập đầy đủ và mật khẩu khớp
-            // Chuyển hướng sang trang "Home" sẽ được thực hiện bởi <Link>
         }
     };
 
     return (
-        <form className="">
-            <h1 className="font-bold flex justify-center mb-8">Đăng Ký</h1>
+        <form className="px-4 sm:px-0">
+            <h1 className="font-bold flex justify-center mb-8 text-[24px] sm:text-[32px]">Đăng Ký</h1>
             
-            <div>
+            <div className="flex justify-center">
                 <input
-                    className="py-3 px-5 w-[400px] border mb-4 hover:border-[#ff7e00] focus:border-[#ff7e00] focus:outline-none focus:border"
+                    className="py-3 px-5 w-full sm:w-[400px] border mb-4 hover:border-[#ff7e00] focus:border-[#ff7e00] focus:outline-none"
                     type="email"
                     placeholder="Nhập tài khoản Email"
                     value={email}
@@ -38,9 +36,9 @@ function FormSignUp() {
                 />
             </div>
             
-            <div>   
+            <div className="flex justify-center">   
                 <input
-                    className="py-3 px-5 w-full mb-4 border hover:border-[#ff7e00] focus:border-[#ff7e00] focus:outline-none focus:border"
+                    className="py-3 px-5 w-full sm:w-[400px] mb-4 border hover:border-[#ff7e00] focus:border-[#ff7e00] focus:outline-none"
                     type={showPassword ? "text" : "password"}
                     placeholder="Mật khẩu"
                     value={password}
@@ -48,9 +46,9 @@ function FormSignUp() {
                 />
             </div>
 
-            <div>   
+            <div className="flex justify-center">   
                 <input
-                    className="py-3 px-5 w-full border hover:border-[#ff7e00] focus:border-[#ff7e00] focus:outline-none focus:border"
+                    className="py-3 px-5 w-full sm:w-[400px] border hover:border-[#ff7e00] focus:border-[#ff7e00] focus:outline-none"
                     type={showPassword ? "text" : "password"}
                     placeholder="Nhập lại mật khẩu"
                     value={confirmPassword}
@@ -72,19 +70,19 @@ function FormSignUp() {
             </div>
 
             {/* Hiển thị thông báo lỗi */}
-            {error && <p className="text-red-500 mt-2">{error}</p>}
+            {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
 
-            <div className="mt-10 flex justify-center mb-3 ">
+            <div className="mt-10 flex justify-center mb-3">
                 <Link
                     to="/home-page" // Điều hướng đến trang home
-                    className=" hover:bg-white hover:text-[#ff7e00] hover:border-[#ff7e00] hover:border bg-[#ff7e00] w-full border border-[#ff7c00] rounded-full text-center text-white py-3 px-10 mt-3 inline-block"
+                    className="hover:bg-white hover:text-[#ff7e00] hover:border-[#ff7e00] hover:border bg-[#ff7e00] w-full sm:w-[400px] border border-[#ff7c00] rounded-full text-center text-white py-3 px-10 mt-3 inline-block"
                     onClick={handleLoginClick}
                 >
                     Đăng Ký
                 </Link>
             </div>
-            <div className='flex justify-end text-[14px]'>
-                <div>Bạn đã có tài khoản? <Link to='/sign-in' className="text-[#ff7e00]">Đăng nhập</Link></div>
+            <div className="flex justify-end text-[14px]">
+                <div>Bạn đã có tài khoản? <Link to="/sign-in" className="text-[#ff7e00]">Đăng nhập</Link></div>
             </div>
         </form>
     );

@@ -10,7 +10,7 @@ function SignUpStore(){
                 <HeaderStore />
             </div>
             <div>
-                <div className="w-fit flex mr-auto ml-auto px-28 pb-20 pt-16 bg-white">
+                <div className="w-fit flex mr-auto ml-auto px-24 pb-14 pt-16 bg-white">
                     <FormSignUpStore />
                 </div>
             </div>
