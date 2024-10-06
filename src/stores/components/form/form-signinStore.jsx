@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import IconLoginUser from '../assets/svg/icon_loginuser.svg';
-import IconLoginUserOrange from '../assets/svg/icon_loginuser_Orange.svg';
+import IconLoginUser from '../../assets/svg/icon_loginuser.svg';
+import IconLoginUserOrange from '../../assets/svg/icon_loginuser_Orange.svg';
 
 function FormSignInStore() {
     const [email, setEmail] = useState('');

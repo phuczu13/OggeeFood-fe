@@ -24,7 +24,7 @@ function FormSignIn() {
     return (
         <div>
             <form className="px-4 sm:px-0">
-                <h1 className="font-bold flex justify-center mb-8 text-[24px] sm:text-[32px]">Đăng Nhập</h1>
+                <h1 className="font-bold flex justify-center mb-8 text-[20px] sm:text-[24px]">Đăng Nhập</h1>
                 
                 {/* Input Email */}
                 <div className="flex justify-center">

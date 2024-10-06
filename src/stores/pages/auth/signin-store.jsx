@@ -1,16 +1,16 @@
 import React from "react";
-import HeaderStore from '../components/headerStore';
-import FormSignInStore from '../components/form-signinStore';
+import HeaderStore from '../../components/header/login-headerStore';
+import FormSignInStore from '../../components/form/form-signinStore';
 
 function SignInStore() {
 
     return (
-        <div className='bg-[#f1f1f1] w-full h-screen'>
+        <div className='bg-[#f1f1f1] w-full h-screen pb-10'>
             <div>
                 <HeaderStore />
             </div>
             <div>
-                <div className="w-fit flex mr-auto ml-auto px-24 pb-10 pt-16 bg-white">
+            <div className="w-fit flex mr-auto ml-auto px-20 pb-1 pt-10 bg-white">
                     <FormSignInStore />
                 </div>
             </div>

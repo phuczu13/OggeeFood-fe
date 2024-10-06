@@ -24,7 +24,7 @@ function FormSignUp() {
 
     return (
         <form className="px-4 sm:px-0">
-            <h1 className="font-bold flex justify-center mb-8 text-[24px] sm:text-[32px]">Đăng Ký</h1>
+            <h1 className="font-bold flex justify-center mb-8 text-[22px] sm:text-[24px]">Đăng Ký</h1>
             
             <div className="flex justify-center">
                 <input
