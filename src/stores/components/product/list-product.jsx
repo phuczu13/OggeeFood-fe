@@ -54,6 +54,14 @@ function ListProduct() {
 
     // Handle form submission
     const handleSave = () => {
+        const { name, description, price, image } = currentProduct;
+    
+        // Kiểm tra nếu bất kỳ trường nào trống
+        if (!name || !description || !price || !image) {
+            toast.error('Vui lòng điền đầy đủ thông tin món!', { duration: 2000 });
+            return; // Dừng quá trình nếu có trường bị trống
+        }
+    
         if (isEditing) {
             setProducts(
                 products.map((item) =>
@@ -67,6 +75,7 @@ function ListProduct() {
         }
         setIsModalOpen(false);
     };
+    
 
     const handleDelete = () => {
         setProducts(products.filter((item) => item.id !== productToDelete.id));
@@ -135,9 +144,12 @@ function ListProduct() {
                     className="fixed inset-0 flex items-center justify-center modal-background bg-black bg-opacity-50"
                     onClick={closeModalOnClickOutside}
                 >
-                    <div className="bg-white p-6 rounded-lg w-1/3" onClick={(e) => e.stopPropagation()}>
-                        <h2 className="text-xl font-semibold mb-4">
-                            {isEditing ? "Cập nhật món" : "Thêm món"}
+                    <div
+                        className="bg-white p-6 rounded-lg w-full sm:w-2/3 md:w-1/2 lg:w-1/3 max-h-[90vh] overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <h2 className="text-xl font-semibold mb-4 text-center">
+                            {isEditing ? "Cập nhật món" : "Thêm món mới"}
                         </h2>
                         <div className="mb-4">
                             <input
@@ -186,16 +198,16 @@ function ListProduct() {
                                 className="w-full border px-3 py-2 rounded-md focus:outline-none focus:border-[#ff7e00]"
                             />
                         </div>
-                        <div className="flex gap-3">
+                        <div className="flex flex-col sm:flex-row gap-3">
                             <button
                                 onClick={handleSave}
-                                className="bg-[#ff7e00] hover:bg-[#ef4c2b] text-white px-4 py-2 rounded-md"
+                                className="w-full sm:w-auto bg-[#ff7e00] hover:bg-[#ef4c2b] text-white px-4 py-2 rounded-md"
                             >
                                 {isEditing ? "Cập nhật" : "Thêm món"}
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md"
+                                className="w-full sm:w-auto bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md"
                             >
                                 Hủy
                             </button>
@@ -203,6 +215,7 @@ function ListProduct() {
                     </div>
                 </div>
             )}
+
 
             {isDeleteModalOpen && (
                 <div
@@ -213,19 +226,24 @@ function ListProduct() {
                         }
                     }}
                 >
-                    <div className="bg-white p-6 rounded-lg w-1/4" onClick={(e) => e.stopPropagation()}>
+                    <div
+                        className="bg-white p-6 rounded-lg w-full sm:w-2/3 md:w-1/2 lg:w-1/4 max-h-[90vh] overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <h2 className="text-xl font-semibold mb-3 text-center">Xác nhận xóa món</h2>
-                        <p className="text-center">Bạn có chắc chắn muốn xóa món <strong>{productToDelete?.name}</strong>?</p>
-                        <div className="flex gap-3 mt-6 justify-center">
+                        <p className="text-center">
+                            Bạn có chắc chắn muốn xóa món <strong>{productToDelete?.name}</strong>?
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
                             <button
                                 onClick={handleDelete}  
-                                className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md"
+                                className="w-full sm:w-auto bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md"
                             >
                                 Xoá
                             </button>
                             <button
                                 onClick={() => setIsDeleteModalOpen(false)}
-                                className="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
+                                className="w-full sm:w-auto bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
                             >
                                 Hủy
                             </button>
@@ -233,6 +251,7 @@ function ListProduct() {
                     </div>
                 </div>
             )}
+
 
             {isDeleteLastItemModalOpen && ( // New alert modal for last item deletion
                 <div
@@ -243,13 +262,20 @@ function ListProduct() {
                         }
                     }}
                 >
-                    <div className="bg-white p-6 rounded-lg w-1/4" onClick={(e) => e.stopPropagation()}>
+                    <div
+                        className="bg-white p-6 rounded-lg w-full sm:w-2/3 md:w-1/2 lg:w-1/4 max-h-[90vh] overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <h2 className="text-xl font-semibold mb-3 text-center">Cảnh báo</h2>
-                        <p className="text-center">Bạn không thể xóa món ăn cuối cùng. Vui lòng thêm ít nhất một món ăn khác trước khi xóa.</p>
+                        <p className="text-center">
+                            Bạn không thể xóa món ăn cuối cùng. 
+                        </p>
+                        <p className="text-center">
+                            Vui lòng thêm ít nhất một món ăn khác trước khi xóa.</p>
                         <div className="flex gap-3 mt-6 justify-center">
                             <button
                                 onClick={() => setIsDeleteLastItemModalOpen(false)} // Close the alert modal
-                                className="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
+                                className="w-full sm:w-auto bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
                             >
                                 Đóng
                             </button>
@@ -257,6 +283,7 @@ function ListProduct() {
                     </div>
                 </div>
             )}
+
 
             <Toaster position="top-right"/>
         </>

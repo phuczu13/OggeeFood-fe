@@ -19,7 +19,8 @@ import InforStore from './stores/pages/home/infor-store';
 
 
 import SignUpStore from './stores/pages/auth/signup-store'
-import InforNewForm from './stores/pages/auth/infor-newstore';
+import InforNewStore from './stores/pages/auth/infor-newstore'
+
 
 
 
@@ -45,7 +46,7 @@ function App() {
             < Route path='infor-store' element={<InforStore/>} />
 
             < Route path='signup-store' element={<SignUpStore/>} />
-            < Route path='infor-newform' element={<InforNewForm/>} />
+            < Route path='infor-newstore' element={<InforNewStore/>} />
 
           </Routes>
         </Router>

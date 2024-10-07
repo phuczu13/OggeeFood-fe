@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Toaster, toast } from 'react-hot-toast'; // Import Toaster and toast
 import IconRating from '../../assets/svg/icon_rating.svg';
 
 function ListTopping() {
@@ -25,6 +26,7 @@ function ListTopping() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDeleteLastItemModalOpen, setIsDeleteLastItemModalOpen] = useState(false); // New state for alert modal
     const [currentProduct, setCurrentProduct] = useState(null);
     const [productToDelete, setProductToDelete] = useState(null);
 
@@ -45,29 +47,41 @@ function ListTopping() {
             setProductToDelete(product);
             setIsDeleteModalOpen(true);
         } else {
-            alert("Không thể xóa, cần ít nhất 1 món ăn trong danh sách.");
+            setProductToDelete(product);
+            setIsDeleteLastItemModalOpen(true); // Open the alert modal instead
         }
     };
 
+    // Handle form submission
     const handleSave = () => {
+        const { name, description, price, image } = currentProduct;
+    
+        // Kiểm tra nếu bất kỳ trường nào trống
+        if (!name || !description || !price || !image) {
+            toast.error('Vui lòng điền đầy đủ thông tin Topping!', { duration: 2000 });
+            return; // Dừng quá trình nếu có trường bị trống
+        }
+    
         if (isEditing) {
             setProducts(
                 products.map((item) =>
                     item.id === currentProduct.id ? currentProduct : item
                 )
             );
+            toast.success('Cập nhật Topping thành công!', { duration: 2000 }); // Toast for edit success
         } else {
-            setProducts([
-                ...products,
-                { ...currentProduct, id: products.length + 1 },
-            ]);
+            setProducts([ ...products, { ...currentProduct, id: products.length + 1 }]);
+            toast.success('Thêm Topping thành công!', { duration: 2000 }); // Toast for add success
         }
         setIsModalOpen(false);
     };
+    
 
     const handleDelete = () => {
         setProducts(products.filter((item) => item.id !== productToDelete.id));
+        toast.success('Xóa Topping thành công!', { duration: 2000 }); // Toast for delete success
         setIsDeleteModalOpen(false);
+        setIsDeleteLastItemModalOpen(false); // Close alert modal after delete
     };
 
     const closeModalOnClickOutside = (e) => {
@@ -85,7 +99,7 @@ function ListTopping() {
                         onClick={openAddModal}
                         className="flex items-center bg-[#ff7e00] hover:bg-[#ef4c2b] text-white font-medium px-4 py-2 rounded-md"
                     >
-                        <span>Thêm topping</span>
+                        <span>Thêm Topping</span>
                     </button>
                 </div>
 
@@ -125,19 +139,21 @@ function ListTopping() {
                 </div>
             </div>
 
-            {/* Add/Edit Modal */}
             {isModalOpen && (
                 <div
                     className="fixed inset-0 flex items-center justify-center modal-background bg-black bg-opacity-50"
                     onClick={closeModalOnClickOutside}
                 >
-                    <div className="bg-white p-6 rounded-lg w-1/3" onClick={(e) => e.stopPropagation()}>
-                        <h2 className="text-xl font-semibold mb-4">
-                            {isEditing ? "Cập nhật topping" : "Thêm topping"}
+                    <div
+                        className="bg-white p-6 rounded-lg w-full sm:w-2/3 md:w-1/2 lg:w-1/3 max-h-[90vh] overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <h2 className="text-xl font-semibold mb-4 text-center">
+                            {isEditing ? "Cập nhật Topping" : "Thêm Topping mới"}
                         </h2>
                         <div className="mb-4">
                             <input
-                                placeholder="Tên topping"
+                                placeholder="Tên Topping"
                                 type="text"
                                 value={currentProduct.name}
                                 onChange={(e) =>
@@ -182,16 +198,16 @@ function ListTopping() {
                                 className="w-full border px-3 py-2 rounded-md focus:outline-none focus:border-[#ff7e00]"
                             />
                         </div>
-                        <div className="flex gap-3">
+                        <div className="flex flex-col sm:flex-row gap-3">
                             <button
                                 onClick={handleSave}
-                                className="bg-[#ff7e00] hover:bg-[#ef4c2b] text-white px-4 py-2 rounded-md"
+                                className="w-full sm:w-auto bg-[#ff7e00] hover:bg-[#ef4c2b] text-white px-4 py-2 rounded-md"
                             >
-                                {isEditing ? "Cập nhật" : "Thêm topping"}
+                                {isEditing ? "Cập nhật" : "Thêm Topping"}
                             </button>
                             <button
                                 onClick={() => setIsModalOpen(false)}
-                                className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md"
+                                className="w-full sm:w-auto bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md"
                             >
                                 Hủy
                             </button>
@@ -200,7 +216,7 @@ function ListTopping() {
                 </div>
             )}
 
-            {/* Delete Confirmation Modal */}
+
             {isDeleteModalOpen && (
                 <div
                     className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 modal-background"
@@ -210,19 +226,24 @@ function ListTopping() {
                         }
                     }}
                 >
-                    <div className="bg-white p-6 rounded-lg w-1/4" onClick={(e) => e.stopPropagation()}>
+                    <div
+                        className="bg-white p-6 rounded-lg w-full sm:w-2/3 md:w-1/2 lg:w-1/4 max-h-[90vh] overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <h2 className="text-xl font-semibold mb-3 text-center">Xác nhận xóa Topping</h2>
-                        <p className="text-center">Bạn có chắc chắn muốn xóa Topping <strong>{productToDelete?.name}</strong>?</p>
-                        <div className="flex gap-3 mt-6 justify-center">
+                        <p className="text-center">
+                            Bạn có chắc chắn muốn xóa Topping <strong>{productToDelete?.name}</strong>?
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
                             <button
                                 onClick={handleDelete}  
-                                className="bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md"
+                                className="w-full sm:w-auto bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md"
                             >
                                 Xoá
                             </button>
                             <button
                                 onClick={() => setIsDeleteModalOpen(false)}
-                                className="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
+                                className="w-full sm:w-auto bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
                             >
                                 Hủy
                             </button>
@@ -230,6 +251,41 @@ function ListTopping() {
                     </div>
                 </div>
             )}
+
+
+            {isDeleteLastItemModalOpen && ( // New alert modal for last item deletion
+                <div
+                    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 modal-background"
+                    onClick={(e) => {
+                        if (e.target.className.includes('modal-background')) {
+                            setIsDeleteLastItemModalOpen(false);  
+                        }
+                    }}
+                >
+                    <div
+                        className="bg-white p-6 rounded-lg w-full sm:w-2/3 md:w-1/2 lg:w-1/4 max-h-[90vh] overflow-y-auto"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <h2 className="text-xl font-semibold mb-3 text-center">Cảnh báo</h2>
+                        <p className="text-center">
+                            Bạn không thể xóa Topping cuối cùng. 
+                        </p>
+                        <p className="text-center">
+                            Vui lòng thêm ít nhất một Topping khác trước khi xóa.</p>
+                        <div className="flex gap-3 mt-6 justify-center">
+                            <button
+                                onClick={() => setIsDeleteLastItemModalOpen(false)} // Close the alert modal
+                                className="w-full sm:w-auto bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
+                            >
+                                Đóng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
+            <Toaster position="top-right"/>
         </>
     );
 }

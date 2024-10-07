@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import LogoStore from '../../../assets/svg/icon_logoStore.svg';
 import IconLogout from '../../../assets/svg/icon_Logout.svg';
+import { Toaster, toast } from 'react-hot-toast';
 
 function HeaderHS1() {
     const navigate = useNavigate();
@@ -11,10 +12,14 @@ function HeaderHS1() {
         setIsModalOpen(true);
     };
 
+    
     const confirmLogout = () => {
         localStorage.removeItem('authToken');
+        localStorage.setItem('loggedOut', 'true'); // Đặt cờ trạng thái đăng xuất
         navigate('/signin-store');
     };
+     
+    
 
     const cancelLogout = () => {
         setIsModalOpen(false);
@@ -85,6 +90,7 @@ function HeaderHS1() {
                     </div>
                 </div>
             )}
+            <Toaster position='top-right' />
         </>
     );
 }
