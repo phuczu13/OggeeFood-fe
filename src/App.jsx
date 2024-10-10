@@ -4,10 +4,13 @@ import { BrowserRouter as Router,Routes,Route  } from 'react-router-dom'
 import { StoreProvider } from './stores/pages/StoreContext';
 
 import IntroPage from './users/pages/intro-page'
-import SignIn from './users/pages/sign-in';
-import HomePage from './users/pages/home-page';
+import SignIn from './users/pages/auth/sign-in';
+import VerifyForm from './users/pages/auth/verify-form';
+import HomePage from './users/pages/home/home-page';
+import DetailStore from './users/pages/home/detail-store';
 
-import SignUp from './users/pages/sign-up';
+
+import SignUp from './users/pages/auth/sign-up';
 
 
 import SignInStore from './stores/pages/auth/signin-store'
@@ -34,7 +37,9 @@ function App() {
           <Routes>
             < Route path='/' element={<IntroPage/>} />
             < Route path='sign-in' element={<SignIn/>} />
+            < Route path='verify-form' element={<VerifyForm/>} />
             < Route path='home-page' element={<HomePage/>} />
+            < Route path='detail-store' element={<DetailStore/>} />
 
             < Route path='sign-up' element={<SignUp/>} />
 

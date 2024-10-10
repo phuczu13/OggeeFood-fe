@@ -1,6 +1,6 @@
 import React from "react";
-import HeaderHP from "../components/homepage/headerHP";
-import FormSignIn from "../components/formHP/form-sign-in";
+import HeaderHP from "../../components/homepage/headerHP";
+import FormSignIn from "../../components/formHP/form-sign-in";
 
 function SignIn() {
 

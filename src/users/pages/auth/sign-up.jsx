@@ -1,6 +1,6 @@
 import React from "react";
-import HeaderHP from "../components/homepage/headerHP";
-import FormSignUp from "../components/formHP/form-sign-up";
+import HeaderHP from "../../components/homepage/headerHP";
+import FormSignUp from "../../components/formHP/form-sign-up";
 
 function SignUp(){
 

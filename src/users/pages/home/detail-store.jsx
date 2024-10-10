@@ -1,12 +1,12 @@
 import React from "react";
-import HeaderHP from "../components/homepage/headerHP";
-import BannerImage from '../../stores/assets/png/banner_bg.jpg';
-import IconAvatar from '../../stores/assets/svg/banner_icon.svg';
-import IconGift from '../../stores/assets/svg/icon_gift.svg'
-import IconReWard from '../../stores/assets/svg/icon_reward.svg'
-import IconHotline from '../../stores/assets/svg/icon_hotline.svg'
+import HeaderHP from "../../components/homepage/headerHP";
+import BannerImage from '../../../stores/assets/png/banner_bg.jpg';
+import IconAvatar from '../../../stores/assets/svg/banner_icon.svg';
+import IconGift from '../../../stores/assets/svg/icon_gift.svg'
+import IconReWard from '../../../stores/assets/svg/icon_reward.svg'
+import IconHotline from '../../../stores/assets/svg/icon_hotline.svg'
 
-function HomePage() {
+function DetailStore() {
     return (
         <div className='bg-[#f1f1f1] w-full h-screen'>
             <div>
@@ -66,4 +66,4 @@ function HomePage() {
     );
 }
 
-export default HomePage;
+export default DetailStore;
