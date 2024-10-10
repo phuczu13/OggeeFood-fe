@@ -54,7 +54,7 @@ function FormSignInStore() {
 
                 <div className="mt-10 flex justify-center mb-3">
                     <Link
-                        to="/home-store"
+                        to="/verify-store"
                         className="hover:bg-white hover:text-[#ff7e00] hover:border-[#ff7e00] hover:border bg-[#ff7e00] w-full sm:w-[400px] border border-[#ff7c00] rounded-full text-center text-white py-3 px-10 mt-3 inline-block"
                         onClick={handleLoginClick}
                     >

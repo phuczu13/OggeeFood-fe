@@ -23,6 +23,7 @@ import InforStore from './stores/pages/home/infor-store';
 
 import SignUpStore from './stores/pages/auth/signup-store'
 import InforNewStore from './stores/pages/auth/infor-newstore'
+import VerifyStore from './stores/pages/auth/verify-store';
 
 
 
@@ -42,8 +43,10 @@ function App() {
             < Route path='detail-store' element={<DetailStore/>} />
 
             < Route path='sign-up' element={<SignUp/>} />
+            < Route path='verify-form' element={<VerifyForm/>} />
 
             < Route path='signin-store' element={<SignInStore/>} />
+            < Route path='verify-store' element={<VerifyStore/>} />
             < Route path='home-store' element={<HomeStore/>} />
             < Route path='topping-store' element={<ToppingStore/>} />
             < Route path='order-store' element={<OrderStore/>} />
@@ -51,6 +54,7 @@ function App() {
             < Route path='infor-store' element={<InforStore/>} />
 
             < Route path='signup-store' element={<SignUpStore/>} />
+            < Route path='verify-store' element={<VerifyStore/>} />
             < Route path='infor-newstore' element={<InforNewStore/>} />
 
           </Routes>

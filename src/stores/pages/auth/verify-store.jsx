@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import LogoFood from '../../assets/svg/icon_logoweb.svg';
+import LogoStore from '../../assets/svg/icon_logoStore.svg';
 import { useNavigate } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
 
-function VerifyForm() {
+function VerifyStore() {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [isLoading, setIsLoading] = useState(false); // State để điều khiển spinner
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ function VerifyForm() {
 
       setTimeout(() => {
         setIsLoading(false); // Tắt spinner sau 3 giây
-        navigate('/home-page');
+        navigate('/home-store');
       }, 3000); // 3000ms = 3 giây
     } else {
       toast.error("Mã OTP không hợp lệ");
@@ -39,7 +39,7 @@ function VerifyForm() {
       <div className='flex text-center shadow-lg'>
         <div className='p-20 w-fit '>
           <div className='flex justify-center'>
-            <img src={LogoFood} alt="logoFood" />
+            <img src={LogoStore} className='w-[222px]' alt="logoStore" />
           </div>
           <h1 className='font-bold text-[26px] mt-10'>Yêu cầu xác thực</h1>
           <p className='font-medium mt-3'>Vui lòng nhập mã mà chúng tôi đã</p>
@@ -102,4 +102,4 @@ function VerifyForm() {
   );
 }
 
-export default VerifyForm;
+export default VerifyStore;
