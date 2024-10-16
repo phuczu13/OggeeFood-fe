@@ -7,7 +7,12 @@ import IntroPage from './users/pages/intro-page'
 import SignIn from './users/pages/auth/sign-in';
 import VerifyForm from './users/pages/auth/verify-form';
 import HomePage from './users/pages/home/home-page';
-import DetailStore from './users/pages/home/detail-store';
+import Eatery from './users/pages/eatery/eatery';
+import Cart from './users/pages/cart/cart';
+
+
+
+import DishDetails from './users/pages/home/dish-details';
 
 
 import SignUp from './users/pages/auth/sign-up';
@@ -40,7 +45,11 @@ function App() {
             < Route path='sign-in' element={<SignIn/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
             < Route path='home-page' element={<HomePage/>} />
-            < Route path='detail-store' element={<DetailStore/>} />
+            < Route path='eatery' element={<Eatery/>} />
+            < Route path='cart' element={<Cart/>} />
+
+
+            < Route path='dish-details' element={<DishDetails/>} />
 
             < Route path='sign-up' element={<SignUp/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
