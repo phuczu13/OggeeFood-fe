@@ -4,7 +4,7 @@ import { Toaster, toast } from 'react-hot-toast';
 import axios from 'axios';
 import LogoFood from '../../assets/svg/icon_logoweb.svg';
 
-function VerifyForm() {
+function VerifyLoginForm() {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ function VerifyForm() {
     if (otpCode.length === 6) {
       setIsLoading(true);
       try {
-        const response = await axios.post('http://localhost:3002/api/user/verify-otp', { email, otp: otpCode });
+        const response = await axios.post('http://localhost:3002/api/user/verify-login-otp', { email, otp: otpCode });
 
         if (response.data.success) {
           toast.success("Xác minh thành công");
@@ -97,4 +97,4 @@ function VerifyForm() {
   );
 }
 
-export default VerifyForm;
+export default VerifyLoginForm;

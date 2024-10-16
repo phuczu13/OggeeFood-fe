@@ -6,6 +6,7 @@ import { StoreProvider } from './stores/pages/StoreContext';
 import IntroPage from './users/pages/intro-page'
 import SignIn from './users/pages/auth/sign-in';
 import VerifyForm from './users/pages/auth/verify-form';
+import VerifyLoginForm from './users/pages/auth/verify-login-form';
 import HomePage from './users/pages/home/home-page';
 import DetailStore from './users/pages/home/detail-store';
 
@@ -23,7 +24,7 @@ import InforStore from './stores/pages/home/infor-store';
 
 import SignUpStore from './stores/pages/auth/signup-store'
 import InforNewStore from './stores/pages/auth/infor-newstore'
-import VerifyStore from './stores/pages/auth/verify-store';
+import VerifyStoreLogin from './stores/pages/auth/verify-store-login';
 
 
 
@@ -44,9 +45,11 @@ function App() {
 
             < Route path='sign-up' element={<SignUp/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
+            < Route path='verify-form' element={<VerifyForm/>} />
+
 
             < Route path='signin-store' element={<SignInStore/>} />
-            < Route path='verify-store' element={<VerifyStore/>} />
+            < Route path='verify-store' element={<VerifyStoreLogin/>} />
             < Route path='home-store' element={<HomeStore/>} />
             < Route path='topping-store' element={<ToppingStore/>} />
             < Route path='order-store' element={<OrderStore/>} />
@@ -54,7 +57,7 @@ function App() {
             < Route path='infor-store' element={<InforStore/>} />
 
             < Route path='signup-store' element={<SignUpStore/>} />
-            < Route path='verify-store' element={<VerifyStore/>} />
+            {/* < Route path='verify-store' element={<VerifyStore/>} /> */}
             < Route path='infor-newstore' element={<InforNewStore/>} />
 
           </Routes>

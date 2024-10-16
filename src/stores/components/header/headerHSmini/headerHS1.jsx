@@ -3,8 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import LogoStore from '../../../assets/svg/icon_logoStore.svg';
 import IconLogout from '../../../assets/svg/icon_Logout.svg';
 import { Toaster, toast } from 'react-hot-toast';
+import { useLocation } from "react-router-dom";
+
 
 function HeaderHS1() {
+    const location = useLocation();
+    const storeId = location.state?.storeId;
+    console.log("storeId is "+storeId)
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -35,26 +40,24 @@ function HeaderHS1() {
         <>
             <div className="px-4 sm:px-[150px] py-[15px] border-b bg-white">
                 <div className="flex flex-col sm:flex-row justify-between items-center">
-                    <Link to='/home-store'>
+                    <Link to='/home-store' state={{ storeId }}>
                         <img src={LogoStore} className="w-[120px] sm:w-[200px] mb-2 sm:mb-0" alt="Logo Web" />  
                     </Link>
                     <div className="flex flex-col sm:flex-row gap-4 sm:gap-12 items-center">
                         <div className='flex flex-col sm:flex-row gap-4 sm:gap-8'>
-                            <Link to='/home-store' className='text-[#ef4c2b] font-semibold border-b-2 border-[#ef4c2b] rounded-sm'>
-                                Món ăn
-                            </Link>
-                            <Link className='hover:text-[#ef4c2b] font-semibold' to='/topping-store'>
-                                Topping
-                            </Link>
-                            <Link className='hover:text-[#ef4c2b] font-semibold' to='/order-store'>
-                                Đơn hàng
-                            </Link>
-                            <Link className='hover:text-[#ef4c2b] font-semibold' to='/revenue-store'>
-                                Doanh số
-                            </Link>
-                            <Link className='hover:text-[#ef4c2b] font-semibold' to='/infor-store'>
-                                Thông tin cửa hàng
-                            </Link>
+                        <Link to='/topping-store' className='hover:text-[#ef4c2b] font-semibold' state={{ storeId }}>     
+                            Topping
+                        </Link>
+                        <Link className='hover:text-[#ef4c2b] font-semibold' to='/order-store' state={{ storeId }}>
+                            Đơn hàng
+                        </Link>
+                        <Link className='hover:text-[#ef4c2b] font-semibold' to='/revenue-store' state={{ storeId }}>
+                            Doanh số
+                        </Link>
+                        <Link className='hover:text-[#ef4c2b] font-semibold' to='/infor-store' state={{ storeId }}>
+                            Thông tin cửa hàng
+                        </Link>
+
                         </div>
                         <div className='mt-2 sm:mt-0'>
                             <button 

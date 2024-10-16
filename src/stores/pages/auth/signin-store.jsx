@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
 import HeaderStore from '../../components/header/login-headerStore';
 import FormSignInStore from '../../components/form/form-signinStore';
+const storeId = location.state?.storeId;
 
 function SignInStore() {
     useEffect(() => {

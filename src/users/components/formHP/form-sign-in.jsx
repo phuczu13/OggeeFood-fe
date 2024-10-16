@@ -1,29 +1,44 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom"; // Import Link từ react-router-dom
+import { Link, useNavigate } from "react-router-dom"; // Import useNavigate từ react-router-dom
+import axios from 'axios'; // Import Axios
 import IconLoginStore from '../../assets/svg/icon_loginstore.svg';
 import IconLoginStoreWhite from '../../assets/svg/icon_loginstorewhite.svg';
 
 function FormSignIn() {
-    // State để lưu email, mật khẩu và thông báo lỗi
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [icon, setIcon] = useState(IconLoginStoreWhite);
+    const navigate = useNavigate(); // Khởi tạo useNavigate
 
-    // Xử lý khi nhấn nút Đăng nhập
-    const handleLoginClick = (e) => {
+    const handleLoginClick = async (e) => {
+        e.preventDefault(); // Ngăn điều hướng mặc định
+
         if (!email || !password) {
-            e.preventDefault(); // Ngăn điều hướng nếu chưa nhập đủ thông tin
             setError('Vui lòng nhập đầy đủ email và mật khẩu');
-        } else {
-            setError(''); // Xóa lỗi nếu đã nhập đầy đủ
-            // Chuyển hướng sang trang "Home" sẽ được thực hiện bởi <Link>
+            return;
+        }
+
+        setError(''); // Xóa lỗi nếu đã nhập đầy đủ
+
+        try {
+            // Gửi yêu cầu đăng nhập
+            const response = await axios.post('http://localhost:3002/api/user/login', { email, password });
+            if (response.data.success) {
+                // Nếu thành công, điều hướng tới trang xác thực OTP
+                navigate('/verify-login-form', { state: { email } });
+            } else {
+                setError(response.data.message); // Hiển thị thông báo lỗi
+            }
+        } catch (error) {
+            setError('Có lỗi xảy ra. Vui lòng thử lại sau.');
+            console.error('Error during login:', error);
         }
     };
 
     return (
         <div>
-            <form className="px-4 sm:px-0">
+            <form className="px-4 sm:px-0" onSubmit={handleLoginClick}>
                 <h1 className="font-bold flex justify-center mb-8 text-[20px] sm:text-[24px]">Đăng Nhập</h1>
                 
                 {/* Input Email */}
@@ -33,7 +48,7 @@ function FormSignIn() {
                         type="email"
                         placeholder="Tài khoản Email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)} // Cập nhật state email
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
                 
@@ -44,7 +59,7 @@ function FormSignIn() {
                         type="password"
                         placeholder="Mật khẩu"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)} // Cập nhật state mật khẩu
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
 
@@ -52,13 +67,12 @@ function FormSignIn() {
                 {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
 
                 <div className="mt-10 flex justify-center mb-3 ">
-                    <Link
-                        to="/verify-form"
+                    <button
+                        type="submit" // Thay đổi từ Link sang button để gửi yêu cầu
                         className="hover:bg-white hover:text-[#ff7e00] hover:border-[#ff7e00] hover:border bg-[#ff7e00] w-full sm:w-[400px] border border-[#ff7c00] rounded-full text-center text-white py-3 px-10 mt-3 inline-block"
-                        onClick={handleLoginClick}
                     >
                         Đăng Nhập
-                    </Link>
+                    </button>
                 </div>
                 <div className="flex justify-end text-[14px]">
                     <div>Bạn chưa có tài khoản? <Link to="/sign-up" className="text-[#ff7e00]">Đăng ký</Link></div>

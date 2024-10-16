@@ -1,7 +1,11 @@
 import VietNam from '../../assets/png/imageAvatar.png';
 import LogoStore from '../../assets/svg/icon_logoStore.svg';
+import { useLocation } from "react-router-dom";
+
 
 function HeaderNewStore() {
+    const location = useLocation();
+    const storeId = location.state?.storeId;
     return (
         <div className="px-4 md:px-10 lg:px-[150px] mb-10 py-[15px] border-b bg-white">
             <div className="flex justify-between items-center">
