@@ -76,7 +76,7 @@ const HomePage = () => {
           <ListProduct />
         </div>
 
-        <div className='mt-[200px]'>
+        <div className='mt-[100px]'>
           <Footer />
         </div>
       </div>
