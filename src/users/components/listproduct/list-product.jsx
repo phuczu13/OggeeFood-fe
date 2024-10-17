@@ -51,7 +51,7 @@ function ListProduct() {
         <div className='mt-10'>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {products.map((product) => (
-                    <div key={product.id} className="border p-3 rounded-lg shadow-sm">
+                    <div key={product.id} className="border border-[#F8E7CC] hover:ring-[#e67350] hover:outline-none hover:ring-2 p-3 rounded-lg shadow-sm">
                         <div className="relative">
                             <img src={product.image} alt={product.name} className="w-full h-[150px] object-cover" />
                             <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">
