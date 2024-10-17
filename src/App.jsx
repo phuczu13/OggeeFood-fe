@@ -10,6 +10,8 @@ import HomePage from './users/pages/home/home-page';
 import Eatery from './users/pages/eatery/eatery';
 import Cart from './users/pages/cart/cart';
 
+import ProductDetail from './users/components/listproduct/product-detail';
+import Product from './users/components/listproduct/product';
 
 
 import DishDetails from './users/pages/home/dish-details';
@@ -47,6 +49,9 @@ function App() {
             < Route path='home-page' element={<HomePage/>} />
             < Route path='eatery' element={<Eatery/>} />
             < Route path='cart' element={<Cart/>} />
+
+            < Route path='product' element={<Product/>} />
+            < Route path='product-detail' element={<ProductDetail/>} />
 
 
             < Route path='dish-details' element={<DishDetails/>} />

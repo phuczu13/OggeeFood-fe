@@ -7,6 +7,7 @@ import Footer from "../../components/homepage/footer";
 import ListProduct from '../../components/listproduct/list-product';
 import IconPrevios from '../../assets/svg/icon_previos.svg'
 import IconNext from '../../assets/svg/icon_next.svg'
+import { Link } from 'react-router-dom';
 
 
 const HomePage = () => {
@@ -75,8 +76,13 @@ const HomePage = () => {
         <div>
           <ListProduct />
         </div>
-
-        <div className='mt-[100px]'>
+        <div className='mt-10 w-full max-w-[350px] mx-auto flex justify-center '>
+          <Link to='/product' className='hover:ring-[#ff7e00] hover:outline-none hover:ring-2 relative p-3 border flex items-center justify-center font-semibold text-[18px] border-[#F8E7CC] text-[#ff7e00] rounded-full w-full'>
+            Xem tất cả các món
+          <img className='absolute right-[70px]' src={IconNext} alt="" />
+          </Link>
+        </div>
+        <div className='mt-[50px]'>
           <Footer />
         </div>
       </div>
