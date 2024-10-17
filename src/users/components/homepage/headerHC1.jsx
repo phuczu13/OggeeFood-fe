@@ -3,9 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import LogoWeb from '../../assets/svg/icon_logoweb.svg';
 import IconLogout from '../../assets/svg/icon_Logout.svg';
 import { Toaster, toast } from 'react-hot-toast';
+import { useLocation } from 'react-router-dom';
+
 
 function HeaderHS2() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const userId = location.state?.userId;
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleLogout = () => {

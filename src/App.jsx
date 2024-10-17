@@ -10,6 +10,7 @@ import VerifyLoginForm from './users/pages/auth/verify-login-form';
 import HomePage from './users/pages/home/home-page';
 import Eatery from './users/pages/eatery/eatery';
 import Cart from './users/pages/cart/cart';
+import CallbackPage from './users/pages/home/CallbackPage';
 
 
 
@@ -46,6 +47,7 @@ function App() {
             < Route path='sign-in' element={<SignIn/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
             < Route path='home-page' element={<HomePage/>} />
+            <Route path="/auth/callback" element={<CallbackPage />} />
             < Route path='eatery' element={<Eatery/>} />
             < Route path='cart' element={<Cart/>} />
 
