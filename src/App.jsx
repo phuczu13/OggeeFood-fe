@@ -12,6 +12,8 @@ import Eatery from './users/pages/eatery/eatery';
 import Cart from './users/pages/cart/cart';
 import CallbackPage from './users/pages/home/CallbackPage';
 
+import ProductDetail from './users/components/listproduct/product-detail';
+import Product from './users/components/listproduct/product';
 
 
 import DishDetails from './users/pages/home/dish-details';
@@ -50,6 +52,9 @@ function App() {
             <Route path="/auth/callback" element={<CallbackPage />} />
             < Route path='eatery' element={<Eatery/>} />
             < Route path='cart' element={<Cart/>} />
+
+            < Route path='product' element={<Product/>} />
+            < Route path='product-detail' element={<ProductDetail/>} />
 
 
             < Route path='dish-details' element={<DishDetails/>} />

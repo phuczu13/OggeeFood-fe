@@ -10,8 +10,9 @@ function Cart() {
       storeId: 1,
       storeName: 'Bún Boà - Phúc Du',
       items: [
-        { id: 1, name: 'Bún Boà Huế', price: 30000, quantity: 2, selected: false },
-        { id: 2, name: 'Bún Boà Gân', price: 40000, quantity: 1, selected: false },
+        { id: 1, name: 'Bún Boà Gân', price: 40000, quantity: 1, selected: false },
+
+
       ],
       allSelected: false,
     },
@@ -19,7 +20,6 @@ function Cart() {
       storeId: 2,
       storeName: 'Bánh Mì - Cô Tiên',
       items: [
-        { id: 3, name: 'Bánh Mì Chả', price: 15000, quantity: 4, selected: false },
         { id: 4, name: 'Bánh Mì Thịt Nguội', price: 20000, quantity: 2, selected: false },
       ],
       allSelected: false,
@@ -28,7 +28,6 @@ function Cart() {
       storeId: 3,
       storeName: 'Cháo Lòng - Ba Son',
       items: [
-        { id: 5, name: 'Cháo Lòng Phèo', price: 25000, quantity: 2, selected: false },
         { id: 6, name: 'Tiết Canh Lòng Heo', price: 25000, quantity: 2, selected: false },
       ],
       allSelected: false,
