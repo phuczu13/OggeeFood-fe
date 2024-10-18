@@ -13,6 +13,10 @@ import Cart from './users/pages/cart/cart';
 import ProductDetail from './users/components/listproduct/product-detail';
 import Product from './users/components/listproduct/product';
 
+import OrderInfo from './users/pages/order/order-info';
+import Order from './users/pages/order/order';
+
+
 
 import DishDetails from './users/pages/home/dish-details';
 
@@ -36,6 +40,7 @@ import VerifyStore from './stores/pages/auth/verify-store';
 
 
 
+
 function App() {
   
   return (
@@ -49,6 +54,9 @@ function App() {
             < Route path='home-page' element={<HomePage/>} />
             < Route path='eatery' element={<Eatery/>} />
             < Route path='cart' element={<Cart/>} />
+
+            < Route path='order' element={<Order/>} />
+            < Route path='order-info' element={<OrderInfo/>} />
 
             < Route path='product' element={<Product/>} />
             < Route path='product-detail' element={<ProductDetail/>} />

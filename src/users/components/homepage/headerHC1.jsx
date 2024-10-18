@@ -4,7 +4,7 @@ import LogoWeb from '../../assets/svg/icon_logoweb.svg';
 import IconLogout from '../../assets/svg/icon_Logout.svg';
 import { Toaster, toast } from 'react-hot-toast';
 
-function HeaderHS2() {
+function HeaderHC1() {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -95,4 +95,4 @@ function HeaderHS2() {
     );
 }
 
-export default HeaderHS2;
+export default HeaderHC1;
