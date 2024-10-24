@@ -153,27 +153,27 @@ function ListOrder() {
 
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
 
-      <div className="flex space-x-4 border-b mb-4">
+      <div className="flex space-x-4 border-b font-semibold mb-4">
         <button
-          className={`pb-2 ${activeTab === 'pending' ? 'border-b-2 border-red-500' : ''}`}
+          className={`pb-2 hover:text-[#ef4b2c] hover:border-b-[#ef4b2c] hover:border-b-2 ${activeTab === 'pending' ? 'border-b-2 border-red-500 text-[#ef4b2c]' : ''}`}
           onClick={() => setActiveTab('pending')}
         >
           Chờ xác nhận
         </button>
         <button
-          className={`pb-2 ${activeTab === 'received' ? 'border-b-2 border-red-500' : ''}`}
+          className={`pb-2 hover:text-[#ef4b2c] hover:border-b-[#ef4b2c] hover:border-b-2 ${activeTab === 'received' ? 'border-b-2 border-red-500 text-[#ef4b2c]' : ''}`}
           onClick={() => setActiveTab('received')}
         >
           Đã nhận
         </button>
         <button
-          className={`pb-2 ${activeTab === 'completed' ? 'border-b-2 border-red-500' : ''}`}
+          className={`pb-2 hover:text-[#ef4b2c] hover:border-b-[#ef4b2c] hover:border-b-2 ${activeTab === 'completed' ? 'border-b-2 border-red-500 text-[#ef4b2c]' : ''}`}
           onClick={() => setActiveTab('completed')}
         >
           Hoàn thành
         </button>
         <button
-          className={`pb-2 ${activeTab === 'canceled' ? 'border-b-2 border-red-500' : ''}`}
+          className={`pb-2 hover:text-[#ef4b2c] hover:border-b-[#ef4b2c] hover:border-b-2 ${activeTab === 'canceled' ? 'border-b-2 border-red-500 text-[#ef4b2c]' : ''}`}
           onClick={() => setActiveTab('canceled')}
         >
           Đã hủy

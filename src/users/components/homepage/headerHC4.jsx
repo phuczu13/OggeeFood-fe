@@ -6,13 +6,12 @@ import IconNext from '../../assets/svg/icon_next.svg'
 import IconLogout2 from '../../assets/svg/icon_Logout2.svg'
 
 
-function HeaderHC3() {
+function HeaderHC4() {
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    // Xử lý logout
     const handleLogout = () => {
         setIsModalOpen(true);
     };
@@ -103,7 +102,7 @@ function HeaderHC3() {
                             <Link className='hover:text-[#ef4c2b] font-semibold' to='/eatery'>
                                 Quán ăn
                             </Link>
-                            <Link className='text-[#ef4c2b] font-semibold border-b-2 border-[#ef4c2b] rounded-sm' to='/cart'>
+                            <Link className='hover:text-[#ef4c2b] font-semibold' to='/cart'>
                                 Giỏ hàng
                             </Link>
                         </div>
@@ -224,4 +223,4 @@ function HeaderHC3() {
     );
 }
 
-export default HeaderHC3;
+export default HeaderHC4;

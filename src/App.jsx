@@ -7,7 +7,10 @@ import IntroPage from './users/pages/intro-page'
 import SignIn from './users/pages/auth/sign-in';
 import VerifyForm from './users/pages/auth/verify-form';
 import HomePage from './users/pages/home/home-page';
+
 import Eatery from './users/pages/eatery/eatery';
+import EateryDetails from './users/pages/eatery/eatery-details';
+
 
 import Cart from './users/pages/cart/cart';
 
@@ -17,8 +20,10 @@ import Product from './users/components/listproduct/product';
 
 import Payment from './users/pages/payment/payment';
 import OrderInfo from './users/pages/order/order-info';
+
+
 import Order from './users/pages/order/order';
-import Account from './users/pages/account/account';
+import UserAccount from './users/pages/account/user-account';
 
 
 
@@ -57,13 +62,15 @@ function App() {
             < Route path='verify-form' element={<VerifyForm/>} />
             < Route path='home-page' element={<HomePage/>} />
             < Route path='eatery' element={<Eatery/>} />
+            < Route path='eatery-details' element={<EateryDetails/>} />
 
             < Route path='cart' element={<Cart/>} />
 
 
-            < Route path='order' element={<Order/>} />
             < Route path='order-info' element={<OrderInfo/>} />
-            < Route path='account' element={<Account/>} />
+            < Route path='order' element={<Order/>} />
+            < Route path='user-account' element={<UserAccount/>} />
+
 
 
             < Route path='product' element={<Product/>} />

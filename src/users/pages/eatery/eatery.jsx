@@ -163,20 +163,20 @@ const Eatery = () => {
       <div>
         < HeaderHC2 />
       </div>
-      <div className="relative w-full max-w-[1200px] mx-auto mt-10">
+      <div className="relative w-full max-w-[1200px] mx-auto mt-10 sm:px-0 px-8">
         <h2 className="text-xl font-bold text-[#ff7e00]">Quán ngon nên thử</h2>
 
-        <div className="flex items-center justify-between mt-6">
-            <button
+        <div className="flex items-center justify-between mt-6 relative">
+          <button
             onClick={prevSlide}
-            className="absolute left-[-30px] transform -translate-y-1/2 rounded-full focus:outline-none"
-            >
-              <img className='w-4' src={IconPrevios} alt="" />
-            </button>
-    
-          <div className="grid grid-cols-4 gap-4 flex-1">
+            className="prev-slide-button absolute left-[-23px] sm:left-[-30px] top-[280px] sm:top-[110px] transform -translate-y-1/2 rounded-full focus:outline-none z-10"
+          >
+            <img className='w-4' src={IconPrevios} alt="" />
+          </button>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 flex-1">
             {getVisibletopeateries().map((topeatery, index) => (
-              <div
+              <Link to='/eatery-details'
                 key={index}
                 className="border border-[#F8E7CC] hover:ring-[#e67350] hover:outline-none hover:ring-2 p-3 rounded-lg shadow-sm text-center"
               >
@@ -191,21 +191,22 @@ const Eatery = () => {
                 <p className="text-gray-600">
                   <span role="img" aria-label="location">📍</span> {topeatery.address}
                 </p>
-              </div>
+              </Link>
             ))}
           </div>
 
           <button
             onClick={nextSlide}
-            className="absolute right-[-30px] transform -translate-y-1/2 rounded-full focus:outline-none"
-            >
-              <img className='w-4' src={IconNext} alt="" />
-            </button>
+            className="next-slide-button absolute right-[-23px] top-[280px] sm:top-[110px] sm:right-[-30px] transform -translate-y-1/2 rounded-full focus:outline-none z-10"
+          >
+            <img className='w-4' src={IconNext} alt="" />
+          </button>
         </div>
       </div>
 
 
-      <div className='w-full max-w-[1200px] mx-auto my-10'>
+
+      <div className='w-full max-w-[1200px] mx-auto my-10 sm:px-0 px-3'>
         <div className='w-full flex items-center'>
           <div className='text-[#ff7e00] text-xl w-28 font-bold'>Quán ăn</div>
           <div className='bg-[#ff7e00] w-full h-[1px]'></div>
@@ -213,7 +214,7 @@ const Eatery = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
           {eateries.map((eateries) => (
-              <div key={eateries.id} className="border border-[#F8E7CC] hover:ring-[#e67350] hover:outline-none hover:ring-2 p-3 rounded-lg shadow-sm">
+              <Link to='/eatery-details' key={eateries.id} className="border border-[#F8E7CC] hover:ring-[#e67350] hover:outline-none hover:ring-2 p-3 rounded-lg shadow-sm">
                   <div className="relative">
                       <img src={eateries.image} alt={eateries.name} className="w-full h-[150px] object-cover" />
                       <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">
@@ -228,7 +229,7 @@ const Eatery = () => {
                           <span className="text-red-500 font-semibold">Địa chỉ: {eateries.address}</span>
                       </div>
                   </div>
-              </div>
+              </Link>
           ))}
         </div>
 

@@ -148,7 +148,7 @@ function Cart() {
       <div>
         <HeaderHC3 />
       </div>
-      <div className="flex-1 w-full max-w-[1200px] mx-auto mt-10">
+      <div className="flex-1 w-full max-w-[1200px] mx-auto mt-10 sm:mt-6 px-4 sm:px-0 pb-10">
         <ToastContainer />
         
         {isModalOpen && (
@@ -203,14 +203,14 @@ function Cart() {
                     </div>
                     <div className="font-semibold text-lg ml-3">{store.storeName}</div>
                   </div>
-                  <div className='flex mr-10 font-semibold justify-center'>
+                  <div className='hidden sm:flex sm:mr-10 sm:font-semibold sm:justify-center'>
                     <div className='w-[110px]'>Số Lượng</div>
                     <div className='w-[175px]'>Số Tiền</div>
                     <div className='w-[75px]'>Thao Tác</div>
                   </div>
                 </div>
                 {store.items.map((item) => (
-                  <div key={item.id} className="border-b py-4 pr-4 flex items-center justify-between">
+                  <div key={item.id} className="border-b py-4 pr-4 flex flex-col sm:flex-row items-center justify-between">
                     <div className="flex items-center p-4">
                       <input
                         type="checkbox"
@@ -228,8 +228,8 @@ function Cart() {
                         </div>  
                       </div>
                     </div>
-                    <div className="flex items-center mr-10">
-                      <div className="flex items-center px-2 text-center w-[110px] justify-between">
+                    <div className="flex flex-col sm:flex-row items-center sm:mr-10">
+                      <div className="flex items-center justify-between w-full sm:w-[110px] px-2">
                         <button className='border-2 flex justify-center text-center items-center rounded-full h-6 w-6 border-[#ff7e00]' onClick={() => handleQuantityChange(store.storeId, item.id, 'decrease')}>
                           <img src={IconMinus} alt="" />
                         </button>
@@ -238,8 +238,8 @@ function Cart() {
                           <img src={IconPlus} alt="" />
                         </button>
                       </div>
-                      <div className="text-lg text-center w-[175px] font-semibold text-[#ff7e00]">{item.price.toLocaleString()} VND</div>
-                      <button className='font-semibold w-[75px]'>Xóa</button>
+                      <div className="text-lg w-full sm:w-[175px] font-semibold text-[#ff7e00] text-center mt-2 sm:mt-0">{item.price.toLocaleString()} VND</div>
+                      <button className='font-semibold w-full sm:w-[75px] text-center mt-2 sm:mt-0'>Xóa</button>
                     </div>
                   </div>
                 ))}
@@ -250,7 +250,7 @@ function Cart() {
       </div>
 
       {!isCartEmpty && (
-        <div className="sticky bottom-0 w-full bg-white border shadow-lg p-4 flex justify-between items-center max-w-[1200px] mx-auto">
+        <div className="sticky bottom-0 w-full bg-white border shadow-lg p-4 flex flex-col sm:flex-row justify-between items-center max-w-[1200px] mx-auto">
           <div className="flex items-center space-x-4">
             <input
               type="checkbox"
@@ -261,7 +261,7 @@ function Cart() {
           </div>
           <button
             onClick={handleDeleteSelected}
-            className="bg-transparent border border-orange-500 text-orange-500 py-2 px-4 rounded"
+            className="bg-transparent border border-orange-500 text-orange-500 py-2 px-4 rounded mt-2 sm:mt-0"
           >
             Xóa
           </button>
@@ -275,13 +275,12 @@ function Cart() {
           </div>
           <Link
             to='/payment'
-            className="bg-orange-500 text-white py-2 px-4 rounded flex items-center"
+            className="bg-orange-500 text-white py-2 px-4 rounded flex items-center mt-2 sm:mt-0"
           >
             Đặt ngay
           </Link>
         </div>
       )}
-
       <Footer />
     </div>
   );
