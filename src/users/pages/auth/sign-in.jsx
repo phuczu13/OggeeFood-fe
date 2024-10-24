@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import HeaderHP from "../../components/homepage/headerHP";
 import FormSignIn from "../../components/formHP/form-sign-in";
-import { Toaster, toast } from "react-hot-toast";
+import { ToastContainer, toast } from 'react-toastify';  // Thêm thư viện Toastify
+import 'react-toastify/dist/ReactToastify.css';  // Thêm style Toastify
 
 function SignIn() {
     useEffect(() => {
@@ -23,7 +24,7 @@ function SignIn() {
                     <FormSignIn />
                 </div>
             </div>
-            < Toaster position="top-right" />
+            < ToastContainer position="top-right" />
         </div>
     );
 }

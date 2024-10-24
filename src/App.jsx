@@ -8,13 +8,18 @@ import SignIn from './users/pages/auth/sign-in';
 import VerifyForm from './users/pages/auth/verify-form';
 import HomePage from './users/pages/home/home-page';
 import Eatery from './users/pages/eatery/eatery';
+
 import Cart from './users/pages/cart/cart';
+
 
 import ProductDetail from './users/components/listproduct/product-detail';
 import Product from './users/components/listproduct/product';
 
+import Payment from './users/pages/payment/payment';
 import OrderInfo from './users/pages/order/order-info';
 import Order from './users/pages/order/order';
+import Account from './users/pages/account/account';
+
 
 
 
@@ -40,7 +45,6 @@ import VerifyStore from './stores/pages/auth/verify-store';
 
 
 
-
 function App() {
   
   return (
@@ -53,14 +57,18 @@ function App() {
             < Route path='verify-form' element={<VerifyForm/>} />
             < Route path='home-page' element={<HomePage/>} />
             < Route path='eatery' element={<Eatery/>} />
+
             < Route path='cart' element={<Cart/>} />
+
 
             < Route path='order' element={<Order/>} />
             < Route path='order-info' element={<OrderInfo/>} />
+            < Route path='account' element={<Account/>} />
+
 
             < Route path='product' element={<Product/>} />
             < Route path='product-detail' element={<ProductDetail/>} />
-
+            < Route path='payment' element={<Payment/>} />
 
             < Route path='dish-details' element={<DishDetails/>} />
 

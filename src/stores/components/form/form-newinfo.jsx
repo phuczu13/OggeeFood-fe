@@ -57,7 +57,7 @@ function FormNewInfo (){
         <div>
             <form
                 onSubmit={handleSubmit}
-                className="bg-white p-10 sm:p-14 rounded-md shadow-md w-full max-w-[600px]"
+                className="bg-white p-10 sm:p-14 rounded-md shadow-lg w-full max-w-[600px]"
                 >
                 <h2 className="text-2xl font-bold mb-14 text-center">Nhập thông tin cho cửa hàng mới</h2>
 

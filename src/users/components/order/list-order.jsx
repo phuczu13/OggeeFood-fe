@@ -53,11 +53,13 @@ function ListOrder() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [confirmationAction, setConfirmationAction] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
-  const [reorderConfirmation, setReorderConfirmation] = useState(null); // Trạng thái cho xác nhận "Đặt lại"
-  
-  const confirmationRef = useRef(null);  // Ref cho modal hủy đơn
-  const detailRef = useRef(null);  // Ref cho modal chi tiết
-  const reorderConfirmationRef = useRef(null);  // Ref cho modal đặt lại đơn
+  const [reorderConfirmation, setReorderConfirmation] = useState(null); 
+  const [rebuyConfirmation, setRebuyConfirmation] = useState(false);
+
+  const confirmationRef = useRef(null);  
+  const detailRef = useRef(null);  
+  const reorderConfirmationRef = useRef(null);  
+  const rebuyConfirmationRef = useRef(null);
   
   const filteredOrders = orders.filter(order => order.status === activeTab);
 
@@ -80,15 +82,33 @@ function ListOrder() {
     setSelectedOrder(null);
     setConfirmationAction(null);
 
-    // Gọi toastify để hiển thị thông báo
     toast.success("Hủy đặt đơn hàng thành công!");
   };
 
-  // Xử lý đặt lại đơn hàng
   const handleReorder = (order) => {
     setSelectedOrder(order);
     setReorderConfirmation(true);
   };
+
+  const handleRebuy = (order) => {
+    setSelectedOrder(order);
+    setReorderConfirmation(false);
+    setConfirmationAction(null); 
+    setRebuyConfirmation(true); 
+  };
+  
+  const confirmRebuy = () => {
+    setOrders(prevOrders =>
+      prevOrders.map(order =>
+        order.id === selectedOrder.id ? { ...order, status: 'pending' } : order
+      )
+    );
+    setRebuyConfirmation(false);
+    setSelectedOrder(null);
+  
+    toast.success("Mua lại đơn hàng thành công!");
+  };
+  
 
   const confirmReorder = () => {
     setOrders(prevOrders =>
@@ -99,7 +119,6 @@ function ListOrder() {
     setReorderConfirmation(false);
     setSelectedOrder(null);
 
-    // Gọi toastify để hiển thị thông báo
     toast.success("Đặt lại đơn hàng thành công!");
   };
 
@@ -114,7 +133,11 @@ function ListOrder() {
     if (reorderConfirmationRef.current && !reorderConfirmationRef.current.contains(event.target)) {
       setReorderConfirmation(false);
     }
+    if (rebuyConfirmationRef.current && !rebuyConfirmationRef.current.contains(event.target)) { 
+      setRebuyConfirmation(false); 
+    }
   };
+  
   
 
   useEffect(() => {
@@ -126,12 +149,10 @@ function ListOrder() {
 
   return (
     <div className="max-w-[1200px] mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-[#ff7e00]">Đơn hàng</h1>
+      <h1 className="text-2xl font-bold mb-4 text-[#ff7e00]">Đơn mua</h1>
 
-      {/* ToastContainer để hiển thị thông báo */}
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
 
-      {/* Tabs */}
       <div className="flex space-x-4 border-b mb-4">
         <button
           className={`pb-2 ${activeTab === 'pending' ? 'border-b-2 border-red-500' : ''}`}
@@ -159,7 +180,6 @@ function ListOrder() {
         </button>
       </div>
 
-      {/* Danh sách đơn hàng */}
       {filteredOrders.length > 0 ? (
         filteredOrders.map(order => (
           <div key={order.id} className="border rounded-lg p-4 mb-4 shadow-sm">
@@ -187,6 +207,23 @@ function ListOrder() {
                 </>
               )}
 
+              {activeTab === 'completed' && (
+                <>
+                  <button
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    onClick={() => handleShowDetail(order)}
+                  >
+                    Xem chi tiết
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                    onClick={() => handleRebuy(order)}
+                  >
+                    Mua lại
+                  </button>
+                </>
+              )}
+
               {activeTab === 'canceled' && (
                 <>
                   <button
@@ -204,7 +241,7 @@ function ListOrder() {
                 </>
               )}
 
-              {activeTab !== 'pending' && activeTab !== 'canceled' && (
+              {activeTab === 'received' && (
                 <button
                   className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                   onClick={() => handleShowDetail(order)}
@@ -219,7 +256,6 @@ function ListOrder() {
         <p className="text-gray-500">Không có đơn hàng nào.</p>
       )}
 
-      {/* Modal chi tiết */}
       {showDetail && selectedOrder && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full" ref={detailRef}>
@@ -263,52 +299,76 @@ function ListOrder() {
         </div>
       )}
 
-      {/* Modal xác nhận hủy đơn */}
       {confirmationAction && selectedOrder && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg p-6" ref={confirmationRef}>
-            <h2 className="text-lg font-semibold mb-4 text-center">Xác nhận hủy đơn hàng</h2>
+            <h2 className="text-lg font-semibold mb-2 text-center">Xác nhận hủy đặt đơn hàng</h2>
             <p className="text-center">
-              Bạn có chắc chắn muốn hủy đơn hàng <span className="font-bold">{selectedOrder.id}</span>?
+              Bạn có chắc chắn muốn hủy đặt đơn hàng <span className="font-bold">{selectedOrder.id}</span>?
             </p>
-            <div className="flex justify-around mt-4">
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                onClick={handleCancelOrder}
-              >
-                Đồng ý
-              </button>
+            <div className="flex justify-center gap-4 mt-5">
               <button
                 className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
                 onClick={() => setConfirmationAction(null)}
               >
                 Đóng
               </button>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                onClick={handleCancelOrder}
+              >
+                Hủy đơn
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Modal xác nhận đặt lại đơn */}
+      {rebuyConfirmation && selectedOrder && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white rounded-lg p-6" ref={rebuyConfirmationRef}>
+            <h2 className="text-lg font-semibold mb-2 text-center">Xác nhận mua lại đơn hàng</h2>
+            <p className="text-center">
+              Bạn có chắc chắn muốn mua lại đơn hàng <span className="font-bold">{selectedOrder.id}</span>?
+            </p>
+            <div className="flex justify-center gap-4 mt-5">
+              <button
+                className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+                onClick={() => setRebuyConfirmation(false)}
+              >
+                Đóng
+              </button>
+              <button
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                onClick={confirmRebuy}
+              >
+                Mua hàng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
       {reorderConfirmation && selectedOrder && (
       <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
         <div className="bg-white rounded-lg p-6" ref={reorderConfirmationRef}>
-          <h2 className="text-lg font-semibold mb-4 text-center">Xác nhận đặt lại đơn hàng</h2>
+          <h2 className="text-lg font-semibold mb-2 text-center">Xác nhận đặt lại đơn hàng</h2>
           <p className="text-center">
             Bạn có chắc chắn muốn đặt lại đơn hàng <span className="font-bold">{selectedOrder.id}</span>?
           </p>
-          <div className="flex justify-around mt-4">
-            <button
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-              onClick={confirmReorder}
-            >
-              Đồng ý
-            </button>
+          <div className="flex justify-center gap-4 mt-5">
             <button
               className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
               onClick={() => setReorderConfirmation(null)}
             >
               Đóng
+            </button>
+            <button
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+              onClick={confirmReorder}
+            >
+              Đặt hàng
             </button>
           </div>
         </div>

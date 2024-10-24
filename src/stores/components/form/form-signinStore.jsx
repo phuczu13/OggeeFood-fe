@@ -50,7 +50,7 @@ function FormSignInStore() {
                 </div>
 
                 {/* Hiển thị thông báo lỗi */}
-                {error && <p className="text-red-500 mt-2">{error}</p>}
+                {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
 
                 <div className="mt-10 flex justify-center mb-3">
                     <Link

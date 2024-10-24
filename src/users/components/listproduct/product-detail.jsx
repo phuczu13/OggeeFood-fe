@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Toaster, toast } from 'react-hot-toast';
 import HeaderHC1 from '../../components/homepage/headerHC1'
 import Footer from '../../components/homepage/footer'
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import CSS cho toastify
 
 const ProductDetail = () => {
   const [cart, setCart] = useState([]);
@@ -32,7 +32,6 @@ const ProductDetail = () => {
     };
     setCart([...cart, productToAdd]);
 
-    // Show toast notification
     toast.success('Thêm vào giỏ hàng thành công!');
   };
 
@@ -42,26 +41,21 @@ const ProductDetail = () => {
             <HeaderHC1 />
         </div>
         <div className="max-w-[1200px] mx-auto p-4 relative mt-10">
-            {/* Toaster */}
-            <Toaster position='top-right'/>
+            <ToastContainer position='top-right'/>
 
-            {/* Product Section */}
             <div className="md:flex items-start">
-                {/* Image Placeholder */}
                 <div className="bg-gray-200 w-full mb-4 md:mb-0 md:w-1/2">
-                <img src={product.image} alt="" />
+                <img className='rounded' src={product.image} alt="" />
                 </div>
-                {/* Product Info */}
                 <div className="md:ml-4 md:w-1/2">
                 <h1 className="text-2xl font-bold mb-2">{product.name}</h1>
                 <div className="flex items-center mb-4">
-                    <span className="text-red-500 text-xl">4.2</span>
+                    <span className="text-red-500 text-xl">4.9</span>
                     <span className="text-gray-400 text-sm ml-2">⭐⭐⭐⭐</span>
                 </div>
                 <p className="text-gray-600 mb-2">{product.description}</p>
                 <p className="text-xl font-semibold mb-4">{product.price.toLocaleString()} VND</p>
 
-                {/* Quantity */}
                 <div className="flex items-center mb-4">
                     <label htmlFor="quantity" className="mr-2">Số lượng:</label>
                     <button
@@ -85,7 +79,6 @@ const ProductDetail = () => {
                     </button>
                 </div>
 
-                {/* Add to Cart Button */}
                 <button
                     onClick={addToCart}
                     className="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600 transition"
@@ -101,19 +94,18 @@ const ProductDetail = () => {
                 <div className="border p-4 rounded">
                 <div className="flex items-center mb-2">
                     <img
-                    src="https://placekitten.com/40/40"
+                    src="https://scontent.fsgn5-13.fna.fbcdn.net/v/t39.30808-6/461185481_1058397005800455_8112413207197525059_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=s0m5LenacggQ7kNvgG77VTl&_nc_zt=23&_nc_ht=scontent.fsgn5-13.fna&_nc_gid=AcUuiCeylrAJoPXQBicK9b1&oh=00_AYA_s4kzTxWxBXytGtgwbUqMhenvaxyHtUfkubITRSKzRA&oe=671F6DF5"
                     alt="User Avatar"
                     className="w-10 h-10 rounded-full"
                     />
                     <div className="ml-4">
                     <p className="font-semibold">Tên khách hàng</p>
-                    <p className="text-sm text-gray-500">4.2 ⭐⭐⭐⭐</p>
+                    <p className="text-sm text-gray-500">4.9 ⭐⭐⭐⭐</p>
                     </div>
                 </div>
                 <p>
                     aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
                 </p>
-                {/* Image review placeholders */}
                 <div className="grid grid-cols-4 gap-2 mt-4">
                     <div className="bg-gray-200 w-full h-24">
                     <p className="text-center pt-8 text-gray-400">Hình</p>
