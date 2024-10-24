@@ -1,12 +1,12 @@
 import React from 'react'
 import ListOrder from '../../components/order/list-order';
-import HeaderHC1 from '../../components/homepage/headerHC1';
+import HeaderHC4 from '../../components/homepage/headerHC4';
 
 function Order() {
   return (
     <div>
         <div>
-            < HeaderHC1 />
+            < HeaderHC4 />
         </div>
         <div>
             < ListOrder />

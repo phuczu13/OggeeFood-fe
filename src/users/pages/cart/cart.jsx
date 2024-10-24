@@ -178,8 +178,10 @@ const selectedTotalPrice = calculateSelectedTotalPrice();
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F5F5]">
-      <HeaderHC3 />
-      <div className="flex-1 w-full max-w-[1200px] mx-auto mt-10">
+      <div>
+        <HeaderHC3 />
+      </div>
+      <div className="flex-1 w-full max-w-[1200px] mx-auto mt-10 sm:mt-6 px-4 sm:px-0 pb-10">
         <ToastContainer />
         
         {isModalOpen && (
@@ -239,13 +241,10 @@ const selectedTotalPrice = calculateSelectedTotalPrice();
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center mr-10">
-                      <div className="flex items-center px-2 text-center w-[110px] justify-between">
-                        <button
-                          className="border-2 rounded-full h-6 w-6 border-[#ff7e00] flex items-center justify-center"
-                          onClick={() => handleQuantityChange(store.storeId, item.productId._id, 'decrease')}
-                        >
-                          <img src={IconMinus} alt="minus" />
+                    <div className="flex flex-col sm:flex-row items-center sm:mr-10">
+                      <div className="flex items-center justify-between w-full sm:w-[110px] px-2">
+                        <button className='border-2 flex justify-center text-center items-center rounded-full h-6 w-6 border-[#ff7e00]' onClick={() => handleQuantityChange(store.storeId, item.id, 'decrease')}>
+                          <img src={IconMinus} alt="" />
                         </button>
                         <span className="border-2 border-[#ff7e00] rounded-lg px-2 text-[#ff7e00]">
                           {item.quantity}

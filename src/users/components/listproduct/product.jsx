@@ -6,6 +6,7 @@ import HeaderHC1 from '../homepage/headerHC1';
 import Footer from '../homepage/footer';
 import { ToastContainer, toast } from 'react-toastify';  // Import Toastify
 import 'react-toastify/dist/ReactToastify.css';  // Import CSS của Toastify
+import IconPrevios from '../../assets/svg/icon_previos.svg';
 
 function Product() {
     const [products, setProducts] = useState([]);
@@ -53,7 +54,7 @@ function Product() {
             <div>
                 <HeaderHC1 />
             </div>
-            <div className="w-full max-w-[1200px] mx-auto mt-8 p-4">
+            <div className="w-full max-w-[1200px] mx-auto mt-8 p-3 sm:p-0">
                 <div className='w-full flex items-center'>
                     <span className='text-[#ff7e00] text-xl w-1/5 font-semibold'>Món ngon nóng hổi</span>
                     <div className='bg-[#ff7e00] w-full h-[1px]'></div>
@@ -81,6 +82,12 @@ function Product() {
                         ))}
                     </div>
                 </div>
+            </div>
+            <div className='mt-10 w-full max-w-[350px] mx-auto flex justify-center '>
+                <Link to='/home-page' className='hover:ring-[#ff7e00] hover:outline-none hover:ring-2 relative p-3 border flex items-center justify-center font-semibold text-[18px] border-[#F8E7CC] text-[#ff7e00] rounded-full w-full'>
+                Trở lại trang chủ
+                <img className='absolute left-[70px]' src={IconPrevios} alt="" />
+                </Link>
             </div>
             <div className='mt-20'>
                 <Footer />

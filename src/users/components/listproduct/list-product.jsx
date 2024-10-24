@@ -93,7 +93,7 @@ function ListProduct() {
                                     <span className="text-red-500 font-semibold">
                                         {product.Price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
                                     </span>
-                                    <button onClick={(e) => { e.preventDefault(); handleAddToCart(product); }}><img className='w-[30px] absolute right-0 bottom-1 h-[30px] mr-2' src={IconAddCart} alt="" /></button>
+                                    <button onClick={(e) => { e.preventDefault(); handleAddToCart(product); }}><img className='w-[30px] absolute right-0 bottom-0 h-[30px]' src={IconAddCart} alt="" /></button>
                                 </div>
                             </div>
                         </Link>

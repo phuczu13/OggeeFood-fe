@@ -73,7 +73,7 @@ function HeaderHC2() {
                         <Link to='/home-page'>
                             <img src={LogoWeb} className="w-[120px] sm:w-[200px] mb-2 sm:mb-0" alt="Logo Web" />
                         </Link>
-                        <div className="sm:mt-0">
+                        <div className="sm:mt-0 ml-3">
                             <input
                                 type="text"
                                 placeholder="Tìm kiếm món yêu thích"
@@ -111,7 +111,7 @@ function HeaderHC2() {
                         <div className='relative'>
                             <img
                                 onClick={toggleProfileMenu}
-                                className='w-10 rounded-full cursor-pointer profile-btn'
+                                className='w-10 rounded-full cursor-pointer hover:ring profile-btn'
                                 src="https://scontent.fsgn5-13.fna.fbcdn.net/v/t39.30808-6/461185481_1058397005800455_8112413207197525059_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KBjzgjSWsngQ7kNvgFswZlu&_nc_zt=23&_nc_ht=scontent.fsgn5-13.fna&_nc_gid=AO6cALtSQK5aE8IbuZsL3vX&oh=00_AYBKgvrDIKw8U4qozLeMdtQsX5S3lvhumw74-N--YM55-g&oe=671B08F5"
                                 alt="Profile"
                             />
@@ -169,7 +169,7 @@ function HeaderHC2() {
                         <div className='bg-gray-400 h-[1px] w-full mb-4'></div>
                         <ul className="flex flex-col font-semibold">
                             <li>
-                                <Link to="/account" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                                <Link to="/user-account" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
                                     <div className='flex items-center justify-between'>
                                         Tài khoản <span><img src={IconNext} alt="" /></span>
                                     </div>
