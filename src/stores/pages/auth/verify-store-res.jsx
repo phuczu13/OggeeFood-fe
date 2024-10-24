@@ -3,7 +3,7 @@ import LogoStore from '../../assets/svg/icon_logoStore.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Toaster, toast } from 'react-hot-toast';
 
-function VerifyStoreLogin() {
+function VerifyStoreRegister() {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ function VerifyStoreLogin() {
           toast.success("Xác minh thành công");
   
           // Chuyển hướng đến trang home-store kèm theo storeId
-          navigate('/home-store', { state: { storeId } });
+          navigate('/infor-newstore', { state: { storeId } });
         } else {
           toast.error(data.message || "Mã OTP không hợp lệ");
         }
@@ -108,4 +108,4 @@ function VerifyStoreLogin() {
   );
 }
 
-export default VerifyStoreLogin;
+export default VerifyStoreRegister;

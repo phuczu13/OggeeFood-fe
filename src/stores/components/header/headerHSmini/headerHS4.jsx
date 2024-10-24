@@ -17,6 +17,7 @@ function HeaderHS1() {
 
     const confirmLogout = () => {
         localStorage.removeItem('authToken');
+        localStorage.removeItem('storeId');
         navigate('/signin-store');
     };
 

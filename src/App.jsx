@@ -33,6 +33,7 @@ import InforStore from './stores/pages/home/infor-store';
 import SignUpStore from './stores/pages/auth/signup-store'
 import InforNewStore from './stores/pages/auth/infor-newstore'
 import VerifyStoreLogin from './stores/pages/auth/verify-store-login';
+import VerifyStoreRegister from './stores/pages/auth/verify-store-res';
 
 
 
@@ -66,6 +67,8 @@ function App() {
 
             < Route path='signin-store' element={<SignInStore/>} />
             < Route path='verify-store' element={<VerifyStoreLogin/>} />
+            < Route path='verify-store-res' element={<VerifyStoreRegister/>} />
+
             < Route path='home-store' element={<HomeStore/>} />
             < Route path='topping-store' element={<ToppingStore/>} />
             < Route path='order-store' element={<OrderStore/>} />

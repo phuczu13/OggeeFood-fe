@@ -7,6 +7,8 @@ import ListProduct from '../../components/listproduct/list-product';
 import IconPrevios from '../../assets/svg/icon_previos.svg'
 import IconNext from '../../assets/svg/icon_next.svg'
 import { Link } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
+
 
 
 const HomePage = () => {
@@ -78,9 +80,8 @@ const HomePage = () => {
             ))}
           </div>
         </div>
-
         <div className="ml-[10px]">
-          <div>
+        <div>
             <img
               className="h-[160px] w-[310px] object-cover"
               src="https://down-tx-vn.img.susercontent.com/vn-11134513-7r98o-lsv9c7ybqhzt32@resize_ss280x175!@crop_w280_h175_cT"
@@ -94,6 +95,10 @@ const HomePage = () => {
               alt="Ad"
             />
           </div>
+        </div>
+        
+    </div>
+    <div className="ml-[10px]">      
 
         <div>
           <ListProduct />
@@ -109,15 +114,6 @@ const HomePage = () => {
 
         </div>
       </div>
-
-      <div>
-        <ListProduct />
-      </div>
-
-      <div className="mt-[100px]">
-        <Footer />
-      </div>
-    </div>
     </div>
   );
 };

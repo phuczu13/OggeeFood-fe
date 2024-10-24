@@ -10,7 +10,7 @@ const CallbackPage = () => {
 
         if (code) {
             // Gọi API để xử lý code và đăng nhập người dùng
-            fetch(`http://localhost:3002/api/user/sso/callback`, {
+            fetch(`https://be-order-food.vercel.app/api/user/sso/callback`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -28,6 +28,7 @@ const CallbackPage = () => {
                     if (data.token) {
                         // Lưu token vào localStorage
                         localStorage.setItem('token', data.token);
+                        localStorage.setItem('userId', data.userId);
                         const userId = data.userId; 
                         console.log("userId:", userId);  // Log userId để kiểm tra
                         // Chuyển hướng về trang chính và kèm theo userId (hoặc storeId) trong state

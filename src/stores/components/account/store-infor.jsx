@@ -5,12 +5,11 @@ import { useLocation } from 'react-router-dom';
 function StoreInfo() {
   const location = useLocation();
   const storeId = location.state?.storeId;
-
   // Initialize state
   const [storeInfo, setStoreInfo] = useState({
-    name: '',
-    address: '',
-    phone: '',
+    storeName: '',
+    storeAddress: '',
+    phoneNumber: '',
     email: '',
     openingTime: '',
     closingTime: ''
@@ -51,9 +50,9 @@ function StoreInfo() {
         if (data && data.status === 'OK' && data.data) {
           const storeData = data.data; // Assuming the data is inside a 'data' property
           setStoreInfo({
-            name: storeData.storeName || '',
-            address: storeData.storeAddress || '',
-            phone: storeData.phoneNumber || '',
+            storeName: storeData.storeName || '',
+            storeAddress: storeData.storeAddress || '',
+            phoneNumber: storeData.phoneNumber || '',
             email: storeData.email || '',
             // Convert times to 24-hour format if necessary
             openingTime: convertTo24HourFormat(storeData.openingTime) || '',
@@ -92,7 +91,7 @@ function StoreInfo() {
         closingTime: storeInfo.closingTime  // Assuming the time is already in 24-hour format
       };
 
-      const response = await fetch(`http://localhost:3002/api/store/updatestore/${storeId}`, {
+      const response = await fetch(`https://be-order-food.vercel.app/api/store/updatestore/${storeId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -122,10 +121,10 @@ function StoreInfo() {
           </label>
           <input 
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-            id="name" 
+            id="storeName" 
             type="text" 
-            name="name" 
-            value={storeInfo.name} 
+            name="storeName" 
+            value={storeInfo.storeName} 
             onChange={handleInputChange} 
           />
         </div>
@@ -136,10 +135,10 @@ function StoreInfo() {
           </label>
           <input 
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-            id="address" 
+            id="storeAddress" 
             type="text" 
-            name="address" 
-            value={storeInfo.address} 
+            name="storeAddress" 
+            value={storeInfo.storeAddress} 
             onChange={handleInputChange} 
           />
         </div>
@@ -150,10 +149,10 @@ function StoreInfo() {
           </label>
           <input 
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-            id="phone" 
+            id="phoneNumber" 
             type="text" 
-            name="phone" 
-            value={storeInfo.phone} 
+            name="phoneNumber" 
+            value={storeInfo.phoneNumber} 
             onChange={handleInputChange} 
           />
         </div>
@@ -201,7 +200,7 @@ function StoreInfo() {
         </div>
         
         <div className="flex items-center justify-center">
-          <button 
+          <button
             className="bg-[#ff7e00] hover:bg-[#ef4b2c] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" 
             type="submit"
           >

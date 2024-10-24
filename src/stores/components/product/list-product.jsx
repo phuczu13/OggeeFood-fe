@@ -26,7 +26,7 @@ function ListProduct() {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get(`http://localhost:3002/api/product/get-products-by-store/${storeId}`);
+            const response = await axios.get(`https://be-order-food.vercel.app/api/product/get-products-by-store/${storeId}`);
             setProducts(response.data.data); // Assuming the API returns products in 'data'
         } catch (error) {
             console.error("Error fetching products:", error);
@@ -37,7 +37,7 @@ function ListProduct() {
     // API to fetch categories
     const fetchCategories = async () => {
         try {
-            const response = await axios.get(`http://localhost:3002/api/category/getallCategory/${storeId}`);
+            const response = await axios.get(`https://be-order-food.vercel.app/api/category/getallCategory/${storeId}`);
             setCategories(response.data.data); // Assuming categories come in 'data'
         } catch (error) {
             console.error("Error fetching categories:", error);
@@ -80,7 +80,7 @@ function ListProduct() {
         try {
             if (isEditing) {
                 // Update product
-                await axios.put(`http://localhost:3002/api/product/update-product/${currentProduct._id}`, {
+                await axios.put(`https://be-order-food.vercel.app/api/product/update-product/${currentProduct._id}`, {
                     Food_name,
                     Food_detail,
                     Price,
@@ -90,7 +90,7 @@ function ListProduct() {
                 toast.success("Cập nhật món thành công!", { duration: 2000 });
             } else {
                 // Add new product
-                await axios.post("http://localhost:3002/api/product/create-product", {
+                await axios.post("https://be-order-food.vercel.app/api/product/create-product", {
                     Food_name,
                     Food_detail,
                     Price,
@@ -112,7 +112,7 @@ function ListProduct() {
     // Delete product
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:3002/api/product/delete-product/${productToDelete._id}`);
+            await axios.delete(`https://be-order-food.vercel.app/api/product/delete-product/${productToDelete._id}`);
             toast.success("Xóa món thành công!", { duration: 2000 });
             setIsDeleteModalOpen(false);
             setIsDeleteLastItemModalOpen(false);
@@ -158,7 +158,7 @@ function ListProduct() {
                                 <h3 className="font-semibold text-lg">{product.Food_name}</h3>
                                 <p className="text-gray-500 text-sm">{product.Food_detail}</p>
                                 <div className="flex justify-between items-center mt-2">
-                                    <span className="text-red-500 font-semibold">{product.Price} VNĐ</span>
+                                    <span className="text-red-500 font-semibold">{product.Price.toLocaleString()} VNĐ</span>
                                     <div className="flex gap-2">
                                         <button
                                             onClick={() => openEditModal(product)}

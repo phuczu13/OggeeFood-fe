@@ -26,7 +26,7 @@ function ListTopping() {
 
     const fetchToppings = async () => {
         try {
-            const response = await axios.get(`http://localhost:3002/api/topping/get-toppings-by-store/${storeId}`);
+            const response = await axios.get(`https://be-order-food.vercel.app/api/topping/get-toppings-by-store/${storeId}`);
             setToppings(response.data.data); // Assuming the API returns toppings in 'data'
         } catch (error) {
             console.error("Error fetching toppings:", error);
@@ -37,7 +37,7 @@ function ListTopping() {
     // API to fetch categories
     const fetchCategories = async () => {
         try {
-            const response = await axios.get(`http://localhost:3002/api/category/getallCategory/${storeId}`);
+            const response = await axios.get(`https://be-order-food.vercel.app/api/category/getallCategory/${storeId}`);
             setCategories(response.data.data); // Assuming categories come in 'data'
         } catch (error) {
             console.error("Error fetching categories:", error);
@@ -80,7 +80,7 @@ function ListTopping() {
         try {
             if (isEditing) {
                 // Update topping
-                await axios.put(`http://localhost:3002/api/topping/update-topping/${currentTopping._id}`, {
+                await axios.put(`https://be-order-food.vercel.app/api/topping/update-topping/${currentTopping._id}`, {
                     toppingName,
                     toppingstatus,
                     toppingPrice,
@@ -90,7 +90,7 @@ function ListTopping() {
                 toast.success("Cập nhật topping thành công!", { duration: 2000 });
             } else {
                 // Add new topping
-                await axios.post("http://localhost:3002/api/topping/add-topping", {
+                await axios.post("https://be-order-food.vercel.app/api/topping/add-topping", {
                     toppingName,
                     toppingstatus,
                     toppingPrice,
@@ -112,7 +112,7 @@ function ListTopping() {
     // Delete topping
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:3002/api/topping/delete-topping/${toppingToDelete._id}`);
+            await axios.delete(`https://be-order-food.vercel.app/api/topping/delete-topping/${toppingToDelete._id}`);
             toast.success("Xóa topping thành công!", { duration: 2000 });
             setIsDeleteModalOpen(false);
             setIsDeleteLastItemModalOpen(false);
@@ -133,7 +133,7 @@ function ListTopping() {
         <>
             <div className="max-w-[1200px] mx-auto p-4">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold text-[#ff7e00]">Toppings</h2>
+                    <h2 className="text-2xl font-bold text-[#ff7e00]">Topping</h2>
                     <button
                         onClick={openAddModal}
                         className="flex items-center bg-[#ff7e00] hover:bg-[#ef4c2b] text-white font-medium px-4 py-2 rounded-md"

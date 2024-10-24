@@ -20,6 +20,7 @@ function HeaderHS1() {
     
     const confirmLogout = () => {
         localStorage.removeItem('authToken');
+        localStorage.removeItem('storeId');
         localStorage.setItem('loggedOut', 'true'); // Đặt cờ trạng thái đăng xuất
         navigate('/signin-store');
     };
@@ -45,6 +46,9 @@ function HeaderHS1() {
                     </Link>
                     <div className="flex flex-col sm:flex-row gap-4 sm:gap-12 items-center">
                         <div className='flex flex-col sm:flex-row gap-4 sm:gap-8'>
+                        <Link className='text-[#ef4c2b] font-semibold border-b-2 border-[#ef4c2b] rounded-sm' to='/home-store' state={{ storeId }}>
+                            Món ăn
+                        </Link>
                         <Link to='/topping-store' className='hover:text-[#ef4c2b] font-semibold' state={{ storeId }}>     
                             Topping
                         </Link>

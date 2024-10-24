@@ -12,7 +12,14 @@ function FormSignInStore() {
 
     const handleLoginClick = async (e) => {
         e.preventDefault(); // Prevent default form submission
-    
+        
+        const storedToken = localStorage.getItem('authToken');
+        const storeId = localStorage.getItem('storeId');
+        if (storedToken) {
+            navigate('/home-store',{ state: { storeId } }); // Nếu có token, điều hướng trực tiếp đến trang cửa hàng
+            return; // Ngăn không thực hiện các bước tiếp theo
+        }
+
         if (!email || !password) {
             setError('Vui lòng nhập đầy đủ email và mật khẩu');
             return;
@@ -22,7 +29,7 @@ function FormSignInStore() {
     
         // Call login API
         try {
-            const response = await fetch('http://localhost:3002/api/store/login', {
+            const response = await fetch('https://be-order-food.vercel.app/api/store/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

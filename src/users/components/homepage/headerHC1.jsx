@@ -18,7 +18,8 @@ function HeaderHS2() {
 
     
     const confirmLogout = () => {
-        localStorage.removeItem('authToken');
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
         localStorage.setItem('loggedOut', 'true'); // Đặt cờ trạng thái đăng xuất
         navigate('/sign-in');
     };
