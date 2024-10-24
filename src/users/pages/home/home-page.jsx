@@ -12,7 +12,7 @@ import { useLocation } from "react-router-dom";
 
 const HomePage = () => {
   const location = useLocation();
-  const userId = location.state?.userId;
+  const userId = localStorage.getItem('userId');
   console.log("userId at home is "+userId)
 
   const [currentIndex, setCurrentIndex] = useState(0);

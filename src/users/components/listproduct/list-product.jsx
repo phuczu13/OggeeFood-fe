@@ -10,11 +10,12 @@ function ListProduct() {
     const [products, setProducts] = useState([]); // Ban đầu để trống
     const [loading, setLoading] = useState(true); // Trạng thái loading
     const [error, setError] = useState(null); // Trạng thái lỗi
+    const userId = localStorage.getItem('userId');
 
     // Hàm gọi API để lấy dữ liệu sản phẩm ngẫu nhiên
     const fetchRandomProducts = async () => {
         try {
-            const response = await axios.get('https://be-order-food.vercel.app/api/product/get-randompro'); // API URL từ backend
+            const response = await axios.get('http://localhost:3002/api/product/get-randompro'); // API URL từ backend
             console.log(response.data.data);
             setProducts(response.data.data); // Cập nhật sản phẩm
             setLoading(false); // Tắt loading sau khi có dữ liệu
@@ -27,10 +28,31 @@ function ListProduct() {
 
     const [cart, setCart] = useState([]);
 
-    const handleAddToCart = (product) => {
-        setCart([...cart, product]);
-        toast.success("Thêm vào giỏ hàng thành công!");
+    const handleAddToCart = async (product) => {
+        console.log('Product object:', product);
+        try {
+            const response = await axios.post('http://localhost:3002/api/cart/add-to-cart', {
+                productId: product._id,
+                storeId: product.Store_id,
+                quantity: 1, // Bạn có thể cho phép người dùng chọn số lượng nếu muốn
+                userId,
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Nếu có xác thực người dùng
+                }
+            });
+    
+            if (response.status === 200) {
+                // Cập nhật giao diện giỏ hàng nếu cần
+                setCart([...cart, product]);
+                toast.success("Thêm vào giỏ hàng thành công!");
+            }
+        } catch (error) {
+            console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);
+            toast.error("Lỗi khi thêm sản phẩm vào giỏ hàng.");
+        }
     };
+    
 
 
     // Gọi API khi component được render lần đầu
