@@ -3,6 +3,8 @@ import axios from 'axios'; // Import axios
 import IconRating from "../../assets/svg/icon_rating.svg";
 import IconAddCart from "../../assets/svg/icon_addCart.svg";
 import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'
 
 function ListProduct() {
     const [products, setProducts] = useState([]); // Ban đầu để trống
@@ -22,6 +24,15 @@ function ListProduct() {
         }
     };
 
+
+    const [cart, setCart] = useState([]);
+
+    const handleAddToCart = (product) => {
+        setCart([...cart, product]);
+        toast.success("Thêm vào giỏ hàng thành công!");
+    };
+
+
     // Gọi API khi component được render lần đầu
     useEffect(() => {
         fetchRandomProducts();
@@ -37,8 +48,9 @@ function ListProduct() {
 
     return (
         <div className="w-full max-w-[1200px] mx-auto">
+            <ToastContainer />
             <div className='w-full flex items-center'>
-                <span className='text-[#ff7e00] text-xl w-1/5 font-semibold'>Món ăn nổi bật</span>
+                <span className='text-[#ff7e00] text-xl w-3/5 sm:w-1/5 font-semibold'>Món ăn nổi bật</span>
                 <div className='bg-[#ff7e00] w-full h-[1px]'></div>
             </div>
             <div className='mt-10'>
@@ -55,11 +67,11 @@ function ListProduct() {
                             <div className="mt-4">
                                 <h3 className="font-semibold text-lg">{product.Food_name} - {product.storeName}</h3>
                                 <p className="text-gray-500 text-sm">{product.Food_detail}</p>
-                                <div className="flex justify-between items-center mt-2">
+                                <div className="flex relative justify-between items-center mt-2">
                                     <span className="text-red-500 font-semibold">
                                         {product.Price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
                                     </span>
-                                    <button><img className='w-[30px] h-[30px] mr-2' src={IconAddCart} alt="" /></button>
+                                    <button onClick={(e) => { e.preventDefault(); handleAddToCart(product); }}><img className='w-[30px] absolute right-0 bottom-1 h-[30px] mr-2' src={IconAddCart} alt="" /></button>
                                 </div>
                             </div>
                         </Link>

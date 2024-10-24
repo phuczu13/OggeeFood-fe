@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom'; // Import useLocation to get passed state
-import { Toaster, toast } from 'react-hot-toast';
 import axios from 'axios';
 import LogoFood from '../../assets/svg/icon_logoweb.svg';
+import { ToastContainer, toast } from 'react-toastify';  // Thêm thư viện Toastify
+import 'react-toastify/dist/ReactToastify.css';  // Thêm style Toastify
+
 
 function VerifyForm() {
   const [otp, setOtp] = useState(new Array(6).fill(""));
@@ -12,13 +14,56 @@ function VerifyForm() {
   const email = location.state?.email; // Get email from passed state
 
   const handleChange = (element, index) => {
-    if (isNaN(element.value)) return;
-    const newOtp = [...otp];
-    newOtp[index] = element.value;
-    setOtp(newOtp);
+    const value = element.value;
+    if (!isNaN(value)) {
+      const newOtp = [...otp];
+      newOtp[index] = value;
+      setOtp(newOtp);
 
-    if (element.nextSibling && element.value !== "") {
-      element.nextSibling.focus();
+      if (value !== "" && element.nextSibling) {
+        element.nextSibling.focus();
+      }
+    }
+  };
+
+  // Hàm cho phép paste mã OTP
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const pasteData = e.clipboardData.getData('text').split('').filter(char => !isNaN(char)).slice(0, 6);
+    if (pasteData.length > 0) {
+      const newOtp = [...otp];
+      pasteData.forEach((char, i) => {
+        if (i < newOtp.length) {
+          newOtp[i] = char;
+        }
+      });
+      setOtp(newOtp);
+
+      // Sau khi paste, nhảy đến ô cuối cùng
+      const lastFilledIndex = pasteData.length - 1; // Lấy chỉ số của ô cuối cùng sau khi paste
+      const lastInput = document.querySelectorAll('input[name="otp"]')[lastFilledIndex];
+      if (lastInput) {
+        lastInput.focus(); // Đưa focus vào ô cuối cùng
+      }
+    }
+  };
+
+  // Hàm xử lý sự kiện xóa (Backspace)
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace") {
+      const newOtp = [...otp];
+
+      // Nếu ô hiện tại có giá trị, xóa giá trị của nó
+      if (newOtp[index] !== "") {
+        newOtp[index] = "";
+        setOtp(newOtp);
+      } else if (index > 0) {
+        // Nếu ô hiện tại trống và không phải là ô đầu tiên, focus về ô trước đó
+        const prevInput = e.target.previousSibling;
+        if (prevInput) {
+          prevInput.focus();
+        }
+      }
     }
   };
 
@@ -60,7 +105,7 @@ function VerifyForm() {
           <p className='font-medium mt-3'>Vui lòng nhập mã mà chúng tôi đã</p>
           <h2 className='font-medium'>gửi tới <span className='text-[#ff7e00] font-semibold'>{email}.</span></h2>
           <div className='mt-10'>
-            <div className='flex gap-2'>
+            <div className='flex gap-2' onPaste={handlePaste}>
               {otp.map((data, index) => (
                 <input
                   key={index}
@@ -70,6 +115,7 @@ function VerifyForm() {
                   value={data}
                   onChange={e => handleChange(e.target, index)}
                   onFocus={e => e.target.select()}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
                 />
               ))}
             </div>
@@ -92,7 +138,26 @@ function VerifyForm() {
           </div>
         </div>
       </div>
-      <Toaster />
+      <ToastContainer position='top-right' />
+
+      {/* CSS cho loading spinner */}
+      <style>
+        {`
+          .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ff7e00;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+          }
+          
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}
+      </style>
     </div>
   );
 }

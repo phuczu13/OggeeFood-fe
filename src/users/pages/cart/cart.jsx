@@ -1,45 +1,40 @@
 import React, { useState } from 'react';
 import HeaderHC3 from "../../components/homepage/headerHC3";
 import Footer from "../../components/homepage/footer";
-import { ToastContainer, toast } from 'react-toastify';  // Thêm thư viện Toastify
-import 'react-toastify/dist/ReactToastify.css';  // Thêm style Toastify
+import { ToastContainer, toast } from 'react-toastify'; 
+import 'react-toastify/dist/ReactToastify.css';  
+import IconMinus from '../../assets/svg/icon_minus.svg'
+import IconPlus from '../../assets/svg/icon_plusOrange.svg'
+import { Link } from 'react-router-dom';
 
 function Cart() {
   const [cartItems, setCartItems] = useState([
     {
-      storeId: 1,
+      storeId: 101,
       storeName: 'Bún Boà - Phúc Du',
       items: [
-        { id: 1, name: 'Bún Boà Gân', price: 40000, quantity: 1, selected: false },
-        { id: 2, name: 'Bún Boà Gân', price: 40000, quantity: 1, selected: false },
+        { id: 101, name: 'Bún Boà Quế', describe: 'Thịt tái', price: 30000, image: 'https://i.pinimg.com/736x/65/66/47/656647345744b84f16fa44e21f754953.jpg', quantity: 3, selected: false },
+        { id: 102, name: 'Bún Boà Quế', describe: 'Thịt nạm', price: 30000, image: 'https://i.pinimg.com/736x/65/66/47/656647345744b84f16fa44e21f754953.jpg', quantity: 2, selected: false },
+        { id: 103, name: 'Bún Boà Quế', describe: 'Gàu, gân', price: 35000, image: 'https://i.pinimg.com/736x/65/66/47/656647345744b84f16fa44e21f754953.jpg', quantity: 5, selected: false },   
+      ],
+      allSelected: false,
+    },
 
+    {
+      storeId: 201,
+      storeName: 'Bún Boà - Phúc Du',
+      items: [
+        { id: 22, name: 'Bún Boà Quế', describe: 'Thịt tái', price: 30000, image: 'https://i.pinimg.com/736x/65/66/47/656647345744b84f16fa44e21f754953.jpg', quantity: 1, selected: false },
+        { id: 23, name: 'Bún Boà Quế', describe: 'Thịt nạm', price: 30000, image: 'https://i.pinimg.com/736x/65/66/47/656647345744b84f16fa44e21f754953.jpg', quantity: 1, selected: false },
+        { id: 24, name: 'Bún Boà Quế', describe: 'Gàu, gân', price: 35000, image: 'https://i.pinimg.com/736x/65/66/47/656647345744b84f16fa44e21f754953.jpg', quantity: 1, selected: false },   
+      ],
+      allSelected: false,
+    },
 
-      ],
-      allSelected: false,
-    },
-    {
-      storeId: 2,
-      storeName: 'Bánh Mì - Cô Tiên',
-      items: [
-        { id: 3, name: 'Bánh Mì Thịt Nguội', price: 20000, quantity: 2, selected: false },
-        { id: 4, name: 'Bánh Mì Thịt Nguội', price: 20000, quantity: 2, selected: false },
-        { id: 5, name: 'Bánh Mì Thịt Nguội', price: 20000, quantity: 2, selected: false },
-      ],
-      allSelected: false,
-    },
-    {
-      storeId: 3,
-      storeName: 'Cháo Lòng - Ba Son',
-      items: [
-        { id: 6, name: 'Tiết Canh Lòng Heo', price: 25000, quantity: 2, selected: false },
-      ],
-      allSelected: false,
-    },
   ]);
 
-  const [isModalOpen, setIsModalOpen] = useState(false); // State quản lý modal
+  const [isModalOpen, setIsModalOpen  ] = useState(false); 
 
-  // Hàm thay đổi số lượng
   const handleQuantityChange = (storeId, itemId, action) => {
     setCartItems((prevItems) =>
       prevItems.map((store) =>
@@ -61,7 +56,6 @@ function Cart() {
     );
   };
 
-  // Hàm chọn/bỏ chọn một món
   const handleSelectItem = (storeId, itemId) => {
     setCartItems((prevItems) =>
       prevItems.map((store) =>
@@ -79,7 +73,23 @@ function Cart() {
     );
   };
 
-  // Hàm chọn/bỏ chọn tất cả món
+  const handleSelectAllItemsO1S = (storeId, isSelected) => {
+    setCartItems((prevCartItems) => 
+      prevCartItems.map((store) => {
+        if (store.storeId === storeId) {
+          return {
+            ...store,
+            items: store.items.map((item) => ({
+              ...item,
+              selected: isSelected,
+            })),
+          };
+        }
+        return store;
+      })
+    );
+  };
+  
   const handleSelectAllItems = () => {
     setCartItems((prevItems) =>
       prevItems.map((store) => ({
@@ -90,7 +100,6 @@ function Cart() {
     );
   };
 
-  // Hàm xóa các món đã chọn
   const handleDeleteSelected = () => {
     const hasSelectedItems = cartItems.some((store) =>
       store.items.some((item) => item.selected)
@@ -101,10 +110,9 @@ function Cart() {
       return;
     }
 
-    setIsModalOpen(true);  // Mở modal xác nhận xóa
+    setIsModalOpen(true);  
   };
 
-  // Hàm xác nhận xóa trong modal
   const confirmDelete = () => {
     setCartItems((prevItems) =>
       prevItems.map((store) => ({
@@ -112,36 +120,37 @@ function Cart() {
         items: store.items.filter((item) => !item.selected),
       }))
     );
-    setIsModalOpen(false);  // Đóng modal sau khi xóa
+    setIsModalOpen(false); 
     toast.success('Đã xóa thành công');
   };
 
-  // Tính tổng số món và tổng tiền cho các món được chọn
+  // Tính tổng số lượng của các món đã chọn
   const totalItems = cartItems.reduce(
     (total, store) =>
       total +
-      store.items.reduce((storeTotal, item) => (item.selected ? storeTotal + item.quantity : storeTotal), 0),
+      store.items.reduce((storeTotal, item) => item.selected ? storeTotal + item.quantity : storeTotal, 0),
     0
   );
+
+  // Tính tổng tiền của các món đã chọn
   const totalPrice = cartItems.reduce(
     (total, store) =>
       total +
-      store.items.reduce((storeTotal, item) => (item.selected ? storeTotal + item.price * item.quantity : 0), 0),
+      store.items.reduce((storeTotal, item) => item.selected ? storeTotal + (item.price * item.quantity) : storeTotal, 0),
     0
   );
 
-  // Điều kiện khi giỏ hàng trống
+
   const isCartEmpty = cartItems.every((store) => store.items.length === 0);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#F5F5F5]">
       <div>
         <HeaderHC3 />
       </div>
       <div className="flex-1 w-full max-w-[1200px] mx-auto mt-10">
         <ToastContainer />
         
-        {/* Modal xác nhận xóa */}
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg">
@@ -165,7 +174,6 @@ function Cart() {
           </div>
         )}
 
-        {/* Giỏ hàng */}
         {isCartEmpty ? (
           <div className="text-center mt-10">
             <p className="text-2xl font-semibold mb-4">Giỏ hàng của bạn còn trống</p>
@@ -177,33 +185,61 @@ function Cart() {
             </button>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-md p-4 mb-4">
-            <div className="text-xl font-bold mb-4">Giỏ hàng</div>
+          <div className="">
+            <div className="text-xl font-bold mb-4 text-[#ff7e00]">Sản phẩm</div>
 
             {cartItems.map((store) => (
-              <div key={store.storeId} className="mt-5 p-4 border rounded-lg shadow-sm bg-gray-50">
-                <div className="font-semibold text-lg mb-2">{store.storeName}</div>
+              <div key={store.storeId} className="mt-5 border shadow-sm bg-white">
+                <div className='flex gap-2 justify-between items-center text-center w-full border-b p-4'>
+                  <div className='flex flex-row items-center'>
+                    <input
+                      type="checkbox"
+                      className="mr-3 h-4 w-4"
+                      checked={store.items.every(item => item.selected)}
+                      onChange={(e) => handleSelectAllItemsO1S(store.storeId, e.target.checked)}
+                    />
+                    <div className='bg-[#ff7e00] px-2 text-white'>
+                      Nổi bật
+                    </div>
+                    <div className="font-semibold text-lg ml-3">{store.storeName}</div>
+                  </div>
+                  <div className='flex mr-10 font-semibold justify-center'>
+                    <div className='w-[110px]'>Số Lượng</div>
+                    <div className='w-[175px]'>Số Tiền</div>
+                    <div className='w-[75px]'>Thao Tác</div>
+                  </div>
+                </div>
                 {store.items.map((item) => (
-                  <div key={item.id} className="border-b py-4 flex items-center justify-between">
-                    <div className="flex items-center">
+                  <div key={item.id} className="border-b py-4 pr-4 flex items-center justify-between">
+                    <div className="flex items-center p-4">
                       <input
                         type="checkbox"
-                        className="mr-4"
+                        className="mr-5 h-4 w-4"
                         checked={item.selected}
                         onChange={() => handleSelectItem(store.storeId, item.id)}
                       />
-                      <div>
-                        <div className="font-semibold">Tên món: {item.name}</div>
-                        <div className="text-gray-500">Mặc định</div>
+                      <div className='flex gap-5 items-center'>
+                        <div>
+                          <img className='w-20 h-20 object-cover' src={item.image} alt="imageProduct" />
+                        </div>
+                        <div>
+                          <div className="font-semibold">Tên món: {item.name}</div>
+                          <div className="text-gray-500">Mô tả: {item.describe}</div>
+                        </div>  
                       </div>
                     </div>
-                    <div className="flex items-center space-x-4">
-                      <div className="text-lg font-semibold">{item.price.toLocaleString()} VND</div>
-                      <div className="flex items-center space-x-2">
-                        <button onClick={() => handleQuantityChange(store.storeId, item.id, 'decrease')}>-</button>
-                        <span>{item.quantity}</span>
-                        <button onClick={() => handleQuantityChange(store.storeId, item.id, 'increase')}>+</button>
+                    <div className="flex items-center mr-10">
+                      <div className="flex items-center px-2 text-center w-[110px] justify-between">
+                        <button className='border-2 flex justify-center text-center items-center rounded-full h-6 w-6 border-[#ff7e00]' onClick={() => handleQuantityChange(store.storeId, item.id, 'decrease')}>
+                          <img src={IconMinus} alt="" />
+                        </button>
+                        <span className='border-2 border-[#ff7e00] rounded-lg px-2 text-[#ff7e00]'>{item.quantity}</span>
+                        <button className='border-2 flex justify-center items-center rounded-full h-6 w-6 border-[#ff7e00]' onClick={() => handleQuantityChange(store.storeId, item.id, 'increase')}>
+                          <img src={IconPlus} alt="" />
+                        </button>
                       </div>
+                      <div className="text-lg text-center w-[175px] font-semibold text-[#ff7e00]">{item.price.toLocaleString()} VND</div>
+                      <button className='font-semibold w-[75px]'>Xóa</button>
                     </div>
                   </div>
                 ))}
@@ -213,13 +249,12 @@ function Cart() {
         )}
       </div>
 
-      {/* Thanh Tổng món & Tổng tiền */}
       {!isCartEmpty && (
-        <div className="sticky bottom-0 w-full bg-white border-t shadow-lg p-4 flex justify-between items-center max-w-[1200px] mx-auto">
+        <div className="sticky bottom-0 w-full bg-white border shadow-lg p-4 flex justify-between items-center max-w-[1200px] mx-auto">
           <div className="flex items-center space-x-4">
             <input
               type="checkbox"
-              className="mr-2"
+              className="mr-2 h-4 w-4"
               onChange={handleSelectAllItems}
             />
             <span>Chọn tất cả các món</span>
@@ -238,12 +273,12 @@ function Cart() {
             <span className="font-semibold">Tổng tiền: </span>
             <span className="text-orange-500">{totalPrice.toLocaleString()} VND</span>
           </div>
-          <button
-            onClick={() => alert('Đặt ngay')}
+          <Link
+            to='/payment'
             className="bg-orange-500 text-white py-2 px-4 rounded flex items-center"
           >
             Đặt ngay
-          </button>
+          </Link>
         </div>
       )}
 

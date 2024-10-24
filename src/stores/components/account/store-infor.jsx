@@ -112,9 +112,10 @@ function StoreInfo() {
   };
 
   return (
-    <div className="max-w-[1200px] mx-auto p-4">
-      <h1 className="text-2xl font-bold text-[#ff7e00] mb-6">Thông tin cửa hàng</h1>
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+
+    <div className="max-w-[800px] mx-auto p-4">
+      <h1 className="text-2xl font-bold text-[#ff7e00] mb-6 text-center">Thông tin cửa hàng</h1>
+      <form onSubmit={handleSubmit} className="bg-white shadow-md border rounded px-8 pt-6 pb-8 mb-6">     
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">
             Tên cửa hàng

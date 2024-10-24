@@ -9,11 +9,20 @@ import VerifyForm from './users/pages/auth/verify-form';
 import VerifyLoginForm from './users/pages/auth/verify-login-form';
 import HomePage from './users/pages/home/home-page';
 import Eatery from './users/pages/eatery/eatery';
+
 import Cart from './users/pages/cart/cart';
 import CallbackPage from './users/pages/home/CallbackPage';
 
+
 import ProductDetail from './users/components/listproduct/product-detail';
 import Product from './users/components/listproduct/product';
+
+import Payment from './users/pages/payment/payment';
+import OrderInfo from './users/pages/order/order-info';
+import Order from './users/pages/order/order';
+import Account from './users/pages/account/account';
+
+
 
 
 import DishDetails from './users/pages/home/dish-details';
@@ -52,11 +61,18 @@ function App() {
             < Route path='home-page' element={<HomePage/>} />
             <Route path="/auth/callback" element={<CallbackPage />} />
             < Route path='eatery' element={<Eatery/>} />
+
             < Route path='cart' element={<Cart/>} />
+
+
+            < Route path='order' element={<Order/>} />
+            < Route path='order-info' element={<OrderInfo/>} />
+            < Route path='account' element={<Account/>} />
+
 
             < Route path='product' element={<Product/>} />
             < Route path='product-detail' element={<ProductDetail/>} />
-
+            < Route path='payment' element={<Payment/>} />
 
             < Route path='dish-details' element={<DishDetails/>} />
 

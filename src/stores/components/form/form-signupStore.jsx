@@ -57,7 +57,6 @@ function FormSignUpStore() {
                 Đăng ký dành cho cửa hàng
             </h1>
             
-            {/* Input Email */}
             <div>
                 <input
                     className="py-3 px-4 w-full sm:w-[400px] border mb-4 hover:border-[#ff7e00] focus:border-[#ff7e00] focus:outline-none"
@@ -69,7 +68,6 @@ function FormSignUpStore() {
                 />
             </div>
             
-            {/* Input Mật khẩu */}
             <div>   
                 <input
                     className="py-3 px-4 w-full border mb-4 hover:border-[#ff7e00] focus:border-[#ff7e00] focus:outline-none"
@@ -81,7 +79,6 @@ function FormSignUpStore() {
                 />
             </div>
 
-            {/* Nhập lại mật khẩu */}
             <div>   
                 <input
                     className="py-3 px-4 w-full border hover:border-[#ff7e00] focus:border-[#ff7e00] focus:outline-none"
@@ -93,7 +90,6 @@ function FormSignUpStore() {
                 />
             </div>
 
-            {/* Checkbox để hiển thị mật khẩu */}
             <div className="mb-4 mt-2">
                 <label className="inline-flex items-center">
                     <input
@@ -106,10 +102,8 @@ function FormSignUpStore() {
                 </label>
             </div>
 
-            {/* Hiển thị thông báo lỗi */}
-            {error && <p className="text-red-500 mt-2">{error}</p>}
+            {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
 
-            {/* Nút Đăng Ký */}
             <div className="mt-10 flex justify-center mb-3">
                 <button
                     type="submit"
@@ -120,7 +114,6 @@ function FormSignUpStore() {
                 </button>
             </div>
 
-            {/* Điều hướng Đăng nhập */}
             <div className="flex justify-end text-[12px] sm:text-[14px]">
                 <div>Bạn đã có tài khoản cửa hàng? 
                     <Link to='/signin-store' className="text-[#ff7e00]"> Đăng nhập</Link>

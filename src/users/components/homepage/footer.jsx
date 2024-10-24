@@ -16,7 +16,7 @@ function Footer() {
 
             <div className='flex gap-5 justify-center my-10 font-semibold'>
                 <Link
-                    to='/home-page'
+                    to='/product'
                 >
                     PRODUCTS
                 </Link>
@@ -26,12 +26,12 @@ function Footer() {
                     BLOG
                 </Link>
                 <Link
-                    to='/home-store'
+                    to='/eatery'
                 >
                     STORE
                 </Link>
                 <Link
-                    to=''
+                    to='/contact'
                 >
                     CONTACTS
                 </Link>

@@ -56,15 +56,13 @@ function FormNewInfo() {
     }
   };
 
-
-  return (
-    <div>
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-10 sm:p-14 rounded-md shadow-md w-full max-w-[600px]"
-      >
-        <h2 className="text-2xl font-bold mb-14 text-center">Nhập thông tin cho cửa hàng mới</h2>
-
+    return(
+        <div>
+            <form
+                onSubmit={handleSubmit}
+                className="bg-white p-10 sm:p-14 rounded-md shadow-lg w-full max-w-[600px]"
+                >
+                <h2 className="text-2xl font-bold mb-14 text-center">Nhập thông tin cho cửa hàng mới</h2>
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div>
             <label className="block text-sm font-medium mb-1">Tên cửa hàng</label>

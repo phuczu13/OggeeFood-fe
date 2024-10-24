@@ -4,6 +4,8 @@ import IconPrevios from '../../assets/svg/icon_previos.svg'
 import IconNext from '../../assets/svg/icon_next.svg'
 import IconRating from "../../assets/svg/icon_rating.svg";
 import Footer from '../../components/homepage/footer';
+import IconSeeAll from '../../assets/svg/icon_next.svg'
+import { Link } from 'react-router-dom';
 
 
 const Eatery = () => {
@@ -231,6 +233,12 @@ const Eatery = () => {
         </div>
 
 
+      </div>
+      <div className='mt-10 w-full max-w-[350px] mx-auto flex justify-center '>
+        <Link to='/list-eatery' className='hover:ring-[#ff7e00] hover:outline-none hover:ring-2 relative p-3 border flex items-center justify-center font-semibold text-[18px] border-[#F8E7CC] text-[#ff7e00] rounded-full w-full'>
+          Xem tất cả các quán
+          <img className='absolute right-[70px]' src={IconSeeAll} alt="" />
+        </Link>
       </div>
 
       <div className='pt-10'>
