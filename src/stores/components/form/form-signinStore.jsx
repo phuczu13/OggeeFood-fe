@@ -29,7 +29,7 @@ function FormSignInStore() {
     
         // Call login API
         try {
-            const response = await fetch('http://localhost:3002/api/store/login', {
+            const response = await fetch('https://be-order-food.vercel.app/api/store/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
