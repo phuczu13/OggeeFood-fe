@@ -12,7 +12,6 @@ function FormSignInStore() {
 
     const handleLoginClick = async (e) => {
         e.preventDefault(); // Prevent default form submission
-        
         const storedToken = localStorage.getItem('authToken');
         const storeId = localStorage.getItem('storeId');
         if (storedToken) {
@@ -26,17 +25,17 @@ function FormSignInStore() {
         }
     
         setError('');
+        console.log("Data sent:", { email, password });
     
         // Call login API
         try {
-            const response = await fetch('https://be-order-food.vercel.app/api/store/login', {
+            const response = await fetch('http://localhost:3002/api/store/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ email, password }),
             });
-    
             const data = await response.json();
             console.log("Response from API:", data); // Log phản hồi để kiểm tra
     

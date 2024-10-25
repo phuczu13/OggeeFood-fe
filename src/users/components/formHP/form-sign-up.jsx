@@ -22,7 +22,7 @@ function FormSignUp() {
             setError('');
 
             try {
-                const response = await axios.post('http://localhost:3002/api/user/register', {
+                const response = await axios.post('https://be-order-food.vercel.app/api/user/register', {
                     name,
                     email,
                     password,

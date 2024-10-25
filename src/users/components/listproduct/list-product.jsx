@@ -15,7 +15,7 @@ function ListProduct() {
     // Hàm gọi API để lấy dữ liệu sản phẩm ngẫu nhiên
     const fetchRandomProducts = async () => {
         try {
-            const response = await axios.get('http://localhost:3002/api/product/get-randompro'); // API URL từ backend
+            const response = await axios.get('https://be-order-food.vercel.app/api/product/get-randompro'); // API URL từ backend
             console.log(response.data.data);
             setProducts(response.data.data); // Cập nhật sản phẩm
             setLoading(false); // Tắt loading sau khi có dữ liệu
@@ -31,7 +31,7 @@ function ListProduct() {
     const handleAddToCart = async (product) => {
         console.log('Product object:', product);
         try {
-            const response = await axios.post('http://localhost:3002/api/cart/add-to-cart', {
+            const response = await axios.post('https://be-order-food.vercel.app/api/cart/add-to-cart', {
                 productId: product._id,
                 storeId: product.Store_id,
                 quantity: 1, // Bạn có thể cho phép người dùng chọn số lượng nếu muốn

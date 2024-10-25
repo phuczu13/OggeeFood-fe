@@ -72,7 +72,7 @@ function VerifyForm() {
     if (otpCode.length === 6) {
       setIsLoading(true);
       try {
-        const response = await axios.post('http://localhost:3002/api/user/verify-otp', { email, otp: otpCode });
+        const response = await axios.post('https://be-order-food.vercel.app/api/user/verify-otp', { email, otp: otpCode });
 
         if (response.data.success) {
           toast.success("Xác minh thành công");

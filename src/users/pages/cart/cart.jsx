@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import IconMinus from '../../assets/svg/icon_minus.svg';
 import IconPlus from '../../assets/svg/icon_plusOrange.svg';
 import axios from 'axios'; // Use axios for API requests
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -14,32 +14,31 @@ function Cart() {
   const [selectedItems, setSelectedItems] = useState(new Set());
   const [productToDelete, setProductToDelete] = useState(null);
   const userId = localStorage.getItem('userId');
-
+  const navigate = useNavigate();
   useEffect(() => {
     fetchCartData();
   }, []);
 
   const fetchCartData = async () => {
     try {
-      const response = await axios.get(`http://localhost:3002/api/cart/get-cart?userId=${userId}`);
-      if (response.data) {
-        setCartItems([{
-          storeId: response.data.storeId,
-          storeName: response.data.storeName,
-          storeAddress: response.data.storeAddress,
-          items: response.data.items // This is an array of items
-        }]);
-      } else {
+      const response = await axios.get(`https://be-order-food.vercel.app/api/cart/get-cart?userId=${userId}`);
+      console.log(response.data); // Kiểm tra dữ liệu trả về
+      if (Array.isArray(response.data)) {
+        setCartItems(response.data);
+    } else {
         setCartItems([]);
-      }
+    }
     } catch (error) {
       console.error('Error fetching cart data:', error);
       toast.error('Lỗi khi tải giỏ hàng');
     }
   };
+  
+  
   const deleteProduct = async (storeId, productId) => {
     try {
-      const response = await axios.delete(`http://localhost:3002/api/cart/remove-item`, {
+      console.log( userId, storeId, productId)
+      const response = await axios.delete(`https://be-order-food.vercel.app/api/cart/remove-item`, {
         data: { userId, storeId, productId }
       });
       if (response.status === 200) {
@@ -52,28 +51,28 @@ function Cart() {
     }
   };
   
-  const updateQuantity = async (userId, productId, newQuantity) => {
+  const updateQuantity = async (userId, storeId, productId, newQuantity) => {
     try {
         if (newQuantity === 0) {
-            // Nếu số lượng là 0, gọi API để xóa sản phẩm khỏi giỏ hàng
-            const response = await axios.delete(`http://localhost:3002/api/cart/remove-item`, {
-                data: { userId, productId }
+            // If quantity is zero, call API to remove the item
+            const response = await axios.delete(`https://be-order-food.vercel.app/api/cart/remove-item`, {
+                data: { userId, storeId, productId }
             });
 
             if (response.status === 200) {
-                fetchCartData(); // Làm mới dữ liệu giỏ hàng sau khi xóa
+                fetchCartData(); // Refresh the cart data after deletion
                 toast.success('Sản phẩm đã bị xóa khỏi giỏ hàng!');
             }
         } else {
-            // Nếu số lượng > 0, cập nhật số lượng sản phẩm
-            const response = await axios.put(`http://localhost:3002/api/cart/update-quantity`, {
+            // If quantity > 0, update the item quantity
+            const response = await axios.put(`https://be-order-food.vercel.app/api/cart/update-quantity`, {
                 userId,
                 productId,
                 quantity: newQuantity,
             });
 
             if (response.status === 200) {
-                fetchCartData(); // Làm mới dữ liệu giỏ hàng
+                fetchCartData(); // Refresh the cart data after update
                 toast.success('Cập nhật số lượng thành công!');
             }
         }
@@ -83,8 +82,9 @@ function Cart() {
     }
 };
 
+// Function to handle when user clicks to increase or decrease quantity
 const handleQuantityChange = (storeId, productId, action) => {
-    const newCartItems = cartItems.map((store) => {
+  const newCartItems = (Array.isArray(cartItems) ? cartItems : []).map((store) => {
         if (store.storeId === storeId) {
             return {
                 ...store,
@@ -92,21 +92,22 @@ const handleQuantityChange = (storeId, productId, action) => {
                     if (item.productId._id === productId) {
                         const newQuantity = action === 'increase' 
                             ? item.quantity + 1 
-                            : Math.max(0, item.quantity - 1); // Cho phép giảm số lượng về 0
+                            : Math.max(0, item.quantity - 1); // Allow quantity to decrease to 0
 
-                        updateQuantity(userId, productId, newQuantity); // Gọi hàm update hoặc xóa
-
+                        updateQuantity(userId, storeId, productId, newQuantity); // Call update or delete
+                        console.log(userId, productId, newQuantity)
                         return { ...item, quantity: newQuantity };
                     }
                     return item;
-                }).filter(item => item.quantity > 0), // Loại bỏ các sản phẩm có quantity = 0 khỏi state
+                }).filter(item => item.quantity > 0), // Filter out items with quantity 0
             };
         }
         return store;
     });
 
-    setCartItems(newCartItems); // Cập nhật state
+    setCartItems(newCartItems); // Update the UI immediately
 };
+
 
 
   const handleSelectAllItems = () => {
@@ -117,10 +118,10 @@ const handleQuantityChange = (storeId, productId, action) => {
     } else {
         // Select all if not already selected
         cartItems.forEach(store => {
-            store.items.forEach(item => {
-                newSelection.add(`${store.storeId}-${item._id}`);
-            });
-        });
+          (store.items || []).forEach(item => {
+              newSelection.add(`${store.storeId}-${item._id}`);
+          });
+      });      
         setSelectedItems(newSelection);
     }
 };
@@ -137,44 +138,50 @@ const handleSelectItem = (storeId, productId) => {
   setSelectedItems(newSelectedItems);
 };
 
-  const calculateSelectedTotalItems = () => {
-    return Array.from(selectedItems).reduce((acc, itemKey) => {
-        const [storeId, productId] = itemKey.split('-');
-        const store = cartItems.find(store => store.storeId === storeId);
-        const item = store.items.find(item => item._id === productId);
-        return acc + (item ? item.quantity : 0);
-    }, 0);
+const calculateSelectedTotalItems = () => {
+  return Array.from(selectedItems).reduce((acc, itemKey) => {
+      const [storeId, productId] = itemKey.split('-');
+      const store = cartItems.find(store => store.storeId === storeId);
+      const item = store?.items?.find(item => item._id === productId);
+      return acc + (item ? item.quantity : 0);
+  }, 0);
 };
 
 const calculateSelectedTotalPrice = () => {
-    return Array.from(selectedItems).reduce((acc, itemKey) => {
-        const [storeId, productId] = itemKey.split('-');
-        const store = cartItems.find(store => store.storeId === storeId);
-        const item = store.items.find(item => item._id === productId);
-        return acc + (item ? item.price * item.quantity : 0);
-    }, 0);
+  return Array.from(selectedItems).reduce((acc, itemKey) => {
+      const [storeId, productId] = itemKey.split('-');
+      const store = cartItems.find(store => store.storeId === storeId);
+      const item = store?.items?.find(item => item._id === productId);
+      return acc + (item ? item.price * item.quantity : 0);
+  }, 0);
 };
+
 
 // Call these functions when rendering to get the latest totals
 const selectedTotalItems = calculateSelectedTotalItems();
 const selectedTotalPrice = calculateSelectedTotalPrice();
 
 
-  // Tính tổng số lượng của các món đã chọn
-  const totalItems = cartItems.reduce(
-    (total, store) =>
-      total +
-      store.items.reduce((storeTotal, item) => item.selected ? storeTotal + item.quantity : storeTotal, 0),
-    0
-  );
+const totalItems = (Array.isArray(cartItems) ? cartItems : []).reduce(
+  (total, store) =>
+    total +
+    (store.items?.reduce(
+      (storeTotal, item) => (item.selected ? storeTotal + item.quantity : storeTotal),
+      0
+    ) || 0),
+  0
+);
 
-  // Tính tổng tiền của các món đã chọn
-  const totalPrice = cartItems.reduce(
-    (total, store) =>
-      total +
-      store.items.reduce((storeTotal, item) => item.selected ? storeTotal + (item.price * item.quantity) : storeTotal, 0),
-    0
-  ); 
+const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
+  (total, store) =>
+    total +
+    (store.items?.reduce(
+      (storeTotal, item) =>
+        item.selected ? storeTotal + item.price * item.quantity : storeTotal,
+      0
+    ) || 0),
+  0
+);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F5F5]">
@@ -220,56 +227,65 @@ const selectedTotalPrice = calculateSelectedTotalPrice();
           <div>
             <div className="text-xl font-bold mb-4 text-[#ff7e00]">Sản phẩm</div>
 
-            {cartItems.map((store) => (
+            {Array.isArray(cartItems) && cartItems.length > 0 ? (
+            cartItems.map((store) => (
               <div key={store.storeId} className="mt-5 border shadow-sm bg-white p-4">
                 <h2 className="text-lg font-semibold">{store.storeName}</h2>
                 <p className="text-gray-500 mb-2">{store.storeAddress}</p>
-                {store.items.map((item) => (
-                  <div key={item._id} className="border-b py-4 pr-4 flex items-center justify-between">
-                    <div className="flex items-center p-4">
-                      <input
-                        type="checkbox"
-                        className="mr-5 h-4 w-4"
-                        checked={selectedItems.has(`${store.storeId}-${item._id}`)} // Check if item is selected
-                        onChange={() => handleSelectItem(store.storeId, item._id)} // Toggle selection                                            
-                      />
-                      <div className="flex gap-5 items-center">
-                        <img className="w-20 h-20 object-cover" src={item.imageUrl} alt="product" />
-                        <div>
-                          <div className="font-semibold">{item.name}</div>
-                          <div className="text-gray-500">{item.description}</div>
+                {Array.isArray(store.items) && store.items.length > 0 ? (
+                  store.items.map((item) => (
+                    <div key={item._id} className="border-b py-4 pr-4 flex items-center justify-between">
+                      <div className="flex items-center p-4">
+                        <input
+                          type="checkbox"
+                          className="mr-5 h-4 w-4"
+                          checked={selectedItems.has(`${store.storeId}-${item._id}`)} // Kiểm tra món đã được chọn hay chưa
+                          onChange={() => handleSelectItem(store.storeId, item._id)} // Thay đổi trạng thái chọn
+                        />
+                        <div className="flex gap-5 items-center">
+                          <img className="w-20 h-20 object-cover" src={item.imageUrl} alt="product" />
+                          <div>
+                            <div className="font-semibold">{item.name}</div>
+                            <div className="text-gray-500">{item.description}</div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex flex-col sm:flex-row items-center sm:mr-10">
-                      <div className="flex items-center justify-between w-full sm:w-[110px] px-2">
-                        <button className='border-2 flex justify-center text-center items-center rounded-full h-6 w-6 border-[#ff7e00]' onClick={() => handleQuantityChange(store.storeId, item.id, 'decrease')}>
-                          <img src={IconMinus} alt="" />
-                        </button>
-                        <span className="border-2 border-[#ff7e00] rounded-lg px-2 text-[#ff7e00]">
-                          {item.quantity}
-                        </span>
+                      <div className="flex flex-col sm:flex-row items-center sm:mr-10">
+                        <div className="flex items-center justify-between w-full sm:w-[110px] px-2">
+                          <button 
+                            className='border-2 flex justify-center text-center items-center rounded-full h-6 w-6 border-[#ff7e00]' 
+                            onClick={() => handleQuantityChange(store.storeId, item.productId._id, 'decrease')}>
+                            <img src={IconMinus} alt="minus" />
+                          </button>
+                          <span className="border-2 border-[#ff7e00] rounded-lg px-2 text-[#ff7e00]">
+                            {item.quantity}
+                          </span>
+                          <button 
+                            className="border-2 rounded-full h-6 w-6 border-[#ff7e00] flex items-center justify-center" 
+                            onClick={() => handleQuantityChange(store.storeId, item.productId._id, 'increase')}>
+                            <img src={IconPlus} alt="plus" />
+                          </button>
+                        </div>
+                        <div className="text-lg font-semibold text-[#ff7e00]">
+                          {(item.price * item.quantity).toLocaleString()} VND
+                        </div>
                         <button
-                          className="border-2 rounded-full h-6 w-6 border-[#ff7e00] flex items-center justify-center"
-                          onClick={() => handleQuantityChange(store.storeId, item.productId._id, 'increase')}
-                        >
-                          <img src={IconPlus} alt="plus" />
+                          className="font-semibold text-red-500 ml-4"
+                          onClick={() => deleteProduct(store.storeId, item.productId._id)}>
+                          Xóa
                         </button>
                       </div>
-                      <div className="text-lg font-semibold text-[#ff7e00]">
-                        {(item.price * item.quantity).toLocaleString()} VND
-                      </div>
-                      <button
-                        className="font-semibold text-red-500 ml-4"
-                        onClick={() => deleteProduct(store.storeId, item.productId._id)}
-                      >
-                        Xóa
-                      </button>
                     </div>
-                  </div>
-                ))}
+                  ))
+                ) : (
+                  <p>Không có sản phẩm nào trong cửa hàng</p>
+                )}
               </div>
-            ))}
+            ))
+          ) : (
+            <p>Không có sản phẩm nào trong giỏ hàng</p>
+          )}
+
           </div>
         )}
       </div>
@@ -300,12 +316,25 @@ const selectedTotalPrice = calculateSelectedTotalPrice();
           <span className="font-semibold">Tổng tiền: </span>
           <span className="text-orange-500">{selectedTotalPrice.toLocaleString()} VND</span>
         </div>
-        <Link
-          to='/payment'
-          className="bg-orange-500 text-white py-2 px-4 rounded flex items-center"
+        <button
+          className="bg-orange-500 text-white py-2 px-4 rounded"
+          onClick={() => {
+              const selectedItemsData = Array.from(selectedItems).map(itemKey => {
+                  const [storeId, productId] = itemKey.split('-');
+                  const store = cartItems.find(store => store.storeId === storeId);
+                  const item = store.items.find(item => item._id === productId);
+                  return {
+                      ...item,
+                      storeId,
+                      storeName: store.storeName
+                  };
+              });
+              localStorage.setItem('selectedItems', JSON.stringify(selectedItemsData)); // Lưu vào localStorage
+              navigate('/payment'); // Điều hướng đến trang thanh toán
+          }}
         >
-          Đặt ngay
-        </Link>
+            Đặt ngay
+        </button>                                             
       </div>
     )}
       <Footer />

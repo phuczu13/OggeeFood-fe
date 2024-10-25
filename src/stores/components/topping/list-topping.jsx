@@ -37,8 +37,16 @@ function ListTopping() {
     // API to fetch categories
     const fetchCategories = async () => {
         try {
-            const response = await axios.get(`https://be-order-food.vercel.app/api/category/getallCategory/${storeId}`);
-            setCategories(response.data.data); // Assuming categories come in 'data'
+            const response = await axios.get(`https://be-order-food.vercel.app/api/category/getallCategory`);
+            console.log(response.data); // In toàn bộ phản hồi để kiểm tra
+    
+            // Kiểm tra xem phản hồi có phải là một mảng hay không
+            if (Array.isArray(response.data)) {
+                setCategories(response.data); // Gán danh sách danh mục vào state
+            } else {
+                console.error("Data structure is not as expected");
+                toast.error("Unexpected data structure");
+            }
         } catch (error) {
             console.error("Error fetching categories:", error);
             toast.error("Failed to load categories.");

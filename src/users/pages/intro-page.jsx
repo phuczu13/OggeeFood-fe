@@ -23,10 +23,18 @@ function IntroPage() {
                     <div className='mt-5 flex justify-center'>
                         <Link
                             className='px-4 py-1 sm:px-6 sm:py-2 rounded-full border-2 border-[#ff7e00] text-[#ff7e00] hover:bg-[#ff7e00] hover:text-white'
-                            rel="stylesheet" to="/sign-in">
-                            Bắt đầu ngay
+                            rel="stylesheet" to="/home-page">
+                            Bắt đầu ngay nếu bạn đang tìm kiếm món ăn ngon!
                         </Link>
                     </div>
+                    <div className='mt-5 flex justify-center'>
+                        <Link
+                            className='px-4 py-1 sm:px-6 sm:py-2 rounded-full border-2 border-[#ff7e00] text-[#ff7e00] hover:bg-[#ff7e00] hover:text-white'
+                            rel="stylesheet" to="/sign-in">
+                            Bắt đầu ngay nếu bạn muốn trở thành đối tác của chúng tôi!
+                        </Link>
+                    </div>
+
                 </div>
             </div>
         </div>

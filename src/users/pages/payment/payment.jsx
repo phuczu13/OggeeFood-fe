@@ -1,38 +1,53 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify'; 
 import 'react-toastify/dist/ReactToastify.css';  
 import HeaderHC3 from '../../components/homepage/headerHC3';
 import Footer from '../../components/homepage/footer';
 import IconBack from '../../assets/svg/icon_previos.svg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Payment() {
   const [address, setAddress] = useState('');
   const [addressDetails, setAddressDetails] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('Payment');
+  const [orderItems, setOrderItems] = useState([]);
+  const navigate = useNavigate();
 
-  const [orderItems, setOrderItems] = useState([
-    { id: 1, name: "Bún Bò Phúc Du: Note (Nhiều bún, ít hành)", quantity: 2, price: 30000 },
-    { id: 2, name: "Trà đường - Size lớn: Note (Ít trà, nhiều đá)", quantity: 1, price: 10000 },
-  ]);
-
+  useEffect(() => {
+    // Fetch order items from local storage
+    const items = JSON.parse(localStorage.getItem('selectedItems')) || [];
+    setOrderItems(items);
+  }, []);
   const handleSubmit = () => {
+    // Display success message
     toast.success('Đặt hàng thành công');
-  };
 
-  // Tính tổng tiền với số lượng
+    // Clear order items from local storage
+    localStorage.removeItem('selectedItems');
+
+    // Navigate to a different page or refresh the current page if needed
+    // navigate('/somewhere'); // Uncomment this line if you want to redirect after payment
+  };
+  const handleBack = () =>{
+    localStorage.removeItem('selectedItems');
+    navigate('/cart');
+  }
+  // Calculate total price with quantity
   const totalPrice = orderItems.reduce((total, item) => total + (item.price * item.quantity), 0);
 
   return (
     <div className="">
-      <ToastContainer/>
+      <ToastContainer />
       <HeaderHC3 />
       <div className='sm:px-0 px-3'>
         <div className='relative py-6 max-w-[800px] mx-auto border px-5 my-10 rounded-md shadow-md'>
-          <Link to='/cart' className='absolute bg-[#fff0d7] hover:bg-[#ef4b2c] hover:border-[#ef4b2c] top-0 left-[-50px] flex border-2 border-[#ff7e00] w-8 h-8 gap-2 rounded-full justify-center'>
-            <img className='w-2' src={IconBack} alt="btnBack" />
-          </Link>
+          <button
+            className='absolute bg-[#fff0d7] hover:bg-[#ef4b2c] hover:border-[#ef4b2c] top-0 left-[-50px] flex border-2 border-[#ff7e00] w-8 h-8 gap-2 rounded-full justify-center'
+            onClick={handleBack}
+          >
+            <img className='w-2 mt-1.5' src={IconBack} alt="btnBack" />
+          </button>
           <div className="text-2xl font-bold mb-4 text-[#ff7e00] text-center">Thanh toán</div>
 
           <div className="mb-4">
@@ -76,8 +91,11 @@ function Payment() {
             <div className="mt-2">
               {orderItems.map((item) => (
                 <div key={item.id} className="flex justify-between items-center border-b pb-2 mt-2">
-                  <div>{item.quantity} x {item.name}</div>
-                  {/* Hiển thị giá tiền cho mỗi món (đã nhân với số lượng) */}
+                  <img className="w-20 h-20 object-cover" src={item.imageUrl} alt="product" />
+                  <div>
+                    <div>{item.quantity} x {item.name}</div>
+                    <div className="text-gray-500">{item.description}</div>                                         
+                  </div>
                   <div>{(item.price * item.quantity).toLocaleString()} VND</div>
                 </div>
               ))}
