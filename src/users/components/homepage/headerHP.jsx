@@ -1,6 +1,7 @@
 import VietNam from '../../assets/png/imageAvatar.png';
 import LogoWeb from '../../assets/svg/icon_logoweb.svg';
 import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 
 
 function HeaderHP() {
