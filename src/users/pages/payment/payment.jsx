@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify'; 
-import 'react-toastify/dist/ReactToastify.css';  
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import HeaderHC3 from '../../components/homepage/headerHC3';
 import Footer from '../../components/homepage/footer';
 import IconBack from '../../assets/svg/icon_previos.svg';
@@ -17,24 +17,40 @@ function Payment() {
   useEffect(() => {
     // Fetch order items from local storage
     const items = JSON.parse(localStorage.getItem('selectedItems')) || [];
+    console.log(items)
     setOrderItems(items);
   }, []);
+
   const handleSubmit = () => {
-    // Display success message
     toast.success('Đặt hàng thành công');
-
-    // Clear order items from local storage
     localStorage.removeItem('selectedItems');
-
-    // Navigate to a different page or refresh the current page if needed
-    // navigate('/somewhere'); // Uncomment this line if you want to redirect after payment
+    // Uncomment this line to redirect after payment
+    // navigate('/somewhere');
   };
-  const handleBack = () =>{
+
+  const handleBack = () => {
     localStorage.removeItem('selectedItems');
     navigate('/cart');
-  }
-  // Calculate total price with quantity
-  const totalPrice = orderItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  };
+
+  // Group items by storeId and calculate totals
+  const stores = orderItems.reduce((acc, item) => {
+    if (!acc[item.storeId]) {
+      acc[item.storeId] = { storeName: item.storeName, items: [], storeTotal: 0 };
+    }
+    acc[item.storeId].items.push(item);
+    acc[item.storeId].storeTotal += item.price * item.quantity;
+    return acc;
+  }, {});
+
+  // Shipping cost per store
+  const shippingCost = 20000;
+
+  // Calculate the grand total across all stores
+  const grandTotal = Object.values(stores).reduce(
+    (total, store) => total + store.storeTotal + shippingCost,
+    0
+  );
 
   return (
     <div className="">
@@ -86,47 +102,62 @@ function Payment() {
             </div>
           </div>
 
-          <div className="mb-4">
-            <div className="font-semibold">Tóm tắt đơn hàng</div>
-            <div className="mt-2">
-              {orderItems.map((item) => (
-                <div key={item.id} className="flex justify-between items-center border-b pb-2 mt-2">
-                  <img className="w-20 h-20 object-cover" src={item.imageUrl} alt="product" />
-                  <div>
-                    <div>{item.quantity} x {item.name}</div>
-                    <div className="text-gray-500">{item.description}</div>                                         
+          {Object.entries(stores).map(([storeId, { storeName, items, storeTotal }]) => (
+            <div key={storeId} className="mb-4">
+              <div className="font-semibold">{storeName}</div>
+              <div className="mt-2">
+                {items.map((item) => (
+                  <div key={item.id} className="flex justify-between items-center border-b pb-2 mt-2">
+                    <img className="w-20 h-20 object-cover" src={item.imageUrl} alt="product" />
+                    <div>
+                      <div>{item.quantity} x {item.name}</div>
+                      <div className="text-gray-500">{item.description}</div>
+                    </div>
+                    <div>{(item.price * item.quantity).toLocaleString()} VND</div>
                   </div>
-                  <div>{(item.price * item.quantity).toLocaleString()} VND</div>
+                ))}
+                <div className="flex justify-between mt-2">
+                  <div>Tổng số món</div>
+                  <div>{items.reduce((total, item) => total + item.quantity, 0)}</div>
                 </div>
-              ))}
-              <div className="flex justify-between mt-2">
-                <div>Tổng số món</div>
-                <div>{orderItems.reduce((total, item) => total + item.quantity, 0)}</div>
+                <div className="flex justify-between mt-2">
+                  <div>Tổng tiền món</div>
+                  <div>{storeTotal.toLocaleString()} VND</div>
+                </div>
+                <div className="flex justify-between mt-2">
+                  <div>Chi phí vận chuyển</div>
+                  <div>{shippingCost.toLocaleString()} VND</div>
+                </div>
+                <div className="flex justify-between font-bold mt-2">
+                  <div>Tổng thanh toán cửa hàng</div>
+                  <div>{(storeTotal + shippingCost).toLocaleString()} VND</div>
+                </div>
               </div>
-              <div className="flex justify-between mt-2">
-                <div>Tổng số tiền</div>
-                <div>{totalPrice.toLocaleString()} VND</div>
-              </div>
+            </div>
+          ))}
+
+          <div className="mb-4">
+            <div className="font-semibold">Chi tiết thanh toán tổng</div>
+
+            {/* Tổng tiền hàng */}
+            <div className="mt-2 flex justify-between">
+              <div>Tổng tiền hàng</div>
+              <div>{Object.values(stores).reduce((total, store) => total + store.storeTotal, 0).toLocaleString()} VND</div>
+            </div>
+
+            {/* Tổng tiền phí vận chuyển */}
+            <div className="mt-2 flex justify-between">
+              <div>Tổng tiền phí vận chuyển</div>
+              <div>{(Object.keys(stores).length * shippingCost).toLocaleString()} VND</div>
+            </div>
+
+            {/* Tổng thanh toán */}
+            <div className="mt-2 font-bold flex justify-between">
+              <div>Tổng thanh toán</div>
+              <div>{grandTotal.toLocaleString()} VND</div>
             </div>
           </div>
 
-          <div className="mb-4">
-            <div className="font-semibold">Chi tiết thanh toán</div>
-            <div className="mt-2">
-              <div className="flex justify-between">
-                <div>Tổng tiền món</div>
-                <div>{totalPrice.toLocaleString()} VND</div>
-              </div>
-              <div className="flex justify-between mt-2">
-                <div>Chi phí vận chuyển</div>
-                <div>20.000 VND</div>
-              </div>
-              <div className="flex justify-between font-bold mt-2">
-                <div>Tổng thanh toán</div>
-                <div>{(totalPrice + 20000).toLocaleString()} VND</div>
-              </div>
-            </div>
-          </div>
 
           <div className="mb-4">
             <label className="block font-semibold">Phương thức thanh toán</label>

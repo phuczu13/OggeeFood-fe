@@ -11,6 +11,7 @@ import { Link,useNavigate } from 'react-router-dom';
 function Cart() {
   const [cartItems, setCartItems] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true); // Trạng thái loading
   const [selectedItems, setSelectedItems] = useState(new Set());
   const [productToDelete, setProductToDelete] = useState(null);
   const userId = localStorage.getItem('userId');
@@ -25,12 +26,15 @@ function Cart() {
       console.log(response.data); // Kiểm tra dữ liệu trả về
       if (Array.isArray(response.data)) {
         setCartItems(response.data);
+        setLoading(false)
     } else {
         setCartItems([]);
+        setLoading(false)
     }
     } catch (error) {
       console.error('Error fetching cart data:', error);
       toast.error('Lỗi khi tải giỏ hàng');
+      setLoading(false)
     }
   };
   
@@ -182,6 +186,14 @@ const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
     ) || 0),
   0
 );
+
+  // if (loading) {
+  //   return <p>Loading...</p>;
+  // }
+
+  // if (error) {
+  //   return <p>Error: {error}</p>;
+  // }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F5F5]">

@@ -4,6 +4,7 @@ import LogoWeb from '../../assets/svg/icon_logoweb.svg';
 import { Toaster, toast } from 'react-hot-toast';
 import IconNext from '../../assets/svg/icon_next.svg'
 import IconLogout2 from '../../assets/svg/icon_Logout2.svg'
+import axios from 'axios';
 
 
 function HeaderHC3() {
@@ -12,6 +13,25 @@ function HeaderHC3() {
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    const [userData, setUserData] = useState(null); 
+
+    const userId = localStorage.getItem('userId');
+    // Gọi API lấy thông tin người dùng
+    useEffect(() => {
+      const fetchUserInfo = async () => {
+        try {
+          const response = await axios.get(`https://be-order-food.vercel.app/api/user/inforUser/${userId}`); // API lấy thông tin user bằng userId
+          console.log(response)
+          setUserData(response.data);
+        } catch (error) {
+          console.error('Error fetching user info', error);
+        }
+      };
+  
+      if (userId) {
+        fetchUserInfo();
+      }
+    }, [userId]);
     // Xử lý logout
     const handleLogout = () => {
         setIsModalOpen(true);
@@ -90,7 +110,7 @@ function HeaderHC3() {
                         <img
                             onClick={toggleProfileMenu}
                             className='w-10 rounded-full cursor-pointer profile-btn'
-                            src="https://scontent.fsgn5-13.fna.fbcdn.net/v/t39.30808-6/461185481_1058397005800455_8112413207197525059_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KBjzgjSWsngQ7kNvgFswZlu&_nc_zt=23&_nc_ht=scontent.fsgn5-13.fna&_nc_gid=AO6cALtSQK5aE8IbuZsL3vX&oh=00_AYBKgvrDIKw8U4qozLeMdtQsX5S3lvhumw74-N--YM55-g&oe=671B08F5"
+                            src={userData?.avatar || "default-profile.jpg"}
                             alt="Profile"
                         />
                     </div>
@@ -112,7 +132,7 @@ function HeaderHC3() {
                             <img
                                 onClick={toggleProfileMenu}
                                 className='w-10 rounded-full cursor-pointer hover:ring profile-btn'
-                                src="https://scontent.fsgn5-13.fna.fbcdn.net/v/t39.30808-6/461185481_1058397005800455_8112413207197525059_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=KBjzgjSWsngQ7kNvgFswZlu&_nc_zt=23&_nc_ht=scontent.fsgn5-13.fna&_nc_gid=AO6cALtSQK5aE8IbuZsL3vX&oh=00_AYBKgvrDIKw8U4qozLeMdtQsX5S3lvhumw74-N--YM55-g&oe=671B08F5"
+                                src={userData?.avatar || "default-profile.jpg"}
                                 alt="Profile"
                             />
                         </div>
@@ -165,7 +185,7 @@ function HeaderHC3() {
             {isProfileMenuOpen && (
                 <div className="fixed top-17 right-4 bg-opacity-50 flex justify-end items-start z-50">
                     <div className="bg-[#ffffff] rounded-md w-[200px] p-4 h-fit" style={{ boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)" }}>
-                        <h2 className="text-xl font-semibold mb-4 text-center">Phúc Phạm</h2>
+                        <h2 className="text-xl font-semibold mb-4 text-center">{userData.name}</h2>
                         <div className='bg-gray-400 h-[1px] w-full mb-4'></div>
                         <ul className="flex flex-col font-semibold">
                             <li>
