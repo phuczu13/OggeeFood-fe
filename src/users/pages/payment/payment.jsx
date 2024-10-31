@@ -15,6 +15,7 @@ function Payment() {
   });
 
   const [cartInfo, setCartInfo] = useState([]);
+  const [orderInfo, setOrderInfo] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState('Payment');
   const [orderItems, setOrderItems] = useState([]);
   const [userData, setUserData] = useState(null);
@@ -54,6 +55,19 @@ function Payment() {
       price: item.price
     })));
   }, []);
+
+   // Fetch order items from local storage
+   useEffect(() => {
+    const items = JSON.parse(localStorage.getItem('selectedItems')) || [];
+    setOrderInfo(items.map(item => ({
+      name: item.name,
+      image: item.imageUrl,
+      description: item.description,
+      quantity: item.quantity,
+      price: item.price
+    })));
+  }, []);
+
   const handleSubmit = async () => {
     try {
       const totalPrice = cartInfo.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -73,16 +87,30 @@ function Payment() {
         status: 'Đang tìm tài xế'
       };
       console.log(orderData)
-      const response = await axios.post('http://localhost:3002/api/order/create', orderData);
+      const response = await axios.post('https://be-order-food.vercel.app/api/order/create', orderData);
       if (response.status === 201) {
         toast.success("Đặt hàng thành công")
         localStorage.removeItem('selectedItems');
-
-        if (paymentMethod === 'COD') {
+        const orderId = response.data.data._id;
+        if (paymentMethod === 'Pointer') {
+          const data = {
+            amount: grandTotal, 
+            currency: 'VND', 
+            message: `Thanh toán đơn hàng ${orderId}`, 
+            userID: userId, 
+            orderID: orderId,
+            returnUrl: 'https://be-order-food.vercel.app/home-page', 
+            orders: orderInfo,
+          };
+          try {
+            const response = await axios.post('https://be-order-food.vercel.app/api/payment/create-payment', data);
+            window.location.href = response.data.url; // Chuyển hướng đến trang thanh toán
+          } catch (error) {
+            console.error('Error creating payment:', error);
+          }
+        } else {
           toast.success("Đặt hàng thành công")
           navigate('/home-page');
-        } else {
-          console.log('Processing Pointer payment...');
         }
       }
     } catch (error) {
@@ -236,7 +264,6 @@ function Payment() {
               onChange={(e) => setPaymentMethod(e.target.value)}
               className="w-full p-2 border rounded mt-1 hover:border-[#ff7e00] focus:outline-none focus:border-[#ff7e00] cursor-pointer"
             >
-              <option value="Payment">Chọn phương thức thanh toán</option>
               <option value="COD">Tiền mặt</option>
               <option value="Pointer">Pointer</option>
             </select>
