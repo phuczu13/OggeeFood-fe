@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import IconRating from "../../assets/svg/icon_rating.svg";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+
 
 function ListProduct() {
     const location = useLocation();
@@ -156,7 +157,9 @@ function ListProduct() {
                     {products.map((product) => (
                         <div key={product._id} className="border p-3 rounded-lg shadow-sm">
                             <div className="relative">
-                                <img src={product.Food_picture} alt={product.Food_name} className="w-full h-[150px] object-cover" />
+                                <Link to='/detail-product'>
+                                    <img src={product.Food_picture} alt={product.Food_name} className="w-full h-[150px] object-cover" />
+                                </Link>
                                 <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">
                                     <span className="text-black font-semibold">{product.rating}</span>
                                     <span className="ml-1">

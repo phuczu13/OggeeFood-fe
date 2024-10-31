@@ -30,7 +30,6 @@ import UserAccount from './users/pages/account/user-account';
 
 
 
-import DishDetails from './users/pages/home/dish-details';
 
 
 import SignUp from './users/pages/auth/sign-up';
@@ -42,6 +41,7 @@ import ToppingStore from './stores/pages/home/topping-store';
 import OrderStore from './stores/pages/home/order-store';
 import RevenueStore from './stores/pages/home/revenue-store';
 import InforStore from './stores/pages/home/infor-store';
+import DetailProduct from './stores/components/product/detail-product';
 
 
 import SignUpStore from './stores/pages/auth/signup-store'
@@ -49,6 +49,7 @@ import InforNewStore from './stores/pages/auth/infor-newstore'
 import VerifyStoreLogin from './stores/pages/auth/verify-store-login';
 import VerifyStoreRegister from './stores/pages/auth/verify-store-res';
 import PaymentStatus from './users/pages/payment/paymentStatus';
+
 
 
 
@@ -83,9 +84,6 @@ function App() {
             < Route path='payment' element={<Payment/>} />
             < Route path='payment-status/:id' element={<PaymentStatus/>} />
 
-
-            < Route path='dish-details' element={<DishDetails/>} />
-
             < Route path='sign-up' element={<SignUp/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
@@ -100,6 +98,8 @@ function App() {
             < Route path='order-store' element={<OrderStore/>} />
             < Route path='revenue-store' element={<RevenueStore/>} />
             < Route path='infor-store' element={<InforStore/>} />
+            < Route path='detail-product' element={<DetailProduct/>} />
+            
 
             < Route path='signup-store' element={<SignUpStore/>} />
             {/* < Route path='verify-store' element={<VerifyStore/>} /> */}
