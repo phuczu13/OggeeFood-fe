@@ -33,8 +33,8 @@ const HomePage = () => {
     if (!token) {
       // If no token is found, redirect to login
       //https://oggee-food-fe.vercel.app
-      const redirectUri = encodeURIComponent('http://localhost:1306/auth/callback'); // URL to redirect after login
-      //const redirectUri = encodeURIComponent('https://oggee-food-fe.vercel.app/auth/callback'); // URL to redirect after login
+      //const redirectUri = encodeURIComponent('http://localhost:1306/auth/callback'); // URL to redirect after login
+      const redirectUri = encodeURIComponent('https://oggee-food-fe.vercel.app/auth/callback'); // URL to redirect after login
       window.location.href = `https://sso-pointer.vercel.app/authorize?callbackUrl=${redirectUri}`;
     }
   };
