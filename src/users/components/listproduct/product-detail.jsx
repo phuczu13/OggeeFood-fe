@@ -15,7 +15,6 @@ const ProductDetail = ({ match }) => {
   const location = useLocation();
   const productId = location.state?.productId;
   const [product, setProduct] = useState(null);
- // Import CSS cho toastify
   const [cart, setCart] = useState([]);
   const [quantity, setQuantity] = useState(1);
   
@@ -33,7 +32,6 @@ const ProductDetail = ({ match }) => {
     fetchProductDetails();
   }, [productId]);
 
-  // Handle quantity change
   const handleQuantityChange = (type) => {
     if (type === 'increase') {
       setQuantity((prev) => prev + 1);
@@ -42,7 +40,6 @@ const ProductDetail = ({ match }) => {
     }
   };
 
-  // Handle adding to cart
   const addToCart = () => {
     const productToAdd = {
       ...product,
@@ -54,7 +51,7 @@ const ProductDetail = ({ match }) => {
   };
 
   if (!product) {
-    return <div>Loading...</div>; // Show a loading indicator while fetching data
+    return <div className='flex text-center items-center text-xl justify-center h-screen'>Loading...</div>;
   }
 console.log(product)
   return (
@@ -119,38 +116,31 @@ console.log(product)
             </div>
           </div>
 
-          {/* Reviews Section */}
           <div className="mt-8">
             <h2 className="text-lg font-bold mb-4">Đánh giá món</h2>
             <div className="border p-4 rounded">
-            <div className="flex items-center mb-2">
-                <img
-                src="https://scontent.fsgn5-13.fna.fbcdn.net/v/t39.30808-6/461185481_1058397005800455_8112413207197525059_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=s0m5LenacggQ7kNvgG77VTl&_nc_zt=23&_nc_ht=scontent.fsgn5-13.fna&_nc_gid=AcUuiCeylrAJoPXQBicK9b1&oh=00_AYA_s4kzTxWxBXytGtgwbUqMhenvaxyHtUfkubITRSKzRA&oe=671F6DF5"
-                alt="User Avatar"
-                className="w-10 h-10 rounded-full"
-                />
-                <div className="ml-4">
-                <p className="font-semibold">Tên khách hàng</p>
-                <p className="text-sm text-gray-500">4.9 ⭐⭐⭐⭐</p>
-                </div>
-            </div>
-            <p>
-                aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-            </p>
-            <div className="grid grid-cols-4 gap-2 mt-4">
-                <div className="bg-gray-200 w-full h-24">
-                <p className="text-center pt-8 text-gray-400">Hình</p>
-                </div>
-                <div className="bg-gray-200 w-full h-24">
-                <p className="text-center pt-8 text-gray-400">Hình</p>
-                </div>
-                <div className="bg-gray-200 w-full h-24">
-                <p className="text-center pt-8 text-gray-400">Hình</p>
-                </div>
-                <div className="bg-gray-200 w-full h-24">
-                <p className="text-center pt-8 text-gray-400">Hình</p>
-                </div>
-            </div>
+              <div className="flex items-center mb-2">
+                  <img
+                  src="https://scontent.fhan3-4.fna.fbcdn.net/v/t39.30808-6/461185481_1058397005800455_8112413207197525059_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=SfvOndml2OMQ7kNvgFg5I0q&_nc_zt=23&_nc_ht=scontent.fhan3-4.fna&_nc_gid=AqYeJVo_fzKd8CNrZc3wIdI&oh=00_AYBIlaRMIWS2_o1OUsos2JitUmase4mOTuz8ykWBE4orQQ&oe=6728E0B5"
+                  alt="User Avatar"
+                  className="w-10 h-10 rounded-full"
+                  />
+                  <div className="ml-4">
+                  <p className="font-semibold">Tên người dùng</p>
+                  <p className="text-sm text-gray-500">4.9 ⭐⭐⭐⭐⭐</p>
+                  </div>
+              </div>
+              <p>
+                  Bún ngon lắm ạ!
+              </p>
+              <div className="grid grid-cols-3 gap-2 mt-3">
+                  <div >
+                    <img className="rounded-sm" src="https://cdn3.ivivu.com/2022/09/bun-bo-hue-ivivu-3-1024x683.jpg" alt="" />
+                  </div>
+              </div>
+              <p className='text-[13px] text-[#939393] mt-2'>
+                22:02 <span>13-06-2024</span> | Thể loại: Bún
+              </p>
             </div>
           </div>
         </div>

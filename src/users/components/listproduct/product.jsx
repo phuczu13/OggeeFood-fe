@@ -48,7 +48,6 @@ function Product() {
         toast.success("Thêm vào giỏ hàng thành công!");
     };
 
-
     return (
         <div>
             <div>

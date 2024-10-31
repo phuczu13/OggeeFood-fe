@@ -28,7 +28,6 @@ const HomePage = () => {
     );
   };
 
-  // Function to check if user is logged in
   const checkLoginStatus = () => {
     const token = localStorage.getItem('token'); // Assume token is stored in localStorage
     if (!token) {
@@ -40,7 +39,6 @@ const HomePage = () => {
     }
   };
 
-  // Run the checkLoginStatus function when the component is mounted
   useEffect(() => {
     checkLoginStatus();
   }, []);

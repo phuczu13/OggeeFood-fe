@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Import CSS cho toastify
+import 'react-toastify/dist/ReactToastify.css';
 
 const initialOrders = [
   {
@@ -56,6 +56,12 @@ function ListOrder() {
   const [reorderConfirmation, setReorderConfirmation] = useState(null); 
   const [rebuyConfirmation, setRebuyConfirmation] = useState(false);
 
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
+  const [images, setImages] = useState([]);
+  const [showRatingModal, setShowRatingModal] = useState(false);
+
+  const ratingRef = useRef(null);
   const confirmationRef = useRef(null);  
   const detailRef = useRef(null);  
   const reorderConfirmationRef = useRef(null);  
@@ -136,9 +142,10 @@ function ListOrder() {
     if (rebuyConfirmationRef.current && !rebuyConfirmationRef.current.contains(event.target)) { 
       setRebuyConfirmation(false); 
     }
+    if (ratingRef.current && !ratingRef.current.contains(event.target)) { // Add this condition
+      setShowRatingModal(false);
+    }
   };
-  
-  
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -146,6 +153,48 @@ function ListOrder() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // Hàm form rating
+  const handleRating = (order) => {
+  setSelectedOrder(order);
+  setRating(0);
+  setComment('');
+  setImages([]);
+  setShowRatingModal(true);
+  };
+
+  const handleStarClick = (star) => {
+    setRating(star);
+  };
+
+  const handleCommentChange = (e) => {
+    setComment(e.target.value);
+  };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    const imagePreviews = files.map((file) => URL.createObjectURL(file));
+    setImages(imagePreviews);
+  };
+  
+  const handleRatingSubmit = () => {
+    if (rating < 1) {
+      toast.warning("Bạn cần đánh giá ít nhất 1 sao!");
+      return;
+    }
+  
+    if (images.length > 3) {
+      toast.warning("Chỉ được chọn tối đa 3 ảnh.");
+      return;
+    }
+  
+    toast.success("Đánh giá thành công!");
+    setShowRatingModal(false);
+    setRating(0);
+    setComment('');
+    setImages([]);
+  };
+  
 
   return (
     <div className="max-w-[1200px] mx-auto p-4">
@@ -214,6 +263,12 @@ function ListOrder() {
                     onClick={() => handleShowDetail(order)}
                   >
                     Xem chi tiết
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                    onClick={() => handleRating (order)}
+                  >
+                    Đánh giá
                   </button>
                   <button
                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
@@ -369,6 +424,52 @@ function ListOrder() {
               onClick={confirmReorder}
             >
               Đặt hàng
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    
+    {showRatingModal && selectedOrder && (
+      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+        <div className="bg-white rounded-lg p-6 max-w-md w-full" ref={ratingRef}>
+          <h2 className="text-lg font-semibold mb-4 text-center">Đánh giá đơn hàng</h2>
+          <div className="flex justify-center gap-1 mb-4">
+            {[1, 2, 3, 4, 5].map(star => (
+              <span
+                key={star}
+                className={`cursor-pointer ${rating >= star ? 'text-yellow-500' : 'text-gray-400'}`}
+                onClick={() => handleStarClick(star)}
+              >
+                ★
+              </span>
+            ))}
+          </div>
+          <textarea
+            className="w-full border rounded p-2 mb-4"
+            placeholder="Đánh giá về đơn hàng của bạn"
+            value={comment}
+            onChange={handleCommentChange}
+          />
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleImageChange}
+            className="mb-4"
+          />
+          <div className="flex justify-center gap-4 mt-4">
+            <button
+              className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+              onClick={() => setShowRatingModal(false)}
+            >
+              Hủy
+            </button>
+            <button
+              className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+              onClick={handleRatingSubmit}
+            >
+              Đánh giá
             </button>
           </div>
         </div>
