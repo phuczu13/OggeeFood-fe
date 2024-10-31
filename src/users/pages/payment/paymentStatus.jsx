@@ -10,7 +10,7 @@ function PaymentStatus() {
     useEffect(() => {
         async function fetchOrderStatus() {
             try {
-                const response = await axios.get(`https://be-order-food.vercel.app/api/orders/${id}`);
+                const response = await axios.get(`https://be-order-food.vercel.app/api/order/donhang/${id}`);
                 if (response.data.paymentStatus === "Đã thanh toán") {
                     setStatus('Thanh toán thành công!');
                 } else {
@@ -32,7 +32,7 @@ function PaymentStatus() {
     return (
         <div className="payment-status">
             <h1>{status}</h1>
-            
+
             {/* Thêm nút quay về trang chủ hoặc trang đặt hàng nếu cần */}
         </div>
     );
