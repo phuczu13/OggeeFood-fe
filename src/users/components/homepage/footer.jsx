@@ -28,13 +28,11 @@ function Footer() {
                 <Link
                     to='/eatery'
                 >
-                    STORE
+                    EATERY
                 </Link>
-                <Link
-                    to='/contact'
-                >
+                <a href="https://www.facebook.com/phuczu13" target="_blank" rel="noopener noreferrer">
                     CONTACTS
-                </Link>
+                </a>
             </div>
 
             <div className='max-w-[1200px] mt-10 h-[1px] bg-[#ff7e00] flex justify-center mx-auto'>
