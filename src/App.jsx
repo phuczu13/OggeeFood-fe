@@ -48,6 +48,7 @@ import SignUpStore from './stores/pages/auth/signup-store'
 import InforNewStore from './stores/pages/auth/infor-newstore'
 import VerifyStoreLogin from './stores/pages/auth/verify-store-login';
 import VerifyStoreRegister from './stores/pages/auth/verify-store-res';
+import PaymentStatus from './users/pages/payment/paymentStatus';
 
 
 
@@ -80,6 +81,8 @@ function App() {
             < Route path='product' element={<Product/>} />
             < Route path='product-detail' element={<ProductDetail/>} />
             < Route path='payment' element={<Payment/>} />
+            < Route path='payment-status/:id' element={<PaymentStatus/>} />
+
 
             < Route path='dish-details' element={<DishDetails/>} />
 

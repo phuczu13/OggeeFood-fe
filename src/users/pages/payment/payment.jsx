@@ -99,7 +99,7 @@ function Payment() {
             message: `Thanh toán đơn hàng ${orderId}`, 
             userID: userId, 
             orderID: orderId,
-            returnUrl: 'https://be-order-food.vercel.app/home-page', 
+            returnUrl: `https://be-order-food.vercel.app/payment-status/${orderId}`, 
             orders: orderInfo,
           };
           try {
@@ -109,7 +109,6 @@ function Payment() {
             console.error('Error creating payment:', error);
           }
         } else {
-          toast.success("Đặt hàng thành công")
           navigate('/home-page');
         }
       }
