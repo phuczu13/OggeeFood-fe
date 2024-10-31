@@ -5,14 +5,91 @@ import HeaderHC3 from '../../components/homepage/headerHC3';
 import Footer from '../../components/homepage/footer';
 import IconBack from '../../assets/svg/icon_previos.svg';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function Payment() {
-  const [address, setAddress] = useState('');
-  const [addressDetails, setAddressDetails] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [deliveryInfo, setDeliveryInfo] = useState({
+    name: '',
+    phone: '',
+    address: ''
+  });
+
+  const [cartInfo, setCartInfo] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState('Payment');
   const [orderItems, setOrderItems] = useState([]);
+  const [userData, setUserData] = useState(null);
   const navigate = useNavigate();
+
+  const userId = localStorage.getItem('userId');
+    // Fetch user information
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await axios.get(`https://be-order-food.vercel.app/api/user/inforUser/${userId}`);
+        setUserData(response.data);
+        setDeliveryInfo({
+          name: response.data.name,
+          phone: response.data.phoneNumber,
+          address: response.data.address
+        });
+      } catch (error) {
+        console.error('Error fetching user info', error);
+      }
+    };
+
+    if (userId) {
+      fetchUserInfo();
+    }
+  }, [userId]);
+
+   // Fetch order items from local storage
+   useEffect(() => {
+    const items = JSON.parse(localStorage.getItem('selectedItems')) || [];
+    setCartInfo(items.map(item => ({
+      productId: item.productId._id,
+      name: item.name,
+      image: item.imageUrl,
+      description: item.description,
+      quantity: item.quantity,
+      price: item.price
+    })));
+  }, []);
+  const handleSubmit = async () => {
+    try {
+      const totalPrice = cartInfo.reduce((total, item) => total + item.price * item.quantity, 0);
+      const totalShip = 20000;
+
+      const cartItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
+      const storeId = cartItems[0]?.storeId;
+
+      const orderData = {
+        customerId: userId,
+        cart: cartInfo,
+        deliveryInfo,
+        totalPrice,
+        totalShip,
+        storeId,
+        paymentMethod: paymentMethod,
+        status: 'Đang tìm tài xế'
+      };
+      console.log(orderData)
+      const response = await axios.post('http://localhost:3002/api/order/create', orderData);
+      if (response.status === 201) {
+        toast.success("Đặt hàng thành công")
+        localStorage.removeItem('selectedItems');
+
+        if (paymentMethod === 'COD') {
+          toast.success("Đặt hàng thành công")
+          navigate('/home-page');
+        } else {
+          console.log('Processing Pointer payment...');
+        }
+      }
+    } catch (error) {
+      console.error('Error creating order', error);
+      toast.error('Đặt hàng thất bại');
+    }
+  };
 
   useEffect(() => {
     // Fetch order items from local storage
@@ -20,13 +97,6 @@ function Payment() {
     console.log(items)
     setOrderItems(items);
   }, []);
-
-  const handleSubmit = () => {
-    toast.success('Đặt hàng thành công');
-    localStorage.removeItem('selectedItems');
-    // Uncomment this line to redirect after payment
-    // navigate('/somewhere');
-  };
 
   const handleBack = () => {
     localStorage.removeItem('selectedItems');
@@ -71,12 +141,12 @@ function Payment() {
             <div>Thời gian giao dự kiến: <span className="font-bold">25 phút</span></div>
 
             <div className="mt-2">
-              <label className="block font-semibold">Địa chỉ</label>
+              <label className="block font-semibold">Tên người nhận</label>
               <input
                 type="text"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                placeholder="Nhập địa chỉ của bạn"
+                placeholder="Tên người nhận"
+                value={deliveryInfo.name}
+                onChange={(e) => setDeliveryInfo({ ...deliveryInfo, name: e.target.value })}
                 className="w-full p-2 border rounded mt-1 hover:border-[#ff7e00] focus:outline-none focus:border-[#ff7e00]"
               />
             </div>
@@ -84,9 +154,9 @@ function Payment() {
               <label className="block font-semibold">Chi tiết địa chỉ</label>
               <input
                 type="text"
-                value={addressDetails}
-                onChange={(e) => setAddressDetails(e.target.value)}
-                placeholder="Giúp tài xế tìm bạn dễ dàng hơn"
+                placeholder="Số điện thoại"
+                value={deliveryInfo.phone}
+                onChange={(e) => setDeliveryInfo({ ...deliveryInfo, phone: e.target.value })}
                 className="w-full p-2 border rounded mt-1 hover:border-[#ff7e00] focus:outline-none focus:border-[#ff7e00]"
               />
             </div>
@@ -94,9 +164,9 @@ function Payment() {
               <label className="block font-semibold">Số điện thoại nhận hàng</label>
               <input
                 type="text"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                placeholder="Nhập số điện thoại"
+                placeholder="Địa chỉ"
+                value={deliveryInfo.address}
+                onChange={(e) => setDeliveryInfo({ ...deliveryInfo, address: e.target.value })}
                 className="w-full p-2 border rounded mt-1 hover:border-[#ff7e00] focus:outline-none focus:border-[#ff7e00]"
               />
             </div>
@@ -167,7 +237,7 @@ function Payment() {
               className="w-full p-2 border rounded mt-1 hover:border-[#ff7e00] focus:outline-none focus:border-[#ff7e00] cursor-pointer"
             >
               <option value="Payment">Chọn phương thức thanh toán</option>
-              <option value="COD">COD</option>
+              <option value="COD">Tiền mặt</option>
               <option value="Pointer">Pointer</option>
             </select>
           </div>
