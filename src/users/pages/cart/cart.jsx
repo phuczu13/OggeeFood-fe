@@ -228,12 +228,12 @@ const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
         {cartItems.length === 0 ? (
           <div className="text-center mt-10">
             <p className="text-2xl font-semibold mb-4">Giỏ hàng của bạn còn trống</p>
-            <button
-              onClick={() => (window.location.href = '/')}
+            <Link
+              to='/product'
               className="bg-[#ff7e00] text-white py-2 px-4 rounded hover:bg-[#ef4b2c] hover:outline-none"
             >
               Lựa món ngay
-            </button>
+            </Link>
           </div>
         ) : (
           <div>
