@@ -9,6 +9,8 @@ import { useLocation } from "react-router-dom";
 function HeaderHS1() {
     const location = useLocation();
     const storeId = location.state?.storeId;
+    //const storeId = localStorage.getItem('storeId');
+
     console.log("storeId is "+storeId)
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);

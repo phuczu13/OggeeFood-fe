@@ -1,55 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const initialOrders = [
-  {
-    id: 'CH2202Y1306',
-    name: 'Phạm Thanh Phúc',
-    price: 20000,
-    quantity: 2,
-    status: 'pending',
-  },
-  {
-    id: 'CH1234O1111',
-    name: 'Nguyễn Văn B',
-    price: 40000,
-    quantity: 5,
-    status: 'pending',
-  },
-  {
-    id: 'CH1234O2222',
-    name: 'Nguyễn Thị B',
-    price: 30000,
-    quantity: 1,
-    status: 'received',
-  },
-  {
-    id: 'CH1234O3333',
-    name: 'Nguyễn Thị N',
-    price: 15000,
-    quantity: 1,
-    status: 'received',
-  },
-  {
-    id: 'CH1234O4444',
-    name: 'Nguyễn Thanh M',
-    price: 15000,
-    quantity: 3,
-    status: 'completed',
-  },
-  {
-    id: 'CH1234O5555',
-    name: 'Nguyễn Thanh L',
-    price: 30000,
-    quantity: 2,
-    status: 'completed',
-  },
-];
+import axios from 'axios'; // Use axios for API requests
 
 function ListOrder() {
-  const [orders, setOrders] = useState(initialOrders);
-  const [activeTab, setActiveTab] = useState('pending');
+  const [orders, setOrders] = useState([]);
+  const [activeTab, setActiveTab] = useState('Chờ xác nhận');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [confirmationAction, setConfirmationAction] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
@@ -67,22 +23,52 @@ function ListOrder() {
   const reorderConfirmationRef = useRef(null);  
   const rebuyConfirmationRef = useRef(null);
   
-  const filteredOrders = orders.filter(order => order.status === activeTab);
+  const filteredOrders = orders.filter(order => {
+    if (activeTab === 'Chờ lấy hàng1') {
+      return ['Cửa hàng xác nhận', 'Đang tìm tài xế', 'Đã tìm thấy tài xế','Chờ lấy hàng'].includes(order.status);
+    }
+    return order.status === activeTab;
+  });
+  const userId = localStorage.getItem('userId');
+
+  useEffect(() => {
+    const fetchOrderInfo = async () => {
+      try {
+        const response = await axios.get(`https://be-order-food.vercel.app/api/order/get-order/${userId}`);
+        setOrders(response.data);
+      } catch (error) {
+        console.error('Error fetching order info', error);
+      }
+    };
+
+    if (userId) {
+      fetchOrderInfo();
+    }
+  }, [userId]);
+ 
 
   const handleShowDetail = (order) => {
     setSelectedOrder(order);
     setShowDetail(true);
   };
 
-  const handleConfirmCancel = (order) => {
+  const handleConfirmCancel = async (order) => {
     setSelectedOrder(order);
     setConfirmationAction('cancel');
+    try {
+      const response = await axios.put(`https://be-order-food.vercel.app/api/order/orders/${order._id}/cancel`);
+      console.log(response.data.message); 
+      const updatedOrdersResponse = await axios.get(`https://be-order-food.vercel.app/api/order/get-order/${userId}`);
+      setOrders(updatedOrdersResponse.data);
+    } catch (error) {
+        console.error(error.response ? error.response.data.error : 'An error occurred while canceling the order.');
+    }
   };
 
   const handleCancelOrder = () => {
     setOrders(prevOrders =>
       prevOrders.map(order =>
-        order.id === selectedOrder.id ? { ...order, status: 'canceled' } : order
+        order.id === selectedOrder._id ? { ...order, status: 'Đã hủy' } : order
       )
     );
     setSelectedOrder(null);
@@ -106,7 +92,7 @@ function ListOrder() {
   const confirmRebuy = () => {
     setOrders(prevOrders =>
       prevOrders.map(order =>
-        order.id === selectedOrder.id ? { ...order, status: 'pending' } : order
+        order.id === selectedOrder._id ? { ...order, status: 'Chờ xác nhận' } : order
       )
     );
     setRebuyConfirmation(false);
@@ -119,7 +105,7 @@ function ListOrder() {
   const confirmReorder = () => {
     setOrders(prevOrders =>
       prevOrders.map(order =>
-        order.id === selectedOrder.id ? { ...order, status: 'pending' } : order
+        order.id === selectedOrder._id ? { ...order, status: 'Chờ xác nhận' } : order
       )
     );
     setReorderConfirmation(false);
@@ -204,26 +190,32 @@ function ListOrder() {
 
       <div className="flex space-x-4 border-b font-semibold mb-4">
         <button
-          className={`pb-2 hover:text-[#ef4b2c] hover:border-b-[#ef4b2c] hover:border-b-2 ${activeTab === 'pending' ? 'border-b-2 border-red-500 text-[#ef4b2c]' : ''}`}
-          onClick={() => setActiveTab('pending')}
+          className={`pb-2 hover:text-[#ef4b2c] hover:border-b-[#ef4b2c] hover:border-b-2 ${activeTab === 'Chờ xác nhận' ? 'border-b-2 border-red-500 text-[#ef4b2c]' : ''}`}
+          onClick={() => setActiveTab('Chờ xác nhận')}
         >
           Chờ xác nhận
         </button>
         <button
-          className={`pb-2 hover:text-[#ef4b2c] hover:border-b-[#ef4b2c] hover:border-b-2 ${activeTab === 'received' ? 'border-b-2 border-red-500 text-[#ef4b2c]' : ''}`}
-          onClick={() => setActiveTab('received')}
+          className={`pb-2 hover:text-[#ef4b2c] hover:border-b-[#ef4b2c] hover:border-b-2 ${activeTab === 'Chờ lấy hàng1' ? 'border-b-2 border-red-500 text-[#ef4b2c]' : ''}`}
+          onClick={() => setActiveTab('Chờ lấy hàng1')}
         >
-          Đã nhận
+          Chờ lấy hàng
         </button>
         <button
-          className={`pb-2 hover:text-[#ef4b2c] hover:border-b-[#ef4b2c] hover:border-b-2 ${activeTab === 'completed' ? 'border-b-2 border-red-500 text-[#ef4b2c]' : ''}`}
-          onClick={() => setActiveTab('completed')}
+          className={`pb-2 hover:text-[#ef4b2c] hover:border-b-[#ef4b2c] hover:border-b-2 ${activeTab === 'Đang giao' ? 'border-b-2 border-red-500 text-[#ef4b2c]' : ''}`}
+          onClick={() => setActiveTab('Đang giao')}
+        >
+          Chờ giao hàng
+        </button>
+        <button
+          className={`pb-2 hover:text-[#ef4b2c] hover:border-b-[#ef4b2c] hover:border-b-2 ${activeTab === 'Hoàn thành' ? 'border-b-2 border-red-500 text-[#ef4b2c]' : ''}`}
+          onClick={() => setActiveTab('Hoàn thành')}
         >
           Hoàn thành
         </button>
         <button
-          className={`pb-2 hover:text-[#ef4b2c] hover:border-b-[#ef4b2c] hover:border-b-2 ${activeTab === 'canceled' ? 'border-b-2 border-red-500 text-[#ef4b2c]' : ''}`}
-          onClick={() => setActiveTab('canceled')}
+          className={`pb-2 hover:text-[#ef4b2c] hover:border-b-[#ef4b2c] hover:border-b-2 ${activeTab === 'Đã hủy' ? 'border-b-2 border-red-500 text-[#ef4b2c]' : ''}`}
+          onClick={() => setActiveTab('Đã hủy')}
         >
           Đã hủy
         </button>
@@ -232,14 +224,13 @@ function ListOrder() {
       {filteredOrders.length > 0 ? (
         filteredOrders.map(order => (
           <div key={order.id} className="border rounded-lg p-4 mb-4 shadow-sm">
-            <p className="font-semibold">Mã đơn hàng: {order.id}</p>
-            <p>Tên người nhận: {order.name}</p>
-            <p>Giá: {order.price.toLocaleString()} VND</p>
-            <p>Số lượng: {order.quantity}</p>
-            <p>Tổng giá: {(order.price * order.quantity).toLocaleString()} VND</p>
+            <p className="font-semibold">Mã đơn hàng: {order._id}</p>
+            <p>Tên người nhận: {order.deliveryInfo.name}</p>
+            <p>Địa chỉ: {order.deliveryInfo.address}</p>
+            <p>Giá: {(order.totalPrice + order.totalShip).toLocaleString()} VND</p>
 
             <div className="flex space-x-2 mt-2">
-              {activeTab === 'pending' && (
+              {activeTab === 'Chờ xác nhận' && (
                 <>
                   <button
                     className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
@@ -256,7 +247,7 @@ function ListOrder() {
                 </>
               )}
 
-              {activeTab === 'completed' && (
+              {activeTab === 'Hoàn thành' && (
                 <>
                   <button
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -270,16 +261,16 @@ function ListOrder() {
                   >
                     Đánh giá
                   </button>
-                  <button
+                  {/* <button
                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                     onClick={() => handleRebuy(order)}
                   >
                     Mua lại
-                  </button>
+                  </button> */}
                 </>
               )}
 
-              {activeTab === 'canceled' && (
+              {activeTab === 'Đã hủy' && (
                 <>
                   <button
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
@@ -287,16 +278,23 @@ function ListOrder() {
                   >
                     Xem chi tiết
                   </button>
-                  <button
+                  {/* <button
                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                     onClick={() => handleReorder(order)}
                   >
                     Đặt lại
-                  </button>
+                  </button> */}
                 </>
               )}
-
-              {activeTab === 'received' && (
+              {activeTab === 'Đang giao' && (
+                <button
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  onClick={() => handleShowDetail(order)}
+                >
+                  Xem chi tiết
+                </button>
+              )}
+              {activeTab === 'Chờ lấy hàng1' && (
                 <button
                   className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                   onClick={() => handleShowDetail(order)}
@@ -315,32 +313,37 @@ function ListOrder() {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full" ref={detailRef}>
             <h2 className="text-lg font-semibold mb-4 text-center">Thông tin đơn hàng</h2>
-            <p>Mã vận đơn: {selectedOrder.id}</p>
-            <p>Địa chỉ: [Chưa có địa chỉ]</p>
-            <p>Thời gian dự kiến: [Chưa có thời gian]</p>
+            <p>Mã vận đơn: {selectedOrder._id}</p>
+            <p>Địa chỉ: {selectedOrder.deliveryInfo.address}</p>
+            <p>Thời gian dự kiến: 15 phút</p>
+            <p>Trạng thái đơn hàng: {selectedOrder.status}</p>
             <table className="w-full text-left mt-4">
               <thead>
                 <tr>
                   <th>STT</th>
                   <th>Tên món</th>
+                  <th>Hình ảnh</th>
                   <th>SL</th>
                   <th>Đơn giá</th>
                   <th>Thành tiền</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Bún bò</td>
-                  <td>{selectedOrder.quantity}</td>
-                  <td>{selectedOrder.price.toLocaleString()} VND</td>
-                  <td>{(selectedOrder.price * selectedOrder.quantity).toLocaleString()} VND</td>
-                </tr>
+                {selectedOrder.cart.map((item, index) => (
+                  <tr key={item.productId}>
+                    <td>{index + 1}</td>
+                    <td>{item.name}</td>
+                    <td><img className='w-12 h-10 object-cover' src={item.image} alt="" /></td>
+                    <td>{item.quantity}</td>
+                    <td>{item.price.toLocaleString()} VND</td>
+                    <td>{(item.price * item.quantity).toLocaleString()} VND</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
-            <p className="mt-4">Tổng tiền: {(selectedOrder.price * selectedOrder.quantity).toLocaleString()} VND</p>
-            <p>Phí vận chuyển: 30,000 VND</p>
-            <p>Tổng tiền thanh toán: {(selectedOrder.price * selectedOrder.quantity + 30000).toLocaleString()} VND</p>
+            <p className="mt-4">Tổng tiền: {selectedOrder.totalPrice.toLocaleString()} VND</p>
+            <p>Phí vận chuyển: {selectedOrder.totalShip.toLocaleString()} VND</p>
+            <p>Tổng tiền thanh toán: {(selectedOrder.totalPrice + selectedOrder.totalShip).toLocaleString()} VND</p>
 
             <div className="flex justify-center mt-4">
               <button
@@ -354,12 +357,13 @@ function ListOrder() {
         </div>
       )}
 
+
       {confirmationAction && selectedOrder && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg p-6" ref={confirmationRef}>
             <h2 className="text-lg font-semibold mb-2 text-center">Xác nhận hủy đặt đơn hàng</h2>
             <p className="text-center">
-              Bạn có chắc chắn muốn hủy đặt đơn hàng <span className="font-bold">{selectedOrder.id}</span>?
+              Bạn có chắc chắn muốn hủy đặt đơn hàng <span className="font-bold">{selectedOrder._id}</span>?
             </p>
             <div className="flex justify-center gap-4 mt-5">
               <button
@@ -384,7 +388,7 @@ function ListOrder() {
           <div className="bg-white rounded-lg p-6" ref={rebuyConfirmationRef}>
             <h2 className="text-lg font-semibold mb-2 text-center">Xác nhận mua lại đơn hàng</h2>
             <p className="text-center">
-              Bạn có chắc chắn muốn mua lại đơn hàng <span className="font-bold">{selectedOrder.id}</span>?
+              Bạn có chắc chắn muốn mua lại đơn hàng <span className="font-bold">{selectedOrder._id}</span>?
             </p>
             <div className="flex justify-center gap-4 mt-5">
               <button
@@ -410,7 +414,7 @@ function ListOrder() {
         <div className="bg-white rounded-lg p-6" ref={reorderConfirmationRef}>
           <h2 className="text-lg font-semibold mb-2 text-center">Xác nhận đặt lại đơn hàng</h2>
           <p className="text-center">
-            Bạn có chắc chắn muốn đặt lại đơn hàng <span className="font-bold">{selectedOrder.id}</span>?
+            Bạn có chắc chắn muốn đặt lại đơn hàng <span className="font-bold">{selectedOrder._id}</span>?
           </p>
           <div className="flex justify-center gap-4 mt-5">
             <button

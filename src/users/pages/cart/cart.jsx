@@ -71,6 +71,7 @@ function Cart() {
             // If quantity > 0, update the item quantity
             const response = await axios.put(`https://be-order-food.vercel.app/api/cart/update-quantity`, {
                 userId,
+                storeId,
                 productId,
                 quantity: newQuantity,
             });
