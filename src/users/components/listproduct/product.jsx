@@ -61,7 +61,7 @@ function Product() {
                 <div className='mt-8'>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {products.map((product) => (
-                            <Link to='/product-detail' key={product._id} className="border border-[#F8E7CC] hover:ring-[#e67350] hover:outline-none hover:ring-2 p-3 rounded-lg shadow-sm">
+                            <Link to='/product-detail' state={ {productId : product._id}} key={product._id} className="border border-[#F8E7CC] hover:ring-[#e67350] hover:outline-none hover:ring-2 p-3 rounded-lg shadow-sm">
                                 <div className="relative">
                                     <img src={product.Food_picture} alt={product.Food_name} className="w-full h-[150px] object-cover" />
                                     <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">
