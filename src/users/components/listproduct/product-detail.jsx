@@ -13,11 +13,26 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const ProductDetail = ({ match }) => {
   const location = useLocation();
+  const userId = localStorage.getItem('userId');
   const productId = location.state?.productId;
   const [product, setProduct] = useState(null);
-  const [cart, setCart] = useState([]);
   const [quantity, setQuantity] = useState(1);
+  const [reviews, setReviews] = useState([]);
   
+  useEffect(() => {
+    // Fetch reviews from API
+    const fetchReviews = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3002/api/rating/product/${productId}`);
+            setReviews(response.data);
+        } catch (error) {
+            console.error("Error fetching reviews:", error);
+        }
+    };
+
+    fetchReviews();
+  }, [productId]);
+
   useEffect(() => {
     const fetchProductDetails = async () => {
       try {
@@ -40,14 +55,31 @@ const ProductDetail = ({ match }) => {
     }
   };
 
-  const addToCart = () => {
-    const productToAdd = {
-      ...product,
-      quantity,
-    };
-    setCart([...cart, productToAdd]);
+  const [cart, setCart] = useState([]);
 
-    toast.success('Thêm vào giỏ hàng thành công!');
+  const handleAddToCart = async (products) => {
+        console.log('Product object:', products);
+        try {
+            const response = await axios.post('http://localhost:3002/api/cart/add-to-cart', {
+                productId: productId,
+                storeId: product.Store_id,
+                quantity: quantity, // Bạn có thể cho phép người dùng chọn số lượng nếu muốn
+                userId,
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Nếu có xác thực người dùng
+                }
+            });
+    
+            if (response.status === 200) {
+                // Cập nhật giao diện giỏ hàng nếu cần
+                setCart([...cart, products]);
+                toast.success("Thêm vào giỏ hàng thành công!");
+            }
+        } catch (error) {
+            console.error('Lỗi khi thêm sản phẩm vào giỏ hàng:', error);
+            toast.error("Lỗi khi thêm sản phẩm vào giỏ hàng.");
+        }
   };
 
   if (!product) {
@@ -108,7 +140,7 @@ console.log(product)
             </div>
 
             <button
-                onClick={addToCart}
+                onClick={handleAddToCart}
                 className="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600 transition"
             >
                 Thêm vào giỏ hàng
@@ -118,31 +150,35 @@ console.log(product)
 
           <div className="mt-8">
             <h2 className="text-lg font-bold mb-4">Đánh giá món</h2>
-            <div className="border p-4 rounded">
-              <div className="flex items-center mb-2">
-                  <img
-                  src="https://scontent.fhan3-4.fna.fbcdn.net/v/t39.30808-6/461185481_1058397005800455_8112413207197525059_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=SfvOndml2OMQ7kNvgFg5I0q&_nc_zt=23&_nc_ht=scontent.fhan3-4.fna&_nc_gid=AqYeJVo_fzKd8CNrZc3wIdI&oh=00_AYBIlaRMIWS2_o1OUsos2JitUmase4mOTuz8ykWBE4orQQ&oe=6728E0B5"
-                  alt="User Avatar"
-                  className="w-10 h-10 rounded-full"
-                  />
-                  <div className="ml-4">
-                  <p className="font-semibold">Tên người dùng</p>
-                  <p className="text-sm text-gray-500">4.9 ⭐⭐⭐⭐⭐</p>
-                  </div>
-              </div>
-              <p>
-                  Bún ngon lắm ạ!
-              </p>
-              <div className="grid grid-cols-3 gap-2 mt-3">
-                  <div >
-                    <img className="rounded-sm" src="https://cdn3.ivivu.com/2022/09/bun-bo-hue-ivivu-3-1024x683.jpg" alt="" />
-                  </div>
-              </div>
-              <p className='text-[13px] text-[#939393] mt-2'>
-                22:02 <span>13-06-2024</span> | Thể loại: Bún
-              </p>
-            </div>
+            {reviews.map((review, index) => (
+                <div key={index} className="border p-4 rounded mb-4">
+                    <div className="flex items-center mb-2">
+                        <img
+                            src={review.customerId.avatar || 'default-avatar.png'}
+                            alt="User Avatar"
+                            className="w-10 h-10 rounded-full"
+                        />
+                        <div className="ml-4">
+                            <p className="font-semibold">{review.customerId.name}</p>
+                            <p className="text-sm text-gray-500">{review.rating} ⭐⭐⭐⭐⭐</p>
+                        </div>
+                    </div>
+                    <p>{review.comment}</p>
+                    <div className="grid grid-cols-3 gap-2 mt-3">
+                        {review.images.map((image, idx) => (
+                            <div key={idx}>
+                                <img className="rounded-sm" src={image} alt={`Review image ${idx + 1}`} />
+                            </div>
+                        ))}
+                    </div>
+                    <p className="text-[13px] text-[#939393] mt-2">
+                        {new Date(review.createdAt).toLocaleTimeString()} 
+                        <span> {new Date(review.createdAt).toLocaleDateString()}</span> | Thể loại: Bún
+                    </p>
+                </div>
+            ))}
           </div>
+          
         </div>
         <div className='mt-10'>
           <Footer />

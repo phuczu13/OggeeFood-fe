@@ -22,7 +22,8 @@ function ListOrder() {
   const detailRef = useRef(null);  
   const reorderConfirmationRef = useRef(null);  
   const rebuyConfirmationRef = useRef(null);
-  
+  const [ratedOrders, setRatedOrders] = useState({}); 
+
   const filteredOrders = orders.filter(order => {
     if (activeTab === 'Chờ lấy hàng1') {
       return ['Cửa hàng xác nhận', 'Đang tìm tài xế', 'Đã tìm thấy tài xế','Chờ lấy hàng'].includes(order.status);
@@ -149,37 +150,71 @@ function ListOrder() {
   setShowRatingModal(true);
   };
 
-  const handleStarClick = (star) => {
-    setRating(star);
+  const handleStarClick = (productId, star) => {
+    setRating((prev) => ({ ...prev, [productId]: star })); // Cập nhật đánh giá cho sản phẩm
   };
-
-  const handleCommentChange = (e) => {
-    setComment(e.target.value);
+  
+  const handleCommentChange = (e, productId) => {
+    setComment((prev) => ({ ...prev, [productId]: e.target.value })); // Lưu bình luận cho sản phẩm
   };
-
-  const handleImageChange = (e) => {
+  
+  const handleImageChange = (e, productId) => {
     const files = Array.from(e.target.files);
-    const imagePreviews = files.map((file) => URL.createObjectURL(file));
-    setImages(imagePreviews);
+    setImages((prev) => ({ ...prev, [productId]: files })); // Lưu hình ảnh cho sản phẩm
   };
   
-  const handleRatingSubmit = () => {
-    if (rating < 1) {
-      toast.warning("Bạn cần đánh giá ít nhất 1 sao!");
-      return;
-    }
+  const handleRatingSubmit = async () => {
+    const promises = selectedOrder.cart.map(async (product) => {
+      const productRating = rating[product.productId];
+      const productComment = comment[product.productId];
+      const productImages = images[product.productId] || [];
   
-    if (images.length > 3) {
-      toast.warning("Chỉ được chọn tối đa 3 ảnh.");
-      return;
-    }
+      console.log('Product ID:', product.productId); // In ID sản phẩm
+      console.log('Rating:', productRating); // In giá trị rating
+      console.log('Comment:', productComment); // In giá trị comment
+      console.log('Images:', productImages); // In giá trị images
   
-    toast.success("Đánh giá thành công!");
+      if (!productRating) {
+        toast.warning(`Bạn cần đánh giá ít nhất 1 sao cho sản phẩm ${product.name}!`);
+        return;
+      }
+  
+      const formData = new FormData();
+      formData.append('orderId', selectedOrder._id);
+      formData.append('productId', product.productId); // Lưu ID sản phẩm
+      formData.append('customerId', userId);
+      formData.append('rating', productRating);
+      formData.append('comment', productComment);
+      productImages.forEach(image => formData.append('images', image));
+  
+      try {
+        const response = await axios.post('http://localhost:3002/api/rating/add', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+  
+        if (response.status === 201) {
+          toast.success(`Đánh giá thành công cho sản phẩm ${product.name}!`);
+           // Cập nhật trạng thái đã đánh giá
+          setRatedOrders(prevState => ({
+            ...prevState,
+            [selectedOrder._id]: true // Đánh dấu đơn hàng đã đánh giá
+          }));
+        }
+      } catch (error) {
+        toast.error(`Có lỗi xảy ra khi gửi đánh giá cho sản phẩm ${product.name}.`);
+        console.error(error);
+      }
+    });
+  
+    await Promise.all(promises);
     setShowRatingModal(false);
-    setRating(0);
-    setComment('');
-    setImages([]);
+    setRating({});
+    setComment({});
+    setImages({});
   };
+  
   
 
   return (
@@ -257,16 +292,11 @@ function ListOrder() {
                   </button>
                   <button
                     className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                    onClick={() => handleRating (order)}
+                    onClick={() => handleRating(order)}
+                    disabled={ratedOrders[order._id]} // Disable nút nếu đã đánh giá
                   >
-                    Đánh giá
+                    {ratedOrders[order._id] ? 'Đã đánh giá' : 'Đánh giá'}
                   </button>
-                  {/* <button
-                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-                    onClick={() => handleRebuy(order)}
-                  >
-                    Mua lại
-                  </button> */}
                 </>
               )}
 
@@ -436,41 +466,49 @@ function ListOrder() {
     
     {showRatingModal && selectedOrder && (
       <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-        <div className="bg-white rounded-lg p-6 max-w-md w-full" ref={ratingRef}>
+        <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full" ref={ratingRef}>
           <h2 className="text-lg font-semibold mb-4 text-center">Đánh giá đơn hàng</h2>
-          <div className="flex justify-center gap-1 mb-4">
-            {[1, 2, 3, 4, 5].map(star => (
-              <span
-                key={star}
-                className={`cursor-pointer ${rating >= star ? 'text-yellow-500' : 'text-gray-400'}`}
-                onClick={() => handleStarClick(star)}
-              >
-                ★
-              </span>
-            ))}
-          </div>
-          <textarea
-            className="w-full border rounded p-2 mb-4"
-            placeholder="Đánh giá về đơn hàng của bạn"
-            value={comment}
-            onChange={handleCommentChange}
-          />
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleImageChange}
-            className="mb-4"
-          />
-          <div className="flex justify-center gap-4 mt-4">
+          
+          {selectedOrder.cart.map((product, index) => (
+            <div key={product.productId} className="mb-4">
+              <h3 className="font-semibold">{product.name}</h3>
+              <div className="flex justify-center gap-1 mb-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <span
+                    key={star}
+                    className={`cursor-pointer text-2xl ${rating[product.productId] >= star ? 'text-yellow-500' : 'text-gray-400'}`}
+                    onClick={() => handleStarClick(product.productId, star)} // Gọi hàm với ID sản phẩm
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
+
+              <textarea
+                className="w-full border rounded p-2 mb-2 h-16 resize-none"
+                placeholder="Đánh giá về sản phẩm này"
+                value={comment[product.productId] || ''} // Lưu trữ bình luận cho sản phẩm
+                onChange={(e) => handleCommentChange(e, product.productId)} // Gọi hàm với ID sản phẩm
+              />
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={(e) => handleImageChange(e, product.productId)} // Gọi hàm với ID sản phẩm
+                className="mb-2 border rounded p-2"
+              />
+            </div>
+          ))}
+
+          <div className="flex justify-between mt-4">
             <button
-              className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+              className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 transition"
               onClick={() => setShowRatingModal(false)}
             >
-              Đóng
+              Đóng
             </button>
             <button
-              className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+              className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
               onClick={handleRatingSubmit}
             >
               Đánh giá
@@ -479,6 +517,8 @@ function ListOrder() {
         </div>
       </div>
     )}
+
+    
     </div>
   );
 }
