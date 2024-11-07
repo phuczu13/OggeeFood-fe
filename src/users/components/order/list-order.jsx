@@ -195,12 +195,10 @@ function ListOrder() {
         });
   
         if (response.status === 201) {
+          await axios.put(`http://localhost:3002/api/order/${selectedOrder._id}/rate`, {
+            hasRated: true
+          });
           toast.success(`Đánh giá thành công cho sản phẩm ${product.name}!`);
-           // Cập nhật trạng thái đã đánh giá
-          setRatedOrders(prevState => ({
-            ...prevState,
-            [selectedOrder._id]: true // Đánh dấu đơn hàng đã đánh giá
-          }));
         }
       } catch (error) {
         toast.error(`Có lỗi xảy ra khi gửi đánh giá cho sản phẩm ${product.name}.`);
@@ -293,9 +291,9 @@ function ListOrder() {
                   <button
                     className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                     onClick={() => handleRating(order)}
-                    disabled={ratedOrders[order._id]} // Disable nút nếu đã đánh giá
+                    disabled={order.hasRated} // Disable nút nếu đã đánh giá
                   >
-                    {ratedOrders[order._id] ? 'Đã đánh giá' : 'Đánh giá'}
+                    {order.hasRated ? 'Đã đánh giá' : 'Đánh giá'}
                   </button>
                 </>
               )}
