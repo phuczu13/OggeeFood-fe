@@ -188,14 +188,14 @@ function ListOrder() {
       productImages.forEach(image => formData.append('images', image));
   
       try {
-        const response = await axios.post('http://localhost:3002/api/rating/add', formData, {
+        const response = await axios.post('https://be-order-food.vercel.app/api/rating/add', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
   
         if (response.status === 201) {
-          await axios.put(`http://localhost:3002/api/order/${selectedOrder._id}/rate`, {
+          await axios.put(`https://be-order-food.vercel.app/api/order/${selectedOrder._id}/rate`, {
             hasRated: true
           });
           toast.success(`Đánh giá thành công cho sản phẩm ${product.name}!`);

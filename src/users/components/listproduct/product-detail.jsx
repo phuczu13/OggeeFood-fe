@@ -23,7 +23,7 @@ const ProductDetail = ({ match }) => {
     // Fetch reviews from API
     const fetchReviews = async () => {
         try {
-            const response = await axios.get(`http://localhost:3002/api/rating/product/${productId}`);
+            const response = await axios.get(`https://be-order-food.vercel.app/api/rating/product/${productId}`);
             setReviews(response.data);
         } catch (error) {
             console.error("Error fetching reviews:", error);
@@ -60,7 +60,7 @@ const ProductDetail = ({ match }) => {
   const handleAddToCart = async (products) => {
         console.log('Product object:', products);
         try {
-            const response = await axios.post('http://localhost:3002/api/cart/add-to-cart', {
+            const response = await axios.post('https://be-order-food.vercel.app/api/cart/add-to-cart', {
                 productId: productId,
                 storeId: product.Store_id,
                 quantity: quantity, // Bạn có thể cho phép người dùng chọn số lượng nếu muốn

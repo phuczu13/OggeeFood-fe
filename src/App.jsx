@@ -49,6 +49,7 @@ import InforNewStore from './stores/pages/auth/infor-newstore'
 import VerifyStoreLogin from './stores/pages/auth/verify-store-login';
 import VerifyStoreRegister from './stores/pages/auth/verify-store-res';
 import PaymentStatus from './users/pages/payment/paymentStatus';
+import SearchResults from './users/components/listproduct/SearchResults';
 
 
 
@@ -99,7 +100,7 @@ function App() {
             < Route path='revenue-store' element={<RevenueStore/>} />
             < Route path='infor-store' element={<InforStore/>} />
             < Route path='detail-product' element={<DetailProduct/>} />
-            
+            <Route path="search-results" element={<SearchResults />} />
 
             < Route path='signup-store' element={<SignUpStore/>} />
             {/* < Route path='verify-store' element={<VerifyStore/>} /> */}

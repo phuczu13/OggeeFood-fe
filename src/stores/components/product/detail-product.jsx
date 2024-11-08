@@ -23,7 +23,7 @@ const DetailProduct = () => {
       // Fetch reviews from API
       const fetchReviews = async () => {
         try {
-          const response = await axios.get(`http://localhost:3002/api/rating/product/${productId}`);
+          const response = await axios.get(`https://be-order-food.vercel.app/api/rating/product/${productId}`);
           console.log("Reviews response:", response.data);
           setReviews(response.data);
         } catch (error) {
@@ -33,7 +33,7 @@ const DetailProduct = () => {
   
       const fetchProductDetails = async () => {
         try {
-          const response = await axios.get(`http://localhost:3002/api/product/get-product/${productId}`);
+          const response = await axios.get(`https://be-order-food.vercel.app/api/product/get-product/${productId}`);
           console.log("Product details response:", response.data.data);
           setProduct(response.data.data);
         } catch (error) {
@@ -52,7 +52,7 @@ const DetailProduct = () => {
 
   const handleResponseSubmit = async (reviewId) => {
     try {
-        await axios.post(`http://localhost:3002/api/rating/respond/${reviewId}`, { response });
+        await axios.post(`https://be-order-food.vercel.app/api/rating/respond/${reviewId}`, { response });
         setReviews(reviews.map(review => review._id === reviewId ? { ...review, response } : review));
         setResponse('');
     } catch (error) {

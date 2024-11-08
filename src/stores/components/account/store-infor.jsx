@@ -39,7 +39,7 @@ function StoreInfo() {
       }
 
       try {
-        const response = await fetch(`http://localhost:3002/api/store/getInforStore/${storeId}`);
+        const response = await fetch(`https://be-order-food.vercel.app/api/store/getInforStore/${storeId}`);
         if (!response.ok) {
           throw new Error('Could not fetch store information');
         }

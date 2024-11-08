@@ -12,11 +12,27 @@ function HeaderHC2() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
 
     const [userData, setUserData] = useState(null); 
 
     const userId = localStorage.getItem('userId');
+
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value); // Cập nhật giá trị tìm kiếm khi người dùng gõ
+    };
+    
+    const handleSearch = async (event) => {
+        if (event.key === 'Enter' && searchQuery.trim() !== "") {
+            console.log("Searching for:", searchQuery);
+            try {
+                navigate(`/search-results?query=${searchQuery}`);
+            } catch (error) {
+                console.error("Error fetching search results:", error);
+            }
+        }
+    }; 
     // Gọi API lấy thông tin người dùng
     useEffect(() => {
       const fetchUserInfo = async () => {
@@ -99,6 +115,9 @@ function HeaderHC2() {
                                 type="text"
                                 placeholder="Tìm kiếm món yêu thích"
                                 className="border-2 p-2 w-full sm:w-[250px] sm:ml-4 rounded-full border-[#d0d0d0] px-5 focus:outline-none focus:border-[#ff7e00]"
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                                onKeyDown={handleSearch} // Xử lý khi nhấn Enter
                             />
                         </div>
                     </div>

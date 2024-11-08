@@ -15,7 +15,24 @@ function HeaderHC1() {
     const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [userData, setUserData] = useState(null); 
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
 
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value); // Cập nhật giá trị tìm kiếm khi người dùng gõ
+    };
+    
+    const handleSearch = async (event) => {
+        if (event.key === 'Enter' && searchQuery.trim() !== "") {
+            console.log("Searching for:", searchQuery);
+            try {
+                navigate(`/search-results?query=${searchQuery}`);
+            } catch (error) {
+                console.error("Error fetching search results:", error);
+            }
+        }
+    };    
+    
     const userId = localStorage.getItem('userId');
     // Gọi API lấy thông tin người dùng
     useEffect(() => {
@@ -99,6 +116,9 @@ function HeaderHC1() {
                                 type="text"
                                 placeholder="Tìm kiếm món yêu thích"
                                 className="border-2 p-2 w-full sm:w-[250px] sm:ml-4 rounded-full border-[#d0d0d0] px-5 focus:outline-none focus:border-[#ff7e00]"
+                                value={searchQuery}
+                                onChange={handleSearchChange}
+                                onKeyDown={handleSearch} // Xử lý khi nhấn Enter
                             />
                         </div>
                     </div>
@@ -180,7 +200,17 @@ function HeaderHC1() {
                         </ul>
                     </div>
                 )}
-
+                {searchResults.length > 0 && (
+                <div className="absolute bg-white border rounded-lg shadow-lg p-4 mt-2 w-full sm:w-[250px]">
+                    {searchResults.map((product) => (
+                        <div key={product.id} className="p-2 hover:bg-gray-100 cursor-pointer">
+                            <Link to={`/product/${product._id}`} className="text-gray-700">
+                                {product.Food_name}
+                            </Link>
+                        </div>
+                    ))}
+                </div>
+            )}
             </div>
 
             {isProfileMenuOpen && (
@@ -241,6 +271,7 @@ function HeaderHC1() {
                     </div>
                 </div>
             )}
+            
             <Toaster position='top-right' />
         </>
     );
