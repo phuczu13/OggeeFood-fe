@@ -83,8 +83,7 @@ function Payment() {
         totalPrice,
         totalShip,
         storeId,
-        paymentMethod: paymentMethod,
-        status: 'Đang tìm tài xế'
+        paymentMethod: paymentMethod
       };
       console.log(orderData)
       const response = await axios.post('https://be-order-food.vercel.app/api/order/create', orderData);
