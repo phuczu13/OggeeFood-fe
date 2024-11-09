@@ -28,21 +28,6 @@ const HomePage = () => {
     );
   };
 
-  const checkLoginStatus = () => {
-    const token = localStorage.getItem('token'); // Assume token is stored in localStorage
-    if (!token) {
-      // If no token is found, redirect to login
-      //https://oggee-food-fe.vercel.app
-      const redirectUri = encodeURIComponent('http://localhost:1306/auth/callback'); // URL to redirect after login
-      //const redirectUri = encodeURIComponent('https://oggee-food-fe.vercel.app/auth/callback'); // URL to redirect after login
-      window.location.href = `https://sso-pointer.vercel.app/authorize?callbackUrl=${redirectUri}`;
-    }
-  };
-
-  useEffect(() => {
-    checkLoginStatus();
-  }, []);
-
   return (
     <div className="md:px-0">
       <HeaderHC1 />

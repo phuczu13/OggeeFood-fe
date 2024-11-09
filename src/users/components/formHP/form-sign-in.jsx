@@ -35,7 +35,13 @@ function FormSignIn() {
             console.error('Error during login:', error);
         }
     };
-
+    const handlePointerClick = async (e) =>{
+        e.preventDefault(); 
+        const token = localStorage.getItem('token'); // Assume token is stored in localStorage
+        if (!token) {
+            window.location.href = `https://sso-pointer.vercel.app/authorize?clientId=672d85ad134d92f3b3c6397b`;
+        }
+    }
     return (
         <div>
             <form className="px-4 sm:px-0" onSubmit={handleLoginClick}>
@@ -91,6 +97,16 @@ function FormSignIn() {
                         Đăng nhập dành cho cửa hàng
                     </div>
                 </Link>
+            </div>
+            <div className="flex justify-center items-center mb-3 ">
+                <button
+                    type="submit" // Thay đổi từ Link sang button để gửi yêu cầu
+                    className="hover:bg-white hover:text-[#ff7e00] hover:border-[#ff7e00] hover:border bg-[#ff7e00] w-full sm:w-[400px] border border-[#ff7c00] rounded-full text-center text-white py-3 px-10 mt-3 inline-block"
+                    >
+                        <a href="https://sso-pointer.vercel.app/authorize?clientId=672d9324632babe6da65eba1">
+                            Đăng Nhập Bằng Pointer
+                        </a>
+                </button>
             </div>
         </div>
     );

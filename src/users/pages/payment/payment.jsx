@@ -75,7 +75,7 @@ function Payment() {
 
       const cartItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
       const storeId = cartItems[0]?.storeId;
-
+      
       const orderData = {
         customerId: userId,
         cart: cartInfo,
