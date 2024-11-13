@@ -117,6 +117,19 @@ function FormSignInStore() {
                     </div>
                 </Link>
             </div>
+            <div className="flex justify-center items-center mb-3">
+                <Link
+                    to="/signin-driver"
+                    onMouseEnter={() => setIcon(IconLoginUserOrange)}
+                    onMouseLeave={() => setIcon(IconLoginUser)}
+                    className="hover:bg-white hover:text-[#ff7e00] hover:border-[#ff7e00] hover:border bg-[#ff7e00] w-full sm:w-[400px] border border-[#ff7c00] text-center text-white py-3 px-10 mt-3 inline-block"
+                >
+                    <div className="flex justify-center gap-5">
+                        <img src={icon} className="w-[20px] sm:w-[25px] h-[20px] sm:h-[25px]" alt="loginStore" />
+                        Đăng nhập dành cho tài xế
+                    </div>
+                </Link>
+            </div>
         </div>
     );
 }

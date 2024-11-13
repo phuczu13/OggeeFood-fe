@@ -50,6 +50,11 @@ import VerifyStoreLogin from './stores/pages/auth/verify-store-login';
 import VerifyStoreRegister from './stores/pages/auth/verify-store-res';
 import PaymentStatus from './users/pages/payment/paymentStatus';
 import SearchResults from './users/components/listproduct/SearchResults';
+import OrderDriver from './driver/pages/oder';
+import ProfileDriver from './driver/pages/profile';
+import LoginDriver from './driver/pages/sign-in-driver';
+import CallbackPageDriver from './driver/pages/CallbackPageDriver';
+import InforDriver from './driver/pages/register-driver';
 
 
 
@@ -105,6 +110,15 @@ function App() {
             < Route path='signup-store' element={<SignUpStore/>} />
             {/* < Route path='verify-store' element={<VerifyStore/>} /> */}
             < Route path='infor-newstore' element={<InforNewStore/>} />
+
+
+            <Route path="order-driver" element={<OrderDriver></OrderDriver>}/>
+            <Route path="profile-driver" element={<ProfileDriver></ProfileDriver>}/>
+            <Route path="signin-driver" element={<LoginDriver></LoginDriver>}/>
+            <Route path="/auth-driver/callback" element={<CallbackPageDriver />} />
+            <Route path="/register-driver" element={<InforDriver />} />
+
+
 
           </Routes>
         </Router>
