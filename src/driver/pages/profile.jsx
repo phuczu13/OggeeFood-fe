@@ -72,7 +72,7 @@ function ProfileDriver() {
         <div className="rounded-[20px] shadow-2xl w-[668px] h-[701px] p-8 border border-gray-300">
           <div className="flex flex-col items-center">
             <div className="rounded-full border-[2px] w-[100px] h-[100px] flex items-center justify-center mb-4"></div>
-            <div className="text-center font-semibold text-lg mb-8">{driverInfo.email}</div>
+            {/* <div className="text-center font-semibold text-lg mb-8">{driverInfo.email}</div> */}
             <h1>Yêu cầu thiết kế lại dùm</h1>
 
           </div>
