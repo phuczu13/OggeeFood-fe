@@ -220,6 +220,7 @@ function ListOrder() {
             <p>Địa chỉ: {selectedOrder.deliveryInfo.address}</p>
             <p>Thời gian dự kiến: 15 phút</p>
             <p>Trạng thái đơn hàng: {selectedOrder.status}</p>
+            <p>Tài xế: {selectedOrder.driverId || "Chưa có tài xế"}</p>
             <table className="w-full text-left mt-4">
               <thead>
                 <tr>

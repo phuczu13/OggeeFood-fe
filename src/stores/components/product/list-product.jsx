@@ -157,7 +157,7 @@ function ListProduct() {
                     {products.map((product) => (
                         <div key={product._id} className="border p-3 rounded-lg shadow-sm">
                             <div className="relative">
-                                <Link to='/detail-product'>
+                                <Link to={'/detail-product'} state={ {productId : product._id, storeId} } key={product._id}>
                                     <img src={product.Food_picture} alt={product.Food_name} className="w-full h-[150px] object-cover" />
                                 </Link>
                                 <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">

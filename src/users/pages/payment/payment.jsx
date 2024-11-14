@@ -75,7 +75,7 @@ function Payment() {
 
       const cartItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
       const storeId = cartItems[0]?.storeId;
-
+      
       const orderData = {
         customerId: userId,
         cart: cartInfo,
@@ -83,8 +83,7 @@ function Payment() {
         totalPrice,
         totalShip,
         storeId,
-        paymentMethod: paymentMethod,
-        status: 'Đang tìm tài xế'
+        paymentMethod: paymentMethod
       };
       console.log(orderData)
       const response = await axios.post('https://be-order-food.vercel.app/api/order/create', orderData);

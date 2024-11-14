@@ -79,19 +79,38 @@ function ListTopping() {
     // Add or Edit topping
     const handleSave = async () => {
         const { toppingName, toppingstatus, toppingPrice, toppingImage } = currentTopping;
-
+    
+        // Kiểm tra nếu các trường bắt buộc còn trống
         if (!toppingName || !toppingstatus || !toppingPrice || !toppingImage) {
             toast.error("Vui lòng điền đầy đủ thông tin món!", { duration: 2000 });
             return;
         }
-
+    
+        // Kiểm tra giá topping không hợp lệ
+        const price = parseInt(toppingPrice, 10);
+    
+        if (isNaN(price)) {
+            toast.error("Giá tiền không hợp lệ! Giá không được chứa ký tự đặc biệt hoặc chữ cái.", { duration: 2000 });
+            return;
+        }
+    
+        if (price < 0) {
+            toast.error("Giá tiền phải là số dương.", { duration: 2000 });
+            return;
+        }
+    
+        if (price < 1000 || price > 10000000) {
+            toast.error("Giá tiền phải từ 1,000 đến 10,000,000 VNĐ.", { duration: 2000 });
+            return;
+        }
+    
         try {
             if (isEditing) {
                 // Update topping
                 await axios.put(`https://be-order-food.vercel.app/api/topping/update-topping/${currentTopping._id}`, {
                     toppingName,
                     toppingstatus,
-                    toppingPrice,
+                    toppingPrice: price, // Dùng giá trị số hợp lệ
                     toppingImage,
                     categoryID: selectedCategory, // Send selected category ID
                 });
@@ -101,14 +120,14 @@ function ListTopping() {
                 await axios.post("https://be-order-food.vercel.app/api/topping/add-topping", {
                     toppingName,
                     toppingstatus,
-                    toppingPrice,
+                    toppingPrice: price, // Dùng giá trị số hợp lệ
                     toppingImage,
                     categoryID: selectedCategory, // Send selected category ID
                     Store_id: storeId,
                 });
                 toast.success("Thêm topping thành công!", { duration: 2000 });
             }
-
+    
             setIsModalOpen(false);
             fetchToppings(); // Refresh topping list after adding/updating
         } catch (error) {
@@ -116,6 +135,7 @@ function ListTopping() {
             toast.error("Lưu topping thất bại.");
         }
     };
+    
 
     // Delete topping
     const handleDelete = async () => {
@@ -160,7 +180,11 @@ function ListTopping() {
                                 <h3 className="font-semibold text-lg">{topping.toppingName}</h3>
                                 <p className="text-gray-500 text-sm">{topping.toppingstatus}</p>
                                 <div className="flex justify-between items-center mt-2">
-                                    <span className="text-red-500 font-semibold">{topping.toppingPrice} VNĐ</span>
+                                    <span className="text-red-500 font-semibold">
+                                        {typeof topping.toppingPrice === 'number'
+                                            ? topping.toppingPrice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+                                            : 'Giá không hợp lệ'}
+                                    </span>
                                     <div className="flex gap-2">
                                         <button
                                             onClick={() => openEditModal(topping)}
@@ -224,15 +248,16 @@ function ListTopping() {
                         </div>
 
                         <div className="mb-4">
-                            <input
+                        <input
                                 placeholder="Giá"
-                                type="text"
+                                type="number"
                                 value={currentTopping.toppingPrice}
                                 onChange={(e) =>
                                     setCurrentTopping({ ...currentTopping, toppingPrice: e.target.value })
                                 }
                                 className="w-full border px-3 py-2 rounded-md focus:outline-none focus:border-[#ff7e00]"
                             />
+
                         </div>
                         <div className="mb-4">
                             <input
@@ -262,6 +287,7 @@ function ListTopping() {
                                 ))}
                             </select>
                         </div>
+
 
                         <div className="flex flex-col sm:flex-row gap-3">
                             <button

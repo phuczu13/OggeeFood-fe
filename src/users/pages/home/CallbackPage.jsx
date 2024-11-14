@@ -7,6 +7,7 @@ const CallbackPage = () => {
     useEffect(() => {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
+        console.log(code)
 
         if (code) {
             // Gọi API để xử lý code và đăng nhập người dùng

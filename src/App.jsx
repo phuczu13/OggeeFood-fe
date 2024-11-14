@@ -6,7 +6,7 @@ import { StoreProvider } from './stores/pages/StoreContext';
 import IntroPage from './users/pages/intro-page'
 import SignIn from './users/pages/auth/sign-in';
 import VerifyForm from './users/pages/auth/verify-form';
-import VerifyLoginForm from './users/pages/auth/verify-login-form';
+// import VerifyLoginForm from './users/pages/auth/verify-login-form';
 import HomePage from './users/pages/home/home-page';
 
 import Eatery from './users/pages/eatery/eatery';
@@ -48,11 +48,17 @@ import InforNewStore from './stores/pages/auth/infor-newstore'
 import VerifyStoreLogin from './stores/pages/auth/verify-store-login';
 import VerifyStoreRegister from './stores/pages/auth/verify-store-res';
 import PaymentStatus from './users/pages/payment/paymentStatus';
+import SearchResults from './users/components/listproduct/SearchResults';
+
 
 // ------------------------------------------------------- //
 //////Flow Driver
-import DetailFood from './driver/pages/home/detailfood';
 
+import OrderDriver from './driver/pages/oder';
+import ProfileDriver from './driver/pages/profile';
+import LoginDriver from './driver/pages/sign-in-driver';
+import CallbackPageDriver from './driver/pages/CallbackPageDriver';
+import InforDriver from './driver/pages/register-driver';
 
 
 
@@ -105,14 +111,20 @@ function App() {
             < Route path='revenue-store' element={<RevenueStore/>} />
             < Route path='infor-store' element={<InforStore/>} />
             < Route path='detail-product' element={<DetailProduct/>} />
-            
+            <Route path="search-results" element={<SearchResults />} />
 
             < Route path='signup-store' element={<SignUpStore/>} />
             {/* < Route path='verify-store' element={<VerifyStore/>} /> */}
             < Route path='infor-newstore' element={<InforNewStore/>} />
 
             ////// Flow Driver --------------
-            < Route path='detailfood' element={<DetailFood/>} />
+
+            <Route path="order-driver" element={<OrderDriver></OrderDriver>}/>
+            <Route path="profile-driver" element={<ProfileDriver></ProfileDriver>}/>
+            <Route path="signin-driver" element={<LoginDriver></LoginDriver>}/>
+            <Route path="/auth-driver/callback" element={<CallbackPageDriver />} />
+            <Route path="/register-driver" element={<InforDriver />} />
+
 
 
           </Routes>
