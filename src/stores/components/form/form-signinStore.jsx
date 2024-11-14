@@ -51,7 +51,20 @@ function FormSignInStore() {
             setError('Đã xảy ra lỗi. Vui lòng thử lại sau.');
         }
     };
-    
+    const handlePointerClick = (e) => {
+        e.preventDefault(); 
+        const token = localStorage.getItem('authToken'); // Lấy token từ localStorage
+        
+        if (token) {
+            // Nếu token tồn tại, chuyển hướng đến trang home-page
+            window.location.href = '/home-store';
+        } else {
+            // Nếu không có token, chuyển hướng đến trang xác thực
+            // window.location.href = `https://sso-pointer.vercel.app/authorize?clientId=673397680b536ec12230126c`;
+            window.location.href = `https://sso-pointer.vercel.app/authorize?clientId=673625cb84ba6c16e51eba2d`;
+
+        }
+    };
     
 
     return (
@@ -103,7 +116,15 @@ function FormSignInStore() {
             </form>
 
             <div className="border-b my-5"></div>
-
+            <div className="flex justify-center items-center mb-3 ">
+                            <button
+                                type="submit" // Thay đổi từ Link sang button để gửi yêu cầu
+                                className="hover:bg-white hover:text-[#ff7e00] hover:border-[#ff7e00] hover:border bg-[#ff7e00] w-full sm:w-[400px] border border-[#ff7c00] rounded-full text-center text-white py-3 px-10 mt-3 inline-block"
+                                onClick={handlePointerClick}
+                                >
+                                Đăng Nhập Bằng Pointer
+                            </button>
+            </div>
             <div className="flex justify-center items-center mb-3">
                 <Link
                     to="/sign-in"

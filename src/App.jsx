@@ -55,6 +55,7 @@ import ProfileDriver from './driver/pages/profile';
 import LoginDriver from './driver/pages/sign-in-driver';
 import CallbackPageDriver from './driver/pages/CallbackPageDriver';
 import InforDriver from './driver/pages/register-driver';
+import CallbackPageStore from './stores/components/form/CallbackPageStore';
 
 
 
@@ -100,6 +101,7 @@ function App() {
             < Route path='verify-store-res' element={<VerifyStoreRegister/>} />
 
             < Route path='home-store' element={<HomeStore/>} />
+            <Route path="/auth-store/callback" element={<CallbackPageStore />} />
             < Route path='topping-store' element={<ToppingStore/>} />
             < Route path='order-store' element={<OrderStore/>} />
             < Route path='revenue-store' element={<RevenueStore/>} />
