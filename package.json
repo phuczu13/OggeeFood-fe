@@ -14,7 +14,10 @@
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "axios": "^1.7.7",
+    "chart.js": "^4.4.6",
+    "chartjs": "^0.3.24",
     "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
     "react-router-dom": "^6.26.2",
@@ -36,5 +39,5 @@
     "tailwindcss": "^3.4.11",
     "vite": "^5.4.8"
   },
-  "proxy": "https://be-order-food.vercel.app" 
+  "proxy": "https://be-order-food.vercel.app"
 }

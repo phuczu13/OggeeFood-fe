@@ -3,7 +3,6 @@ import IconBack from '../../assets/svg/icon_previos.svg';
 import { Link } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
 import axios from 'axios';
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import HeaderHS1 from '../header/headerHSmini/headerHS1';

@@ -6,7 +6,7 @@ import { StoreProvider } from './stores/pages/StoreContext';
 import IntroPage from './users/pages/intro-page'
 import SignIn from './users/pages/auth/sign-in';
 import VerifyForm from './users/pages/auth/verify-form';
-import VerifyLoginForm from './users/pages/auth/verify-login-form';
+// import VerifyLoginForm from './users/pages/auth/verify-login-form';
 import HomePage from './users/pages/home/home-page';
 
 import Eatery from './users/pages/eatery/eatery';
@@ -28,12 +28,11 @@ import Order from './users/pages/order/order';
 import UserAccount from './users/pages/account/user-account';
 
 
-
-
-
-
 import SignUp from './users/pages/auth/sign-up';
 
+// ------------------------------------------------------- //
+
+///Flow Store
 
 import SignInStore from './stores/pages/auth/signin-store'
 import HomeStore from './stores/pages/home/home-store';
@@ -50,6 +49,11 @@ import VerifyStoreLogin from './stores/pages/auth/verify-store-login';
 import VerifyStoreRegister from './stores/pages/auth/verify-store-res';
 import PaymentStatus from './users/pages/payment/paymentStatus';
 import SearchResults from './users/components/listproduct/SearchResults';
+
+
+// ------------------------------------------------------- //
+//////Flow Driver
+
 import OrderDriver from './driver/pages/oder';
 import ProfileDriver from './driver/pages/profile';
 import LoginDriver from './driver/pages/sign-in-driver';
@@ -60,7 +64,7 @@ import CallbackPageStore from './stores/components/form/CallbackPageStore';
 
 
 
-
+// ------------------------------------------------------- //
 
 function App() {
   
@@ -73,7 +77,7 @@ function App() {
             < Route path='sign-in' element={<SignIn/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
             < Route path='home-page' element={<HomePage/>} />
-            <Route path="/auth/callback" element={<CallbackPage />} />
+            < Route path="/auth/callback" element={<CallbackPage />} />
             < Route path='eatery' element={<Eatery/>} />
             < Route path='eatery-details' element={<EateryDetails/>} />
 
@@ -96,6 +100,8 @@ function App() {
             < Route path='verify-form' element={<VerifyForm/>} />
 
 
+            ////// Flow Store --------------
+
             < Route path='signin-store' element={<SignInStore/>} />
             < Route path='verify-store' element={<VerifyStoreLogin/>} />
             < Route path='verify-store-res' element={<VerifyStoreRegister/>} />
@@ -113,6 +119,7 @@ function App() {
             {/* < Route path='verify-store' element={<VerifyStore/>} /> */}
             < Route path='infor-newstore' element={<InforNewStore/>} />
 
+            ////// Flow Driver --------------
 
             <Route path="order-driver" element={<OrderDriver></OrderDriver>}/>
             <Route path="profile-driver" element={<ProfileDriver></ProfileDriver>}/>
