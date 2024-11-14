@@ -31,7 +31,7 @@ const CallbackPageStore = () => {
                         localStorage.setItem('authToken', data.token);
                         localStorage.setItem('storeId', data.storeId);
                         const storeId = data.storeId; 
-                        console.log("driverId:", storeId);  // Log userId để kiểm tra
+                        console.log("storeId:", storeId);  // Log userId để kiểm tra
 
                          // Gọi API để lấy thông tin tài xế từ driverId
                          fetch(`https://be-order-food.vercel.app/api/store/getInforStore/${storeId}`)
