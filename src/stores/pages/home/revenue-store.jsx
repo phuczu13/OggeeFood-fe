@@ -2,6 +2,7 @@ import React from 'react';
 import HeaderHS4 from '../../components/header/headerHSmini/headerHS4';
 import ListRevenue from '../../components/revenue/list-revenue';
 import { useLocation } from "react-router-dom";
+import Footer from '../../components/footer/footer';
 
 
 function RevenueStore() {
@@ -16,6 +17,9 @@ function RevenueStore() {
             </div>
             <div>
                 <ListRevenue />
+            </div>
+            <div>
+                <Footer />
             </div>
         </div>
     );

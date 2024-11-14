@@ -114,7 +114,7 @@ function ListTopping() {
                     toppingImage,
                     categoryID: selectedCategory, // Send selected category ID
                 });
-                toast.success("Cập nhật topping thành công!", { duration: 2000 });
+                toast.success("Cập nhật món phụ thành công!", { duration: 2000 });
             } else {
                 // Add new topping
                 await axios.post("https://be-order-food.vercel.app/api/topping/add-topping", {
@@ -125,14 +125,14 @@ function ListTopping() {
                     categoryID: selectedCategory, // Send selected category ID
                     Store_id: storeId,
                 });
-                toast.success("Thêm topping thành công!", { duration: 2000 });
+                toast.success("Thêm món phụ thành công!", { duration: 2000 });
             }
     
             setIsModalOpen(false);
             fetchToppings(); // Refresh topping list after adding/updating
         } catch (error) {
             console.error("Error saving topping:", error);
-            toast.error("Lưu topping thất bại.");
+            toast.error("Lưu món phụ thất bại.");
         }
     };
     
@@ -141,13 +141,13 @@ function ListTopping() {
     const handleDelete = async () => {
         try {
             await axios.delete(`https://be-order-food.vercel.app/api/topping/delete-topping/${toppingToDelete._id}`);
-            toast.success("Xóa topping thành công!", { duration: 2000 });
+            toast.success("Xóa món phụ thành công!", { duration: 2000 });
             setIsDeleteModalOpen(false);
             setIsDeleteLastItemModalOpen(false);
             fetchToppings(); // Refresh topping list after deleting
         } catch (error) {
             console.error("Error deleting topping:", error);
-            toast.error("Xóa topping thất bại.");
+            toast.error("Xóa món phụ thất bại.");
         }
     };
 
@@ -161,12 +161,12 @@ function ListTopping() {
         <>
             <div className="max-w-[1200px] mx-auto p-4">
                 <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-2xl font-bold text-[#ff7e00]">Topping</h2>
+                    <h2 className="text-2xl font-bold text-[#ff7e00]">Món phụ</h2>
                     <button
                         onClick={openAddModal}
                         className="flex items-center bg-[#ff7e00] hover:bg-[#ef4c2b] text-white font-medium px-4 py-2 rounded-md"
                     >
-                        <span>Thêm topping</span>
+                        <span>Thêm món phụ</span>
                     </button>
                 </div>
 
@@ -311,8 +311,8 @@ function ListTopping() {
             {isDeleteModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg w-11/12 sm:w-1/3">
-                        <h2 className="text-lg font-semibold mb-4">Xóa topping</h2>
-                        <p>Bạn có chắc chắn muốn xóa topping <strong>{toppingToDelete.toppingName}</strong>?</p>
+                        <h2 className="text-lg font-semibold mb-4">Xóa món phụ</h2>
+                        <p>Bạn có chắc chắn muốn xóa món phụ <strong>{toppingToDelete.toppingName}</strong>?</p>
                         <div className="flex justify-end mt-4">
                             <button
                                 onClick={() => setIsDeleteModalOpen(false)}
@@ -335,8 +335,8 @@ function ListTopping() {
             {isDeleteLastItemModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg w-11/12 sm:w-1/3">
-                        <h2 className="text-lg font-semibold mb-4">Xóa topping</h2>
-                        <p>Bạn không thể xóa topping này vì nó là topping cuối cùng. Vui lòng thêm một topping khác trước khi xóa.</p>
+                        <h2 className="text-lg font-semibold mb-4">Xóa món phụ</h2>
+                        <p>Bạn không thể xóa món phụ này vì nó là món phụ cuối cùng. Vui lòng thêm một món phụ khác trước khi xóa.</p>
                         <div className="flex justify-end mt-4">
                             <button
                                 onClick={() => setIsDeleteLastItemModalOpen(false)}

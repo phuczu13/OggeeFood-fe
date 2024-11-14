@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import LogoWeb from '../../assets/svg/icon_logoweb.svg'
+import LogoWeb from "../../../users/assets/svg/icon_logoweb.svg"
 import LogoStore from '../../assets/svg/icon_logoStore.svg'
 
 

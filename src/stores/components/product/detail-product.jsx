@@ -147,7 +147,7 @@ const DetailProduct = () => {
                                   className='text-[#0094df]'
                                   onClick={() => handleReplyClick(review._id)}
                               >
-                                  Trả lời
+                                  Trả lời 
                               </button>
                           </div>
 
