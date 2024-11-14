@@ -15,7 +15,7 @@ function ListOrder() {
   const detailRef = useRef(null);
 
   const filteredOrders = orders.filter(order => {
-    if (activeTab === 'Đã nhận') {
+    if (activeTab === 'Đang làm món') {
       return ['Cửa hàng xác nhận', 'Đang tìm tài xế', 'Đã tìm thấy tài xế'].includes(order.status);
     } else if (activeTab === 'completed'){
       return ['Hoàn thành', 'Đã hủy', 'Chờ lấy hàng','Đang giao'].includes(order.status);
@@ -108,7 +108,7 @@ function ListOrder() {
 
   return (
     <div className="max-w-[1200px] mx-auto p-4">
-      <ToastContainer /> {/* Toast Container */}
+      <ToastContainer />
       <h1 className="text-2xl font-bold mb-4 text-[#ff7e00]">Đơn hàng</h1>
 
       <div className="flex space-x-4 border-b mb-4">
@@ -119,10 +119,16 @@ function ListOrder() {
           Chờ xác nhận
         </button>
         <button
-          className={`pb-2 ${activeTab === 'Đã nhận' ? 'border-b-2 border-red-500' : ''}`}
-          onClick={() => setActiveTab('Đã nhận')}
+          className={`pb-2 ${activeTab === 'Đang làm món' ? 'border-b-2 border-red-500' : ''}`}
+          onClick={() => setActiveTab('Đang làm món')}
         >
-          Đã nhận
+          Đang làm món
+        </button>
+        <button
+          className={`pb-2 ${activeTab === 'find driver' ? 'border-b-2 border-red-500' : ''}`}
+          onClick={() => setActiveTab('find driver')}
+        >
+          Đang tìm tài xế
         </button>
         <button
           className={`pb-2 ${activeTab === 'completed' ? 'border-b-2 border-red-500' : ''}`}
@@ -171,7 +177,7 @@ function ListOrder() {
                 </>
               )}
 
-              {activeTab === 'Đã nhận' && (
+              {activeTab === 'Đang làm món' && (
                 <>
                   <button
                     className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"

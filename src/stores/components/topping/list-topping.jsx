@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Toaster, toast } from "react-hot-toast";
+import { ToastContainer, toast } from "react-toastify";
 import IconRating from "../../assets/svg/icon_rating.svg";
 import { useLocation } from "react-router-dom";
 
@@ -323,7 +323,7 @@ function ListTopping() {
                 </div>
             )}
 
-            <Toaster />
+            <ToastContainer />
         </>
     );
 }

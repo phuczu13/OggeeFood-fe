@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import IconBack from '../../assets/svg/icon_previos.svg';
 import { Link } from 'react-router-dom';
-import IconMinus from '../../assets/svg/icon_minus.svg';
-import IconPlus from '../../assets/svg/icon_plusOrange.svg';
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import HeaderHS1 from '../header/headerHSmini/headerHS1';

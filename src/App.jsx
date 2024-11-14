@@ -28,12 +28,11 @@ import Order from './users/pages/order/order';
 import UserAccount from './users/pages/account/user-account';
 
 
-
-
-
-
 import SignUp from './users/pages/auth/sign-up';
 
+// ------------------------------------------------------- //
+
+///Flow Store
 
 import SignInStore from './stores/pages/auth/signin-store'
 import HomeStore from './stores/pages/home/home-store';
@@ -50,10 +49,15 @@ import VerifyStoreLogin from './stores/pages/auth/verify-store-login';
 import VerifyStoreRegister from './stores/pages/auth/verify-store-res';
 import PaymentStatus from './users/pages/payment/paymentStatus';
 
+// ------------------------------------------------------- //
+//////Flow Driver
+import DetailFood from './driver/pages/home/detailfood';
 
 
 
 
+
+// ------------------------------------------------------- //
 
 function App() {
   
@@ -66,7 +70,7 @@ function App() {
             < Route path='sign-in' element={<SignIn/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
             < Route path='home-page' element={<HomePage/>} />
-            <Route path="/auth/callback" element={<CallbackPage />} />
+            < Route path="/auth/callback" element={<CallbackPage />} />
             < Route path='eatery' element={<Eatery/>} />
             < Route path='eatery-details' element={<EateryDetails/>} />
 
@@ -89,6 +93,8 @@ function App() {
             < Route path='verify-form' element={<VerifyForm/>} />
 
 
+            ////// Flow Store --------------
+
             < Route path='signin-store' element={<SignInStore/>} />
             < Route path='verify-store' element={<VerifyStoreLogin/>} />
             < Route path='verify-store-res' element={<VerifyStoreRegister/>} />
@@ -104,6 +110,10 @@ function App() {
             < Route path='signup-store' element={<SignUpStore/>} />
             {/* < Route path='verify-store' element={<VerifyStore/>} /> */}
             < Route path='infor-newstore' element={<InforNewStore/>} />
+
+            ////// Flow Driver --------------
+            < Route path='detailfood' element={<DetailFood/>} />
+
 
           </Routes>
         </Router>
