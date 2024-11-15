@@ -7,33 +7,37 @@ function PaymentStatus() {
     const { id } = useParams(); // Lấy orderId từ URL
     const [status, setStatus] = useState('Đang xử lý...');
 
-    useEffect(() => {
-        async function fetchOrderStatus() {
-            try {
-                const response = await axios.get(`https://be-order-food.vercel.app/api/order/donhang/${id}`);
-                if (response.data.paymentStatus === "Đã thanh toán") {
-                    setStatus('Thanh toán thành công!');
-                } else {
-                    setStatus('Thanh toán không thành công. Vui lòng thử lại.');
-                }
-            } catch (error) {
-                console.error("Error fetching order status:", error);
-                setStatus('Có lỗi xảy ra. Vui lòng thử lại sau.');
-            }
-        }
-
-        if (id) {
-            fetchOrderStatus();
-        } else {
-            setStatus('Không tìm thấy thông tin đơn hàng.');
-        }
-    }, [id]);
+    
 
     return (
         <div className="payment-status">
-            <h1>{status}</h1>
+             <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+            <div className="bg-white p-8 rounded-lg shadow-md text-center py-10 max-w-[500px] w-full">
 
-            {/* Thêm nút quay về trang chủ hoặc trang đặt hàng nếu cần */}
+                <div className="border rounded-full flex mx-auto border-green-500 w-fit">
+                <img className='pl-16 w-[250px] h-[250px]' src="https://th.bing.com/th/id/R.a1c1a8331f107deedf8ef54de1b257e3?rik=oqQ50DLg6fye8A&riu=http%3a%2f%2fcraftizen.org%2fwp-content%2fuploads%2f2019%2f02%2fsuccessful_payment_388054.png&ehk=Em4ImyRV5nk%2bEJIoj56uumAei6qyyq8J7UZVyyjeqIM%3d&risl=&pid=ImgRaw&r=0" alt="iCon" />
+                </div>
+                
+                <h2 className="text-3xl font-semibold my-4">Thanh toán thành công</h2>
+                <div>
+                <div className='text-xl'>Mã đơn hàng của bạn là <span className='text-[#ff7e00] font-semibold'>abc123</span>.</div>
+                </div>
+                <div className="mt-6 flex justify-center gap-4">
+                <button 
+                    onClick={() => navigate('/order')} 
+                    className="bg-gray-200 text-gray-700 px-4 py-3 rounded-md hover:bg-gray-300 transition"
+                >
+                    Xem đơn hàng của bạn
+                </button>
+                <button 
+                    onClick={() => navigate('/home-page')} 
+                    className="bg-[#ff7e00] text-white px-4 py-3 rounded-md hover:bg-[#ef4c2b] transition"
+                >
+                    Mua sắm tiếp
+                </button>
+                </div>
+            </div>
+            </div>      
         </div>
     );
 }

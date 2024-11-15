@@ -100,7 +100,6 @@ function App() {
             < Route path='verify-form' element={<VerifyForm/>} />
 
 
-            ////// Flow Store --------------
 
             < Route path='signin-store' element={<SignInStore/>} />
             < Route path='verify-store' element={<VerifyStoreLogin/>} />
@@ -119,7 +118,6 @@ function App() {
             {/* < Route path='verify-store' element={<VerifyStore/>} /> */}
             < Route path='infor-newstore' element={<InforNewStore/>} />
 
-            ////// Flow Driver --------------
 
             <Route path="order-driver" element={<OrderDriver></OrderDriver>}/>
             <Route path="profile-driver" element={<ProfileDriver></ProfileDriver>}/>

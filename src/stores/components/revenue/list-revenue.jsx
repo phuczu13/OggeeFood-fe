@@ -1,22 +1,66 @@
-import React from 'react';
+import React, { useState, useEffect } from "react";
 import { Bar, Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, ArcElement, Tooltip, Legend } from 'chart.js';
-
+import axios from 'axios';
 ChartJS.register(BarElement, CategoryScale, LinearScale, ArcElement, Tooltip, Legend);
 
 const Dashboard = () => {
+  const [timeFrame, setTimeFrame] = useState('week'); // week, month, year
+  const [chartData, setChartData] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const storeId = localStorage.getItem('storeId');
+  console.log(storeId)
+  useEffect(() => {
+    fetchData(timeFrame);
+  }, [timeFrame]);
+  const initialData = [
+    { day: 'Mon', revenue: 123456 },
+    { day: 'Tue', revenue: 234567 },
+    { day: 'Wed', revenue: 504000 },
+    { day: 'Thu', revenue: 230000 },
+    { day: 'Fri', revenue: 220000 },
+    { day: 'Sat', revenue: 280000 },
+    { day: 'Sun', revenue: 220000 },
+  ];
   const statistics = [
     { title: "Doanh thu hôm nay", value: 5000000 , color: "text-blue-600", isCurrency: true },
     { title: "Đơn hàng mới", value: 155, color: "text-green-600", isCurrency: false },
     { title: "Đơn hủy", value: 21, color: "text-red-600", isCurrency: false },
   ];
+  const [filteredData, setFilteredData] = useState(initialData);
 
+  const fetchData = async (timeFrame) => {
+    try {
+      let url;
+      switch (timeFrame) {
+        case 'week':
+          url = `https://be-order-food.vercel.app/api/order/revenue/weekly/${storeId}`;
+          break;
+        case 'month':
+          url = `https://be-order-food.vercel.app/api/order/revenue/monthly/${storeId}`;
+          break;
+        case 'year':
+          url = `https://be-order-food.vercel.app/api/order/revenue/yearly/${storeId}`;
+          break;
+        default:
+          url = `https://be-order-food.vercel.app/api/order/revenue/weekly/${storeId}`;
+      }
+      const response = await axios.get(url);
+      setChartData(response.data);
+    } catch (error) {
+      console.error('Error fetching data', error);
+    }
+  };
+  const handleTimeFrameChange = (frame) => {
+    setTimeFrame(frame);
+  };
   const barData = {
-    labels: ['08/11', '09/11', '10/11', '11/11', '12/11', '13/11', '14/11'],
+    labels: chartData.map(data => data._id),
     datasets: [
       {
         label: 'Doanh thu',
-        data: [123456, 234567, 504000, 230000, 220000, 280000, 220000],
+        data: chartData.map(data => data.totalRevenue),
         backgroundColor: 'rgba(54, 162, 235, 0.6)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1,
@@ -118,9 +162,29 @@ const Dashboard = () => {
         <div className="flex gap-6 w-full mt-6">
           <div className="bg-white p-6 rounded-lg shadow-md w-2/3">
             <h2 className="text-xl font-semibold text-center mb-6">Doanh thu bán hàng</h2>
-            <div className='flex justify-center' style={{ width: '100%', height: '300px', margin: '0 auto' }}>
-              <Bar data={barData} options={barOptions} />
-            </div>
+            <div className="flex justify-center mb-4">
+                <button 
+                  className={`px-4 py-2 ${timeFrame === 'week' ? 'bg-blue-500 text-white' : 'bg-gray-200'} rounded mr-2`}
+                  onClick={() => handleTimeFrameChange('week')}
+                >
+                  Tuần
+                </button>
+                <button 
+                  className={`px-4 py-2 ${timeFrame === 'month' ? 'bg-blue-500 text-white' : 'bg-gray-200'} rounded mr-2`}
+                  onClick={() => handleTimeFrameChange('month')}
+                >
+                  Tháng
+                </button>
+                <button 
+                  className={`px-4 py-2 ${timeFrame === 'year' ? 'bg-blue-500 text-white' : 'bg-gray-200'} rounded`}
+                  onClick={() => handleTimeFrameChange('year')}
+                >
+                  Năm
+                </button>
+              </div>
+              <div className="flex justify-center" style={{ width: '100%', height: '300px', margin: '0 auto' }}>
+                <Bar data={barData} options={barOptions} />
+              </div>
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-md w-1/3">
