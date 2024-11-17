@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
 import IconLoginUser from '../../assets/svg/icon_loginuser.svg';
 import IconLoginUserOrange from '../../assets/svg/icon_loginuser_Orange.svg';
+import IconLoginDriver from '../../assets/svg/icon_loginDriver.svg';
+import IconLoginDriverOrange from '../../assets/svg/icon_loginDriverOrange.svg';
 
 function FormSignInStore() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [icon, setIcon] = useState(IconLoginUser);
+    const [iconUser, setIconUser] = useState(IconLoginUser);
+    const [iconDriver, setIconDriver] = useState(IconLoginDriver);
+
     const navigate = useNavigate(); // Initialize useNavigate
 
     const handleLoginClick = async (e) => {
@@ -116,7 +120,7 @@ function FormSignInStore() {
             </form>
 
             <div className="border-b my-5"></div>
-            <div className="flex justify-center items-center mb-3 ">
+            <div className="flex justify-center items-center mb-5 ">
                             <button
                                 type="submit" // Thay đổi từ Link sang button để gửi yêu cầu
                                 className="hover:bg-white hover:text-[#ff7e00] hover:border-[#ff7e00] hover:border bg-[#ff7e00] w-full sm:w-[400px] border border-[#ff7c00] rounded-full text-center text-white py-3 px-10 mt-3 inline-block"
@@ -125,28 +129,28 @@ function FormSignInStore() {
                                 Đăng Nhập Bằng Pointer
                             </button>
             </div>
-            <div className="flex justify-center items-center mb-3">
+            <div className="flex justify-center items-center">
                 <Link
                     to="/sign-in"
-                    onMouseEnter={() => setIcon(IconLoginUserOrange)}
-                    onMouseLeave={() => setIcon(IconLoginUser)}
+                    onMouseEnter={() => setIconUser(IconLoginUserOrange)}
+                    onMouseLeave={() => setIconUser(IconLoginUser)}
                     className="hover:bg-white hover:text-[#ff7e00] hover:border-[#ff7e00] hover:border bg-[#ff7e00] w-full sm:w-[400px] border border-[#ff7c00] text-center text-white py-3 px-10 mt-3 inline-block"
                 >
                     <div className="flex justify-center gap-5">
-                        <img src={icon} className="w-[20px] sm:w-[25px] h-[20px] sm:h-[25px]" alt="loginStore" />
+                        <img src={iconUser} className="w-[20px] sm:w-[25px] h-[20px] sm:h-[25px]" alt="loginStore" />
                         Đăng nhập dành cho khách hàng
                     </div>
                 </Link>
             </div>
-            <div className="flex justify-center items-center mb-3">
+            <div className="flex justify-center items-center">
                 <Link
                     to="/signin-driver"
-                    onMouseEnter={() => setIcon(IconLoginUserOrange)}
-                    onMouseLeave={() => setIcon(IconLoginUser)}
+                    onMouseEnter={() => setIconDriver(IconLoginDriverOrange)}
+                    onMouseLeave={() => setIconDriver(IconLoginDriver)}
                     className="hover:bg-white hover:text-[#ff7e00] hover:border-[#ff7e00] hover:border bg-[#ff7e00] w-full sm:w-[400px] border border-[#ff7c00] text-center text-white py-3 px-10 mt-3 inline-block"
                 >
                     <div className="flex justify-center gap-5">
-                        <img src={icon} className="w-[20px] sm:w-[25px] h-[20px] sm:h-[25px]" alt="loginStore" />
+                        <img src={iconDriver} className="w-[20px] sm:w-[25px] h-[20px] sm:h-[25px]" alt="loginStore" />
                         Đăng nhập dành cho tài xế
                     </div>
                 </Link>

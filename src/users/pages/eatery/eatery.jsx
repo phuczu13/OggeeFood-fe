@@ -8,129 +8,7 @@ import IconSeeAll from '../../assets/svg/icon_next.svg'
 import { Link } from 'react-router-dom';
 import axios from 'axios'; // Import axios
 
-
-
 const Eatery = () => {
-
-  // const topStores = [
-  //   { 
-  //     name: 'Bún Bò Huế - O Hai', 
-  //     address: '74/18 Phan Văn Hớn',
-  //     rating: '4.9',
-  //     image: 'https://reviewvilla.vn/wp-content/uploads/2023/08/bun-bo-sai-gon-3.jpg',
-  //   },
-    
-  //   { 
-  //     name: 'Bún Đậu Sữa Chua - Cô Tiên', 
-  //     address: '142 Phạm Văn Đồng',
-  //     rating: '4.8',
-  //     image: 'https://cdn3.ivivu.com/2016/09/quan-bun-dau-mam-tom-sai-gon-thu-hut-dong-sao-viet-ivivu-1.jpg',
-  //   },
-
-  //   { 
-  //     name: 'Cơm Chiên Hải Sản - Chú Tuấn', 
-  //     address: '74/18 Phan Văn Hớn',
-  //     rating: '4.7',
-  //     image: 'https://top10bienhoa.com/wp-content/uploads/2021/04/com-chien-duong-chau5.png',
-  //   },
-    
-  //   { 
-  //     name: 'Xôi Gà Lá Dứa - Minh Tâm', 
-  //     address: '142 Phạm Văn Đồng',
-  //     rating: '4.8',
-  //     image: 'https://anvat.lagi.vn/wp-content/uploads/sites/3/2020/11/xoi-ngon-lagi.jpg',
-  //   },
-
-  //   { 
-  //     name: 'Mì Quảng - Sông Thu', 
-  //     address: '74/19 Phan Văn Hớn',
-  //     rating: '4.5',
-  //     image: 'https://helenrecipes.com/wp-content/uploads/2021/05/Screenshot-2021-05-31-142423-1200x675.png',
-  //   },
-    
-  //   { 
-  //     name: 'Bánh Mì Thịt Nguội - Phúc Du', 
-  //     address: '142 Phạm Văn Đồng',
-  //     rating: '4.8',
-  //     image: 'https://kenh14cdn.com/203336854389633024/2023/9/12/photo-1-1694513007787746325737.png',
-  //   },
-
-  // ];
-
-
-//   const stores = [
-
-//     { 
-//       id: 1,
-//       name: 'Mì Quảng - Sông Thu', 
-//       category: 'Mì Quảng',
-//       address: '74/19 Phan Văn Hớn',
-//       rating: '4.5',
-//       image: 'https://helenrecipes.com/wp-content/uploads/2021/05/Screenshot-2021-05-31-142423-1200x675.png',
-//     },
-
-//     { 
-//       id: 2,
-//       name: 'Bánh Mì Thịt Nguội - Phúc Du', 
-//       category: 'Bánh Mì',
-//       address: '142 Phạm Văn Đồng',
-//       rating: '4.8',
-//       image: 'https://kenh14cdn.com/203336854389633024/2023/9/12/photo-1-1694513007787746325737.png',
-//     },
-//     { 
-//       id: 3,
-//       name: 'Mì Quảng - Sông Thu', 
-//       category: 'Mì Quảng',
-//       address: '74/19 Phan Văn Hớn',
-//       rating: '4.5',
-//       image: 'https://helenrecipes.com/wp-content/uploads/2021/05/Screenshot-2021-05-31-142423-1200x675.png',
-//     },
-
-//     { 
-//       id: 4,
-//       name: 'Bánh Mì Thịt Nguội - Phúc Du', 
-//       category: 'Bánh Mì',
-//       address: '142 Phạm Văn Đồng',
-//       rating: '4.8',
-//       image: 'https://kenh14cdn.com/203336854389633024/2023/9/12/photo-1-1694513007787746325737.png',
-//     },
-//     { 
-//       id: 5,
-//       name: 'Bánh Mì Thịt Nguội - Phúc Du', 
-//       category: 'Bánh Mì',
-//       address: '142 Phạm Văn Đồng',
-//       rating: '4.8',
-//       image: 'https://kenh14cdn.com/203336854389633024/2023/9/12/photo-1-1694513007787746325737.png',
-//     },
-
-//     { 
-//       id: 6,
-//       name: 'Mì Quảng - Sông Thu', 
-//       category: 'Mì Quảng',
-//       address: '74/19 Phan Văn Hớn',
-//       rating: '4.5',
-//       image: 'https://helenrecipes.com/wp-content/uploads/2021/05/Screenshot-2021-05-31-142423-1200x675.png',
-//     },
-
-//     { 
-//       id: 7,
-//       name: 'Bánh Mì Thịt Nguội - Phúc Du', 
-//       category: 'Bánh Mì',
-//       address: '142 Phạm Văn Đồng',
-//       rating: '4.8',
-//       image: 'https://kenh14cdn.com/203336854389633024/2023/9/12/photo-1-1694513007787746325737.png',
-//     },
-    
-//     { 
-//       id: 8,
-//       name: 'Mì Quảng - Sông Thu', 
-//       category: 'Mì Quảng',
-//       address: '74/19 Phan Văn Hớn',
-//       rating: '4.5',
-//       image: 'https://helenrecipes.com/wp-content/uploads/2021/05/Screenshot-2021-05-31-142423-1200x675.png',
-//     },
-    
-// ];
   const [topStores, setTopStores] = useState([]); // Ban đầu để trống
   const [stores, setStores] = useState([]); // Ban đầu để trống
   const [loading, setLoading] = useState(true); // Trạng thái loading
@@ -167,7 +45,6 @@ const Eatery = () => {
             setLoading(false);
         }
     };
-
     fetchStores();
   }, []); 
   // State to track the current starting index

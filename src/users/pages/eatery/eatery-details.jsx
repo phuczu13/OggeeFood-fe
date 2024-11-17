@@ -10,145 +10,6 @@ import IconRating from "../../assets/svg/icon_rating.svg";
 import { useLocation } from "react-router-dom";
 import axios from 'axios';
 
-const menuData = {
-  mon1: [
-    {
-      name: 'Bún Bò Đặc Biệt',
-      description: 'Tái, Nạm, Gân',
-      price: '50.000',
-      rating: '4.9',
-      imgUrl: 'https://www.cotrang.org/public/images/tin_dang/6/283_bun-bo-hue-bk-3.jpg', 
-    },
-    {
-      name: 'Bún Bò Đặc Biệt',
-      description: 'Tái, Nạm, Gân',
-      price: '50.000',
-      rating: '4.9',
-      imgUrl: 'https://monngonbinhdinh.vn/Images/images/ganh_dhangng_.jpg', 
-    },
-    {
-      name: 'Bún Bò Đặc Biệt',
-      description: 'Tái, Nạm, Gân',
-      price: '50.000',
-      rating: '4.9',
-      imgUrl: 'https://www.cotrang.org/public/images/tin_dang/6/283_bun-bo-hue-bk-3.jpg', 
-    },
-    {
-      name: 'Bún Bò Đặc Biệt',
-      description: 'Tái, Nạm, Gân',
-      price: '50.000',
-      rating: '4.9',
-      imgUrl: 'https://monngonbinhdinh.vn/Images/images/ganh_dhangng_.jpg', 
-    },
-    {
-      name: 'Bún Bò Đặc Biệt',
-      description: 'Tái, Nạm, Gân',
-      price: '50.000',
-      rating: '4.9',
-      imgUrl: 'https://www.cotrang.org/public/images/tin_dang/6/283_bun-bo-hue-bk-3.jpg', 
-    },
-    {
-      name: 'Bún Bò Đặc Biệt',
-      description: 'Tái, Nạm, Gân',
-      price: '50.000',
-      rating: '4.9',
-      imgUrl: 'https://monngonbinhdinh.vn/Images/images/ganh_dhangng_.jpg', 
-    },
-  ],
-
-  mon2: [
-    {
-      name: 'Bún Bò Tái',
-      description: 'Thịt Tái',
-      price: '30.000',
-      rating: '4.7',
-      imgUrl: 'https://nethue.com.vn/uploaded/san%20pham/bun%20bo%20Hue%20so%201.png', 
-    },
-    {
-      name: 'Bún Bò Tái',
-      description: 'Thịt Tái',
-      price: '30.000',
-      rating: '4.7',
-      imgUrl: 'https://product.hstatic.net/200000294188/product/bun-bo-hue_cf91a28b45364ebbb54201101a63e8c6_large_166abda8dcfb467fba091e89c6832906_master.png', 
-    },
-    {
-      name: 'Bún Bò Tái',
-      description: 'Thịt Tái',
-      price: '30.000',
-      rating: '4.7',
-      imgUrl: 'https://nethue.com.vn/uploaded/san%20pham/bun%20bo%20Hue%20so%201.png', 
-    },
-    {
-      name: 'Bún Bò Tái',
-      description: 'Thịt Tái',
-      price: '30.000',
-      rating: '4.7',
-      imgUrl: 'https://product.hstatic.net/200000294188/product/bun-bo-hue_cf91a28b45364ebbb54201101a63e8c6_large_166abda8dcfb467fba091e89c6832906_master.png', 
-    },
-    {
-      name: 'Bún Bò Tái',
-      description: 'Thịt Tái',
-      price: '30.000',
-      rating: '4.7',
-      imgUrl: 'https://nethue.com.vn/uploaded/san%20pham/bun%20bo%20Hue%20so%201.png', 
-    },
-    {
-      name: 'Bún Bò Tái',
-      description: 'Thịt Tái',
-      price: '30.000',
-      rating: '4.7',
-      imgUrl: 'https://product.hstatic.net/200000294188/product/bun-bo-hue_cf91a28b45364ebbb54201101a63e8c6_large_166abda8dcfb467fba091e89c6832906_master.png', 
-    },
-  ],
-
-  mon3: [
-    {
-      name: 'Bún Bò Giò',
-      description: 'Giò Khoanh',
-      price: '40.000',
-      rating: '4.8',
-      imgUrl: 'https://www.huongnghiepaau.com/wp-content/uploads/2017/08/cach-nau-bun-bo-hue.jpg',
-    },
-    {
-      name: 'Bún Bò Giò',
-      description: 'Giò Khoanh',
-      price: '40.000',
-      rating: '4.8',
-      imgUrl: 'https://dienmaynewsun.com/wp-content/uploads/2021/03/bun-bo-hue.jpg',
-    },
-    {
-      name: 'Bún Bò Giò',
-      description: 'Giò Khoanh',
-      price: '40.000',
-      rating: '4.8',
-      imgUrl: 'https://www.huongnghiepaau.com/wp-content/uploads/2017/08/cach-nau-bun-bo-hue.jpg',
-    },
-    {
-      name: 'Bún Bò Giò',
-      description: 'Giò Khoanh',
-      price: '40.000',
-      rating: '4.8',
-      imgUrl: 'https://dienmaynewsun.com/wp-content/uploads/2021/03/bun-bo-hue.jpg',
-    },
-    {
-      name: 'Bún Bò Giò',
-      description: 'Giò Khoanh',
-      price: '40.000',
-      rating: '4.8',
-      imgUrl: 'https://www.huongnghiepaau.com/wp-content/uploads/2017/08/cach-nau-bun-bo-hue.jpg',
-    },
-    {
-      name: 'Bún Bò Giò',
-      description: 'Giò Khoanh',
-      price: '40.000',
-      rating: '4.8',
-      imgUrl: 'https://dienmaynewsun.com/wp-content/uploads/2021/03/bun-bo-hue.jpg',
-    },
-    
-  ],
-};
-
-
 function EateryDetails() {
 const location = useLocation();
 const storeId = location.state?.storeId;
@@ -308,7 +169,7 @@ useEffect(() => {
     <div>
       <ToastContainer position='top-right' autoClose={2000} hideProgressBar={false} />
       <HeaderHC2 />
-      <div className="max-w-[1200px] mx-auto mt-10">
+      <div className="max-w-[1200px] mx-auto my-10">
         <div className=" relative bg-cover rounded-md bg-center h-[300px] mt-6">
           <img 
             className="absolute inset-0 w-full h-full object-cover rounded-md" 
@@ -359,15 +220,6 @@ useEffect(() => {
                   Món phụ
                 </a>
               </li>
-              {/* <li>
-                <a 
-                  href="#mon3" 
-                  className={`text-xl hover:text-[#ef4b2c] ${activeSection === 'mon3' ? 'border-b-2 border-[#ef4b2c] text-[#ef4b2c]' : ''}`} 
-                  onClick={() => handleSectionClick('mon3')}
-                >
-                  Buổi trưa vui vẻ
-                </a>
-              </li> */}
             </ul>
           </div>
 
@@ -409,51 +261,23 @@ useEffect(() => {
                   <div className="relative">
                       <img src={dish.toppingImage} alt={dish.toppingName} className="w-full h-[150px] object-cover" />
                       <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">
-                          <span className="text-black font-semibold">{dish.rating}</span>
-                          <span className="ml-1"><img src={IconRating} alt="" /></span>
+                        <span className="text-black font-semibold">{dish.rating}</span>
+                        <span className="ml-1"><img src={IconRating} alt="" /></span>
                       </div>
                   </div>
                   <div className="mt-4">
-                      <h3 className="font-semibold text-lg">{dish.toppingName}</h3>
-                      {/* <p className="text-gray-500 text-sm">{dish.Food_detail}</p> */}
-                      <div className="flex relative justify-between items-center mt-2">
-                          <span className="text-red-500 font-semibold">{dish.toppingPrice.toLocaleString()} VND</span>
-                          <button onClick={(e) => { e.preventDefault(); handleAddToCart(dish); }}>
-                              <img className='w-[30px] absolute right-0 bottom-0 h-[30px]' src={IconAddCart} alt="icon_add_cart" />
-                          </button>
-                      </div>
+                    <h3 className="font-semibold text-lg">{dish.toppingName}</h3>
+                    <div className="flex relative justify-between items-center mt-2">
+                      <span className="text-red-500 font-semibold">{dish.toppingPrice.toLocaleString()} VND</span>
+                      <button onClick={(e) => { e.preventDefault(); handleAddToCart(dish); }}>
+                          <img className='w-[30px] absolute right-0 bottom-0 h-[30px]' src={IconAddCart} alt="icon_add_cart" />
+                      </button>
+                    </div>
                   </div>
                   </Link>
                 ))}
               </div>
             </section>
-
-            {/* <section id="mon3" className="my-8">
-              <h2 className="text-2xl font-semibold mb-4">Buổi trưa vui vẻ</h2>
-              <div className="grid grid-cols-3 gap-6">
-                {menuData.mon3.map((dish, index) => (
-                  <Link to='/product-detail' key={index} className="border border-[#F8E7CC] hover:ring-[#e67350] hover:outline-none hover:ring-2 p-3 rounded-lg shadow-sm">
-                  <div className="relative">
-                      <img src={dish.Food_picture} alt={dish.Food_name} className="w-full h-[150px] object-cover" />
-                      <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">
-                          <span className="text-black font-semibold">{dish.rating}</span>
-                          <span className="ml-1"><img src={IconRating} alt="" /></span>
-                      </div>
-                  </div>
-                  <div className="mt-4">
-                      <h3 className="font-semibold text-lg">{dish.Food_name}</h3>
-                      <p className="text-gray-500 text-sm">{dish.Food_detail}</p>
-                      <div className="flex relative justify-between items-center mt-2">
-                          <span className="text-red-500 font-semibold">{dish.Price} VND</span>
-                          <button onClick={(e) => { e.preventDefault(); handleAddToCart(dish); }}>
-                              <img className='w-[30px] absolute right-0 bottom-0 h-[30px]' src={IconAddCart} alt="icon_add_cart" />
-                          </button>
-                      </div>
-                  </div>
-                  </Link>
-                ))}
-              </div>
-            </section> */}
           </div>
         </div>
       </div>

@@ -4,12 +4,16 @@ import axios from 'axios'; // Import Axios
 import IconLoginStore from '../../users/assets/svg/icon_loginstore.svg';
 import IconLoginStoreWhite from '../../users/assets/svg/icon_loginstorewhite.svg';
 import HeaderUser from "../header/header_user";
+import IconLoginUser from '../../driver/assets/icon_loginuser.svg';
+import IconLoginUserOrange from '../../driver/assets/icon_loginuser_Orange.svg';
 
 function LoginDriver() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');   
     const [error, setError] = useState('');
-    const [icon, setIcon] = useState(IconLoginStoreWhite);
+    const [iconStore, setIconStore] = useState(IconLoginStoreWhite);
+    const [iconUser, setIconUser] = useState(IconLoginUser);
+
     const navigate = useNavigate(); // Khởi tạo useNavigate
 
     const handleLoginClick = async (e) => {
@@ -55,12 +59,12 @@ function LoginDriver() {
             <div>
                 <HeaderUser />
             </div>
-            <div>
+            <div className="mt-10">
                 <div className="w-fit flex mr-auto ml-auto px-20 pb-1 pt-10 bg-white">
                     <div>
                         <h1 className="font-bold flex justify-center mb-2 text-[20px] sm:text-[24px]">Đăng Nhập</h1>
                         <p className="justify-center flex mb-8">Welcome Back!</p>
-                        <div className="flex justify-center items-center mb-3 ">
+                        <div className="flex justify-center items-center mb-5 ">
                             <button
                                 type="submit" // Thay đổi từ Link sang button để gửi yêu cầu
                                 className="hover:bg-white hover:text-[#ff7e00] hover:border-[#ff7e00] hover:border bg-[#ff7e00] w-full sm:w-[400px] border border-[#ff7c00] rounded-full text-center text-white py-3 px-10 mt-3 inline-block"
@@ -69,28 +73,28 @@ function LoginDriver() {
                                 Đăng Nhập Bằng Pointer
                             </button>
                         </div>
-                        <div className="flex justify-center items-center mb-3 ">
+                        <div className="flex justify-center items-center">
                             <Link
                                 to="/signin-store"
-                                onMouseEnter={() => setIcon(IconLoginStore)}
-                                onMouseLeave={() => setIcon(IconLoginStoreWhite)}
+                                onMouseEnter={() => setIconStore(IconLoginStore)}
+                                onMouseLeave={() => setIconStore(IconLoginStoreWhite)}
                                 className="hover:bg-white hover:text-[#ff7e00] hover:border-[#ff7e00] hover:border bg-[#ff7e00] w-full sm:w-[400px] border border-[#ff7c00] text-center text-white py-3 px-10 mt-3 inline-block"
                             >
                                 <div className="flex justify-center gap-5">
-                                    <img src={icon} className="w-[25px] h-[25px]" alt="loginStore" />
+                                    <img src={iconStore} className="w-[25px] h-[25px]" alt="loginStore" />
                                     Đăng nhập dành cho cửa hàng
                                 </div>
                             </Link>
                         </div>
-                        <div className="flex justify-center items-center mb-3 ">
+                        <div className="flex justify-center items-center mb-10 ">
                             <Link
                                 to="/sign-in"
-                                onMouseEnter={() => setIcon(IconLoginStore)}
-                                onMouseLeave={() => setIcon(IconLoginStoreWhite)}
+                                onMouseEnter={() => setIconUser(IconLoginUserOrange)}
+                                onMouseLeave={() => setIconUser(IconLoginUser)}
                                 className="hover:bg-white hover:text-[#ff7e00] hover:border-[#ff7e00] hover:border bg-[#ff7e00] w-full sm:w-[400px] border border-[#ff7c00] text-center text-white py-3 px-10 mt-3 inline-block"
                             >
                                 <div className="flex justify-center gap-5">
-                                    <img src={icon} className="w-[25px] h-[25px]" alt="loginStore" />
+                                    <img src={iconUser} className="w-[25px] h-[25px]" alt="loginStore" />
                                     Đăng nhập dành cho khách hàng
                                 </div>
                             </Link>

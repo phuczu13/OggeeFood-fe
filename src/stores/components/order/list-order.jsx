@@ -3,14 +3,13 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'; // Use axios for API requests
 
-
 function ListOrder() {
   const [orders, setOrders] = useState([]);
   const [activeTab, setActiveTab] = useState('Chờ xác nhận');
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [confirmationAction, setConfirmationAction] = useState(null);
-  const [showDetail, setShowDetail] = useState(false); // new state for detail
-
+  const [showDetail, setShowDetail] = useState(false);
+  const [showPrintInvoice, setShowPrintInvoice] = useState(false);
   const confirmationRef = useRef(null);
   const detailRef = useRef(null);
 
@@ -90,6 +89,7 @@ function ListOrder() {
       setSelectedOrder(null);
       setConfirmationAction(null);
       setShowDetail(false);
+      setShowPrintInvoice(false);
     }
   };
 
@@ -105,6 +105,16 @@ function ListOrder() {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
   }, []);
+
+  //in hóa đơn
+  const handlePrintInvoice = (order) => {
+    setSelectedOrder(order);
+    setShowPrintInvoice(true);
+  };
+  const handleConfirmPrint = () => {
+    setShowPrintInvoice(false);
+    toast.success("In hóa đơn thành công!")
+  };
 
   return (
     <div className="max-w-[1200px] mx-auto p-4">
@@ -160,7 +170,7 @@ function ListOrder() {
                     Nhận đơn
                   </button>
                   <button
-                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700"
                     onClick={() => {
                       setSelectedOrder(order);
                       setConfirmationAction('cancel');
@@ -198,12 +208,20 @@ function ListOrder() {
               )}
 
               {activeTab === 'completed' && (
-                <button
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                  onClick={() => handleShowDetail(order)}
-                >
-                  Xem chi tiết
-                </button>
+                <>
+                  <button
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                    onClick={() => handleShowDetail(order)}
+                  >
+                    Xem chi tiết
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                    onClick={() => handlePrintInvoice(order)}
+                  >
+                    Xuất hóa đơn
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -226,6 +244,7 @@ function ListOrder() {
                 <tr>
                   <th>STT</th>
                   <th>Tên món</th>
+                  <th>Ảnh</th>
                   <th>SL</th>
                   <th>Đơn giá</th>
                   <th>Thành tiền</th>
@@ -260,12 +279,61 @@ function ListOrder() {
         </div>
       )}
 
+      {showPrintInvoice && selectedOrder && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full" ref={detailRef}>
+            <h2 className="text-lg font-semibold mb-4 text-center">Thông tin đơn hàng</h2>
+            <p>Mã vận đơn: {selectedOrder._id}</p>
+            <p>Tên người nhận: {selectedOrder.deliveryInfo.name}</p>
+            <p>Địa chỉ: {selectedOrder.deliveryInfo.address}</p>
+            <p>Số điện thoại: {selectedOrder.deliveryInfo.phonenumber}</p>
+            <table className="w-full text-left mt-4">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Tên món</th>
+                  <th>SL</th>
+                  <th>Thành tiền</th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedOrder.cart.map((item, index) => (
+                  <tr key={item.productId}>
+                    <td>{index + 1}</td>
+                    <td>{item.name}</td>
+                    <td>{item.quantity}</td>
+                    <td>{(item.price * item.quantity).toLocaleString()} VND</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="mt-4">Tổng tiền: {selectedOrder.totalPrice.toLocaleString()} VND</p>
+            <p>Phí vận chuyển: {selectedOrder.totalShip.toLocaleString()} VND</p>
+            <p>Tổng tiền thanh toán: {(selectedOrder.totalPrice + selectedOrder.totalShip).toLocaleString()} VND</p>
+            <div className="flex justify-center gap-3 mt-4">
+              <button
+                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+                onClick={() => setShowPrintInvoice(false)}
+              >
+                Đóng
+              </button>
+              <button
+                className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                onClick={() => handleConfirmPrint()}
+              >
+                In hóa đơn
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {confirmationAction && selectedOrder && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full" ref={confirmationRef}>
-            <h2 className="text-lg font-semibold mb-2 text-center">Xác nhận {confirmationAction === 'accept' ? 'nhận' : confirmationAction === 'complete' ? 'hoàn thành' : 'cancel'} đơn hàng</h2>
-            <p className='text-center'>Bạn có chắc chắn muốn {confirmationAction === 'accept' ? 'nhận đơn' : confirmationAction === 'complete' ? 'hoàn thành' : 'cancel'} đơn này không?</p>
-            <div className="flex justify-center gap-4 mt-5">
+            <h2 className="text-lg font-semibold mb-2 text-center">Xác nhận {confirmationAction === 'accept' ? '' : confirmationAction === 'complete' ? 'hoàn thành' : 'hủy'} đơn hàng</h2>
+            <p className='text-center'>Bạn có chắc chắn {confirmationAction === 'accept' ? ' muốn nhận' : confirmationAction === 'complete' ? 'đã hoàn thành' : 'muốn hủy'} đơn hàng này không?</p>
+            <div className="flex justify-center gap-3 mt-5">
               <button
                 className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
                 onClick={() => setConfirmationAction(null)}
@@ -273,7 +341,11 @@ function ListOrder() {
                 Hủy
               </button>
               <button
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                className={`px-4 py-2 text-white rounded hover:bg-opacity-90 ${
+                  confirmationAction === 'cancel' 
+                    ? 'bg-red-500 hover:bg-red-700' 
+                    : 'bg-green-500 hover:bg-green-600'
+                }`}
                 onClick={() => handleConfirmAction(confirmationAction)}
               >
                 Xác nhận
@@ -285,5 +357,4 @@ function ListOrder() {
     </div>
   );
 }
-
 export default ListOrder;

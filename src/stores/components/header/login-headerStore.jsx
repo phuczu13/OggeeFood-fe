@@ -11,7 +11,7 @@ function HeaderStoreLogin() {
             <div className="flex justify-between items-center">
                 <img src={LogoStore} className='w-[150px] md:w-[200px]' alt="Logo Web" />
                 <div className="flex gap-4 items-center">
-                    <span className="text-[#ff7e00] font-bold text-sm md:text-base lg:text-lg">Chào bạn cửa hàng thân thiết</span>
+                    <span className="text-[#ff7e00] font-bold text-sm md:text-base lg:text-lg">Chào bạn cửa hàng Ogge</span>
                     <img className="w-[40px] md:w-[50px] h-[40px] md:h-[50px] border rounded-full" src={VietNam} alt="Việt Nam" />
                 </div>
             </div>

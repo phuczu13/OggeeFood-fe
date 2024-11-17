@@ -53,8 +53,6 @@ function ListProduct() {
         }
     };
     
-
-
     // Gọi API khi component được render lần đầu
     useEffect(() => {
         fetchRandomProducts();
@@ -103,5 +101,4 @@ function ListProduct() {
         </div>
     );
 }
-
 export default ListProduct;

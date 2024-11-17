@@ -44,7 +44,7 @@ function HeaderHS1() {
                                 Món ăn
                             </Link>
                             <Link className='hover:text-[#ef4c2b] font-semibold' to='/topping-store' state={{ storeId }}>
-                                Topping
+                                Món phụ
                             </Link>
                             <Link className='text-[#ef4c2b] font-semibold border-b-2 border-[#ef4c2b] rounded-sm' to='/order-store' state={{ storeId }}>
                                 Đơn hàng

@@ -88,13 +88,30 @@ function ListProduct() {
             return;
         }
 
+        const price = parseInt( Price, 10);
+    
+        if (isNaN(price)) {
+            toast.error("Giá tiền không hợp lệ! Giá không được chứa ký tự đặc biệt hoặc chữ cái.", { duration: 2000 });
+            return;
+        }
+    
+        if (price < 0) {
+            toast.error("Giá tiền phải là số dương.", { duration: 2000 });
+            return;
+        }
+    
+        if (price < 1000 || price > 10000000) {
+            toast.error("Giá tiền phải từ 1,000 đến 10,000,000 VNĐ.", { duration: 2000 });
+            return;
+        }
+
         try {
             if (isEditing) {
                 // Update product
                 await axios.put(`https://be-order-food.vercel.app/api/product/update-product/${currentProduct._id}`, {
                     Food_name,
                     Food_detail,
-                    Price,
+                    Price: price,
                     Food_picture,
                     categoryID: selectedCategory, // Send selected category ID
                 });
@@ -104,7 +121,7 @@ function ListProduct() {
                 await axios.post("https://be-order-food.vercel.app/api/product/create-product", {
                     Food_name,
                     Food_detail,
-                    Price,
+                    Price: price,
                     Food_picture,
                     categoryID: selectedCategory, // Send selected category ID
                     Store_id: storeId,
@@ -155,9 +172,9 @@ function ListProduct() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {products.map((product) => (
-                        <div key={product._id} className="border p-3 rounded-lg shadow-sm">
+                        <div key={product._id} className="border p-3 rounded-lg shadow-sm flex flex-col h-full">
                             <div className="relative">
-                                <Link to={'/detail-product'} state={ {productId : product._id, storeId} } key={product._id}>
+                                <Link to={'/detail-product'} state={{ productId: product._id, storeId }} key={product._id}>
                                     <img src={product.Food_picture} alt={product.Food_name} className="w-full h-[150px] object-cover" />
                                 </Link>
                                 <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">
@@ -167,25 +184,25 @@ function ListProduct() {
                                     </span>
                                 </div>
                             </div>
-                            <div className="mt-4">
-                                <h3 className="font-semibold text-lg">{product.Food_name}</h3>
-                                <p className="text-gray-500 text-sm">{product.Food_detail}</p>
-                                <div className="flex justify-between items-center mt-2">
-                                    <span className="text-red-500 font-semibold">{product.Price.toLocaleString()} VNĐ</span>
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => openEditModal(product)}
-                                            className="bg-[#ff7e00] hover:bg-[#ef4c2b] text-white px-3 py-1 rounded-md"
-                                        >
-                                            Sửa
-                                        </button>
-                                        <button
-                                            onClick={() => openDeleteModal(product)}
-                                            className="bg-[#ef4c2b] hover:bg-[#ff7e00] text-white px-3 py-1 rounded-md"
-                                        >
-                                            Xóa
-                                        </button>
-                                    </div>
+                            <div className="mt-4 flex-grow">
+                                <h3 className="font-semibold text-lg line-clamp-2">{product.Food_name}</h3>
+                                <p className="text-gray-500 text-sm line-clamp-1 mt-1">{product.Food_detail}</p>
+                            </div>
+                            <div className="flex justify-between items-center mt-2">
+                                <span className="text-red-500 font-semibold">{product.Price.toLocaleString()} VNĐ</span>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => openEditModal(product)}
+                                        className="bg-[#ff7e00] hover:bg-[#ef4c2b] text-white px-3 py-1 rounded-md"
+                                    >
+                                        Sửa
+                                    </button>
+                                    <button
+                                        onClick={() => openDeleteModal(product)}
+                                        className="bg-[#ef4c2b] hover:bg-[#ff7e00] text-white px-3 py-1 rounded-md"
+                                    >
+                                        Xóa
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -232,7 +249,7 @@ function ListProduct() {
                         <div className="mb-4">
                             <input
                                 placeholder="Giá"
-                                type="text"
+                                type="number"
                                 value={currentProduct.Price}
                                 onChange={(e) =>
                                     setCurrentProduct({ ...currentProduct, Price: e.target.value })
@@ -269,18 +286,18 @@ function ListProduct() {
                             </select>
                         </div>
 
-                        <div className="flex flex-col sm:flex-row gap-3">
+                        <div className="flex flex-col justify-center sm:flex-row gap-3">
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="w-full sm:w-auto bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md"
+                            >
+                                Hủy
+                            </button>
                             <button
                                 onClick={handleSave}
                                 className="w-full sm:w-auto bg-[#ff7e00] hover:bg-[#ef4c2b] text-white px-4 py-2 rounded-md"
                             >
                                 {isEditing ? "Cập nhật" : "Thêm món"}
-                            </button>
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="w-full sm:w-auto bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md"
-                            >
-                                Hủy
                             </button>
                         </div>
                     </div>
@@ -302,20 +319,20 @@ function ListProduct() {
                     >
                         <h2 className="text-xl font-semibold mb-3 text-center">Xác nhận xóa món</h2>
                         <p className="text-center">
-                            Bạn có chắc chắn muốn xóa món <strong>{productToDelete?.name}</strong>?
+                            Bạn có chắc chắn muốn xóa món <strong>{productToDelete?.Food_name}</strong>?
                         </p>
                         <div className="flex flex-col sm:flex-row gap-3 mt-6 justify-center">
-                            <button
-                                onClick={handleDelete}  
-                                className="w-full sm:w-auto bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md"
-                            >
-                                Xoá
-                            </button>
                             <button
                                 onClick={() => setIsDeleteModalOpen(false)}
                                 className="w-full sm:w-auto bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
                             >
                                 Hủy
+                            </button>
+                            <button
+                                onClick={handleDelete}  
+                                className="w-full sm:w-auto bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md"
+                            >
+                                Xoá
                             </button>
                         </div>
                     </div>

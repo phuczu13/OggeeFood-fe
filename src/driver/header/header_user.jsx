@@ -1,16 +1,13 @@
 import React, { useState,useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import LogoWeb from '../../driver/assets/OggeeDriver.png'
-import User from '../../driver/assets/User.png';
+import LogoDriver from '../../driver/assets/logo_driver.svg'
 import { Toaster, toast } from 'react-hot-toast';
 
 function HeaderUser() {
     const [isOpen, setIsOpen] = useState(false);
     const [driverInfo, setDriverInfo] = useState(null);
     const navigate = useNavigate();
-    const toggleDropdown = () => {
-        setIsOpen(!isOpen);
-    };
+
     useEffect(() => {
         const driverId = localStorage.getItem('driverId'); // Lấy driverId từ localStorage
 
@@ -41,18 +38,14 @@ function HeaderUser() {
             <div className="px-4 sm:px-[150px] py-[15px] border-b bg-white">
                 <div className="flex flex-col sm:flex-row justify-between items-center">
                     <div className='flex justify-between'>
-                        <Link to='/order-driver'>
-                            <img src={LogoWeb} className="w-[120px] sm:w-[200px] mb-2 sm:mb-0" alt="Logo Web" />  
+                        <Link to='/signin-driver'>
+                            <img src={LogoDriver} className="w-[120px] sm:w-[200px] h-12" alt="Logo Driver" />  
                         </Link>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-4 sm:gap-12 items-center relative">
                         <div className='mt-2 sm:mt-0'>
-                            <button
-                                className='flex items-center gap-2 text-white bg-[#ff7e00] hover:bg-[#ef4c2b] py-3 font-medium px-4 rounded-md'
-                                onClick={toggleDropdown}
-                            >
-                                <img className='w-[22px] h-[28px]' src={User} alt="User Icon" />
-                            </button>
+                                <div className='text-[#ff7e00] font-semibold text-xl'>Chào tài xế Ogge</div>
+                                {/* <img className='w-[22px] h-[28px]' src={User} alt="User Icon" /> */}
                         </div>
 
                         {isOpen && (

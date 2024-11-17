@@ -5,6 +5,7 @@ import { useLocation } from 'react-router-dom';
 function StoreInfo() {
   const location = useLocation();
   const storeId = location.state?.storeId;
+  const [error, setError] = useState('');
   // Initialize state
   const [storeInfo, setStoreInfo] = useState({
     storeName: '',
@@ -75,14 +76,35 @@ function StoreInfo() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setStoreInfo((prevStoreInfo) => ({
-      ...prevStoreInfo,
-      [name]: value
+    setStoreInfo((prevState) => ({
+      ...prevState,
+      [name]: value,
     }));
   };
 
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setStoreInfo({ ...storeInfo, email: value });  // Cập nhật email vào state
+  
+    // Kiểm tra email có đúng định dạng và phải có @gmail.com
+    const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    if (value && !gmailRegex.test(value)) {
+      setError("Email chưa đúng định dạng");
+    } else {
+      setError("");  // Xóa lỗi khi email hợp lệ
+    }
+  };
+  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Kiểm tra lại email trước khi gửi
+    if (error) {
+      toast.error("Vui lòng nhập email hợp lệ");
+      return;
+    }
+
     try {
       // Convert times to 24-hour format before sending to server
       const storeDataToUpdate = {
@@ -100,7 +122,7 @@ function StoreInfo() {
       });
 
       if (!response.ok) {
-        throw new Error('Could not update store information');
+        throw new Error('Vui lòng điền đầy đủ thông tin');
       }
 
       toast.success('Lưu thành công', {
@@ -112,7 +134,6 @@ function StoreInfo() {
   };
 
   return (
-
     <div className="max-w-[800px] mx-auto p-4">
       <h1 className="text-2xl font-bold text-[#ff7e00] mb-6 text-center">Thông tin cửa hàng</h1>
       <form onSubmit={handleSubmit} className="bg-white shadow-md border rounded px-8 pt-6 pb-8 mb-6">     
@@ -167,11 +188,12 @@ function StoreInfo() {
             id="email" 
             type="email" 
             name="email" 
-            value={storeInfo.email} 
-            onChange={handleInputChange} 
+            value={storeInfo.email}  // Sử dụng giá trị email từ state
+            onChange={handleEmailChange}  // Xử lý sự kiện thay đổi
           />
+          {error && <p className="text-red-500 text-xs italic">{error}</p>}  {/* Hiển thị thông báo lỗi nếu có */}
         </div>
-        
+
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="openingTime">
             Thời gian mở cửa

@@ -177,7 +177,7 @@ function Payment() {
               />
             </div>
             <div className="mt-2">
-              <label className="block font-semibold">Chi tiết địa chỉ</label>
+              <label className="block font-semibold">Số điện thoại nhận hàng</label>
               <input
                 type="text"
                 placeholder="Số điện thoại"
@@ -187,7 +187,7 @@ function Payment() {
               />
             </div>
             <div className="mt-2">
-              <label className="block font-semibold">Số điện thoại nhận hàng</label>
+              <label className="block font-semibold">Chi tiết địa chỉ</label>
               <input
                 type="text"
                 placeholder="Địa chỉ"

@@ -64,7 +64,7 @@ function Product() {
         }
     };
     if (loading) {
-        return <p className='text-center'>Loading...</p>;
+        return <p className='text-center flex justify-center items-center'>Loading...</p>;
     }
 
     if (error) {

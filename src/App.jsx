@@ -11,7 +11,7 @@ import HomePage from './users/pages/home/home-page';
 
 import Eatery from './users/pages/eatery/eatery';
 import EateryDetails from './users/pages/eatery/eatery-details';
-
+import ListEatery from './users/pages/eatery/list-eatery';
 
 import Cart from './users/pages/cart/cart';
 import CallbackPage from './users/pages/home/CallbackPage';
@@ -41,7 +41,7 @@ import OrderStore from './stores/pages/home/order-store';
 import RevenueStore from './stores/pages/home/revenue-store';
 import InforStore from './stores/pages/home/infor-store';
 import DetailProduct from './stores/components/product/detail-product';
-
+import DetailTopping from './stores/components/topping/detai-topping';
 
 import SignUpStore from './stores/pages/auth/signup-store'
 import InforNewStore from './stores/pages/auth/infor-newstore'
@@ -80,6 +80,7 @@ function App() {
             < Route path="/auth/callback" element={<CallbackPage />} />
             < Route path='eatery' element={<Eatery/>} />
             < Route path='eatery-details' element={<EateryDetails/>} />
+            < Route path='list-eatery' element={<ListEatery/>} />
 
             < Route path='cart' element={<Cart/>} />
 
@@ -108,6 +109,8 @@ function App() {
             < Route path='home-store' element={<HomeStore/>} />
             <Route path="/auth-store/callback" element={<CallbackPageStore />} />
             < Route path='topping-store' element={<ToppingStore/>} />
+            < Route path='detail-topping' element={<DetailTopping/>} />
+
             < Route path='order-store' element={<OrderStore/>} />
             < Route path='revenue-store' element={<RevenueStore/>} />
             < Route path='infor-store' element={<InforStore/>} />

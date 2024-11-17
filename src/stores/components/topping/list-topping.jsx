@@ -3,6 +3,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import IconRating from "../../assets/svg/icon_rating.svg";
 import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function ListTopping() {
     const location = useLocation();
@@ -154,6 +155,13 @@ function ListTopping() {
     const closeModalOnClickOutside = (e) => {
         if (e.target.className.includes("modal-background")) {
             setIsModalOpen(false);
+            setIsDeleteModalOpen(false);
+        }
+    };
+    const closeModalOnClickOutside1 = (e) => {
+        // Kiểm tra nếu người dùng click vào phần ngoài modal (có lớp modal-background)
+        if (e.target.classList.contains("modal-background")) {
+            setIsDeleteModalOpen(false);  // Đóng modal nếu click vào background
         }
     };
 
@@ -172,33 +180,41 @@ function ListTopping() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {toppings.map((topping) => (
-                        <div key={topping._id} className="border p-3 rounded-lg shadow-sm">
+                        <div key={topping._id} className="border p-3 rounded-lg shadow-sm flex flex-col h-full">
                             <div className="relative">
-                                <img src={topping.toppingImage} alt={topping.toppingName} className="w-full h-[150px] object-cover" />
-                            </div>
-                            <div className="mt-4">
-                                <h3 className="font-semibold text-lg">{topping.toppingName}</h3>
-                                <p className="text-gray-500 text-sm">{topping.toppingstatus}</p>
-                                <div className="flex justify-between items-center mt-2">
-                                    <span className="text-red-500 font-semibold">
-                                        {typeof topping.toppingPrice === 'number'
-                                            ? topping.toppingPrice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
-                                            : 'Giá không hợp lệ'}
+                                <Link to={'/detail-topping'} state={ {toppingId : topping._id, storeId} } key={topping._id} >
+                                    <img src={topping.toppingImage} alt={topping.toppingName} className="w-full h-[150px] object-cover" />
+                                </Link>
+                                <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">
+                                    <span className="text-black font-semibold">{topping.rating}</span>
+                                    <span className="ml-1">
+                                        <img src={IconRating} alt="" />
                                     </span>
-                                    <div className="flex gap-2">
-                                        <button
-                                            onClick={() => openEditModal(topping)}
-                                            className="bg-[#ff7e00] hover:bg-[#ef4c2b] text-white px-3 py-1 rounded-md"
-                                        >
-                                            Sửa
-                                        </button>
-                                        <button
-                                            onClick={() => openDeleteModal(topping)}
-                                            className="bg-[#ef4c2b] hover:bg-[#ff7e00] text-white px-3 py-1 rounded-md"
-                                        >
-                                            Xóa
-                                        </button>
-                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-4 flex-grow">
+                                <h3 className="font-semibold text-lg line-clamp-2">{topping.toppingName}</h3>
+                                <p className="text-gray-500 text-sm line-clamp-1 mt-1">{topping.toppingstatus}</p>
+                            </div>
+                            <div className="flex justify-between items-center mt-2">
+                                <span className="text-red-500 font-semibold">
+                                    {typeof topping.toppingPrice === 'number'
+                                        ? topping.toppingPrice.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })
+                                        : 'Giá không hợp lệ'}
+                                </span>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => openEditModal(topping)}
+                                        className="bg-[#ff7e00] hover:bg-[#ef4c2b] text-white px-3 py-1 rounded-md"
+                                    >
+                                        Sửa
+                                    </button>
+                                    <button
+                                        onClick={() => openDeleteModal(topping)}
+                                        className="bg-[#ef4c2b] hover:bg-[#ff7e00] text-white px-3 py-1 rounded-md"
+                                    >
+                                        Xóa
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -206,7 +222,6 @@ function ListTopping() {
                 </div>
             </div>
 
-            {/* Add/Edit Modal */}
             {isModalOpen && (
                 <div
                     className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 modal-background"
@@ -217,11 +232,11 @@ function ListTopping() {
                         onClick={(e) => e.stopPropagation()}
                     >
                         <h2 className="text-xl font-semibold mb-4 text-center">
-                            {isEditing ? "Cập nhật topping" : "Thêm topping mới"}
+                            {isEditing ? "Cập nhật món phụ" : "Thêm món phụ mới"}
                         </h2>
                         <div className="mb-4">
                             <input
-                                placeholder="Tên topping"
+                                placeholder="Tên món phụ"
                                 type="text"
                                 value={currentTopping.toppingName}
                                 onChange={(e) =>
@@ -248,7 +263,7 @@ function ListTopping() {
                         </div>
 
                         <div className="mb-4">
-                        <input
+                            <input
                                 placeholder="Giá"
                                 type="number"
                                 value={currentTopping.toppingPrice}
@@ -257,7 +272,6 @@ function ListTopping() {
                                 }
                                 className="w-full border px-3 py-2 rounded-md focus:outline-none focus:border-[#ff7e00]"
                             />
-
                         </div>
                         <div className="mb-4">
                             <input
@@ -270,8 +284,6 @@ function ListTopping() {
                                 className="w-full border px-3 py-2 rounded-md focus:outline-none focus:border-[#ff7e00]"
                             />
                         </div>
-
-                        {/* Category Selection */}
                         <div className="mb-4">
                             <label className="block mb-2 text-gray-700">Chọn danh mục</label>
                             <select
@@ -287,33 +299,36 @@ function ListTopping() {
                                 ))}
                             </select>
                         </div>
-
-
-                        <div className="flex flex-col sm:flex-row gap-3">
+                        <div className="flex flex-col justify-center sm:flex-row gap-3">
+                            <button
+                                onClick={() => setIsModalOpen(false)}
+                                className="w-full sm:w-auto bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
+                            >
+                                Hủy
+                            </button>
                             <button
                                 onClick={handleSave}
                                 className="w-full sm:w-auto bg-[#ff7e00] hover:bg-[#ef4c2b] text-white px-4 py-2 rounded-md"
                             >
-                                {isEditing ? "Cập nhật" : "Thêm topping"}
-                            </button>
-                            <button
-                                onClick={() => setIsModalOpen(false)}
-                                className="w-full sm:w-auto bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded-md"
-                            >
-                                Hủy
+                                {isEditing ? "Cập nhật" : "Thêm món phụ"}
                             </button>
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* Delete Confirmation Modal */}
             {isDeleteModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg w-11/12 sm:w-1/3">
-                        <h2 className="text-lg font-semibold mb-4">Xóa món phụ</h2>
+                <div 
+                    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 modal-background"
+                    onClick={closeModalOnClickOutside1}  // Click vào background để đóng modal
+                >
+                    <div
+                        className="bg-white text-center p-6 rounded-lg w-11/12 sm:w-1/4"
+                        onClick={(e) => e.stopPropagation()} // Ngừng sự kiện click từ div này lan ra ngoài
+                    >
+                        <h2 className="text-lg font-semibold mb-2">Xác nhận xóa món phụ</h2>
                         <p>Bạn có chắc chắn muốn xóa món phụ <strong>{toppingToDelete.toppingName}</strong>?</p>
-                        <div className="flex justify-end mt-4">
+                        <div className="flex justify-center gap-3 mt-5">
                             <button
                                 onClick={() => setIsDeleteModalOpen(false)}
                                 className="bg-gray-300 hover:bg-gray-400 text-black font-semibold px-4 py-2 rounded-md"
@@ -322,7 +337,7 @@ function ListTopping() {
                             </button>
                             <button
                                 onClick={handleDelete}
-                                className="bg-red-500 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-md ml-2"
+                                className="bg-red-500 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-md"
                             >
                                 Xóa
                             </button>
@@ -331,7 +346,6 @@ function ListTopping() {
                 </div>
             )}
 
-            {/* Delete Last Item Confirmation Modal */}
             {isDeleteLastItemModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white p-6 rounded-lg w-11/12 sm:w-1/3">
