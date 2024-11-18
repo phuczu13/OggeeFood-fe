@@ -3,9 +3,9 @@ import { Link, useNavigate } from "react-router-dom"; // Import useNavigate từ
 import axios from 'axios'; // Import Axios
 import IconLoginStore from '../../users/assets/svg/icon_loginstore.svg';
 import IconLoginStoreWhite from '../../users/assets/svg/icon_loginstorewhite.svg';
-import HeaderUser from "../header/header_user";
 import IconLoginUser from '../../driver/assets/icon_loginuser.svg';
 import IconLoginUserOrange from '../../driver/assets/icon_loginuser_Orange.svg';
+import HeaderDriverLogin from "../header/header_driverLogin";
 
 function LoginDriver() {
     const [email, setEmail] = useState('');
@@ -57,7 +57,7 @@ function LoginDriver() {
     return (
         <div className='bg-[#f1f1f1] w-full h-screen pb-10'>
             <div>
-                <HeaderUser />
+                <HeaderDriverLogin />
             </div>
             <div className="mt-10">
                 <div className="w-fit flex mr-auto ml-auto px-20 pb-1 pt-10 bg-white">

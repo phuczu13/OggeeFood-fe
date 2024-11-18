@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import LogoDriver from '../../driver/assets/logo_driver.svg'
 import { Toaster, toast } from 'react-hot-toast';
 
-function HeaderUser() {
+function HeaderDriver() {
     const [isOpen, setIsOpen] = useState(false);
     const [driverInfo, setDriverInfo] = useState(null);
     const navigate = useNavigate();
@@ -38,14 +38,14 @@ function HeaderUser() {
             <div className="px-4 sm:px-[150px] py-[15px] border-b bg-white">
                 <div className="flex flex-col sm:flex-row justify-between items-center">
                     <div className='flex justify-between'>
-                        <Link to='/signin-driver'>
+                        <Link to='/order-driver'>
                             <img src={LogoDriver} className="w-[120px] sm:w-[200px] h-12" alt="Logo Driver" />  
                         </Link>
                     </div>
                     <div className="flex flex-col sm:flex-row gap-4 sm:gap-12 items-center relative">
-                        <div className='mt-2 sm:mt-0'>
-                                <div className='text-[#ff7e00] font-semibold text-xl'>Chào tài xế Ogge</div>
-                                {/* <img className='w-[22px] h-[28px]' src={User} alt="User Icon" /> */}
+                        <div className='mt-2 sm:mt-0 flex items-center gap-2'>
+                            <div className='text-[#ff7e00] font-semibold text-xl'>Chào tài xế Ogge</div>
+                            <img className='w-[50px] border rounded-full h-[50px]' src='https://i.pinimg.com/736x/4c/0c/c5/4c0cc5ffc23b1a6329d4e3f5d803c006.jpg' alt="User Icon" />
                         </div>
 
                         {isOpen && (
@@ -64,4 +64,4 @@ function HeaderUser() {
     );
 }
 
-export default HeaderUser;
+export default HeaderDriver;
