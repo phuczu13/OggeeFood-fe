@@ -75,7 +75,7 @@ const Eatery = () => {
     }
   };
   if (loading) {
-      return <p className='text-center'>Loading...</p>;
+    return <p className='w-full text-[18px] font-semibold text-[#ff7e00] h-screen flex justify-center items-center'>Bạn đợi chút nhé :3</p>;
   }
 
   if (error) {
@@ -101,7 +101,7 @@ const Eatery = () => {
             {getVisibletopStores().map((topStore, index) => (
               <Link to={`/eatery-details`} state={ {storeId : topStore._id}}
                 key={index}
-                className="border border-[#F8E7CC] hover:ring-[#e67350] hover:outline-none hover:ring-2 p-3 rounded-lg shadow-sm text-center"
+                className="border text-center border-[#f1b452] hover:ring-[#e67350] flex flex-col h-full hover:outline-none p-3 rounded-lg shadow-sm transition-transform duration-250 transform hover:scale-105"
               >
                 <div className="relative w-full bg-gray-300 mb-4 flex items-center justify-center">
                   <img src={topStore.avatar} alt='' className="w-full h-[150px] object-cover" />
@@ -127,17 +127,15 @@ const Eatery = () => {
         </div>
       </div>
 
-
-
-      <div className='w-full max-w-[1200px] mx-auto my-10 sm:px-0 px-3'>
-        <div className='w-full flex items-center'>
+      <div className='w-full max-w-[1200px] mx-auto sm:px-0 px-6'>
+        <div className='w-full flex items-center mt-6'>
           <div className='text-[#ff7e00] text-xl w-28 font-bold'>Quán ăn</div>
           <div className='bg-[#ff7e00] w-full h-[1px]'></div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
           {stores.map((stores) => (
-              <Link to={`/eatery-details`} state={ {storeId : stores._id}} key={stores._id} className="border border-[#F8E7CC] hover:ring-[#e67350] hover:outline-none hover:ring-2 p-3 rounded-lg shadow-sm">
+              <Link to={`/eatery-details`} state={ {storeId : stores._id}} key={stores._id} className="border border-[#f1b452] hover:ring-[#e67350] flex flex-col h-full hover:outline-none p-3 rounded-lg shadow-sm transition-transform duration-250 transform hover:scale-105">
                   <div className="relative">
                       <img src={stores.avatar} alt={stores.storeName} className="w-full h-[150px] object-cover" />
                       <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">

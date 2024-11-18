@@ -83,7 +83,7 @@ const ProductDetail = ({ match }) => {
   };
 
   if (!product) {
-    return <div className='flex text-center items-center text-xl justify-center h-screen'>Loading...</div>;
+    return <p className='w-full text-[18px] font-semibold text-[#ff7e00] h-screen flex justify-center items-center'>Bạn đợi chút nhé :3</p>;
   }
 console.log(product)
   return (

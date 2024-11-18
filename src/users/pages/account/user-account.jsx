@@ -56,13 +56,41 @@ const UserAccount = () => {
     }
   };
 
+  //////ảnh đại diện
+  const [image, setImage] = useState("https://i.pinimg.com/736x/65/2a/fa/652afa0a7cf9bac3e8af32384e34068e.jpg");
+  const handleImageChange = (event) => {
+    const file = event.target.files[0]; // Lấy file người dùng chọn
+    if (file && file.type.startsWith("image/")) { // Kiểm tra xem file có phải ảnh không
+      const imageUrl = URL.createObjectURL(file); // Tạo URL tạm thời cho ảnh
+      setImage(imageUrl); // Cập nhật URL vào state
+    } else {
+      toast.warning("Vui lòng chọn một tệp ảnh hợp lệ!");
+    }
+  };
+
   return (
     <div>
       <HeaderHC4 />
       <div className='px-5 sm:p-0'>
         <div className="max-w-[800px] mx-auto bg-white p-6 rounded-lg shadow-lg border my-10">
-          <h1 className="text-2xl font-bold mt-2 mb-6 text-center text-[#ff7e00]">Thông Tin Tài Khoản</h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <h1 className="text-2xl font-bold mt-2 mb-4 text-center text-[#ff7e00]">Thông Tin Tài Khoản</h1>
+          <div className='flex flex-col items-center text-center mx-auto justify-center'>
+          <img className="w-[100px] object-cover border rounded-full h-[100px]" src={image} alt="Uploaded" />
+            <label
+              htmlFor="file-upload"
+              className="mt-4 px-3 py-1 border border-[#525252] rounded-lg cursor-pointer"
+            >
+              Đổi ảnh
+            </label>
+            <input
+              id="file-upload"
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleImageChange}
+            />
+          </div>
+          <div className="grid grid-cols-1 mt-4 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-gray-700">Tên</label>
               <input
@@ -161,7 +189,7 @@ const UserAccount = () => {
               onClick={handleSave}
               className="mt-6 w-full bg-[#ff7e00] text-white py-2 rounded-md hover:bg-[#ff6200] transition-all"
             >
-              Lưu
+              Lưussssssssss
             </button>
           )}
         </div>

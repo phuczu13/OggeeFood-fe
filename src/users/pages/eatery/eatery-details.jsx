@@ -169,14 +169,14 @@ useEffect(() => {
     <div>
       <ToastContainer position='top-right' autoClose={2000} hideProgressBar={false} />
       <HeaderHC2 />
-      <div className="max-w-[1200px] mx-auto my-10">
+      <div className="max-w-[1200px] mx-auto sm:px-0 px-10 my-10">
         <div className=" relative bg-cover rounded-md bg-center h-[300px] mt-6">
           <img 
             className="absolute inset-0 w-full h-full object-cover rounded-md" 
             src={storeInfo.storeAvatar} 
             alt="imgEatery" 
           />
-          <Link to='/eatery' className='absolute bg-[#fff0d7] hover:bg-[#ef4b2c] hover:border-[#ef4b2c] top-0 left-[-50px] flex border-2 border-[#ff7e00] w-8 h-8 gap-2 rounded-full justify-center'>
+          <Link to='/eatery' className='absolute bg-[#fff0d7] hover:bg-[#ef4b2c] hover:border-[#ef4b2c] top-0 sm:left-[-50px] -left-9 flex border-2 border-[#ff7e00] w-8 h-8 gap-2 rounded-full justify-center'>
             <img className='w-2' src={IconBack} alt="btnBack" />
           </Link>
           <div className="absolute inset-0 rounded-md bg-black opacity-50"></div>  
@@ -192,15 +192,13 @@ useEffect(() => {
           </div>
         </div>
 
-        {/* Menu Header */}
         <div className='w-full flex items-center mt-8 mb-4'>
-          <span className='text-[#ff7e00] text-xl w-3/5 sm:w-1/5 font-semibold'>Thực đơn của quán</span>
+          <span className='text-[#ff7e00] text-xl w-4/5 mr-2 sm:mr-0 sm:w-1/5 font-semibold'>Thực đơn của quán</span>
           <div className='bg-[#ff7e00] w-full h-[1px]'></div>
         </div>
 
         <div className="flex">
-          {/* Sidebar */}
-          <div className="w-1/4 py-5">
+          <div className="sm:w-1/4 w-1/2 py-5">
             <ul className="space-y-4 text-[#ff7e00] text-center bg-[#fff0d7] border-[#ff7e00] border-2 px-5 py-5 mr-4 sticky top-4">
               <li className=''>
                 <a 
@@ -228,45 +226,49 @@ useEffect(() => {
           <div className="w-3/4 mt-3">
             <section id="mon1" className="">
               <h2 className="text-2xl font-semibold mb-4">Món chính</h2>
-              <div className="grid grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-3 gap-6">
                 {products && products.map((dish, index) => (
-                  <Link to={`/product-detail`} state={ {productId : dish._id} } key={index} className="border border-[#F8E7CC] hover:ring-[#e67350] hover:outline-none hover:ring-2 p-3 rounded-lg shadow-sm">
-                  <div className="relative">
-                      <img  src={dish.Food_picture} alt={dish.Food_name} className="w-full h-[150px] object-cover" />
-                      <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">
-                          <span className="text-black font-semibold">{dish.rating}</span>
-                          <span className="ml-1"><img src={IconRating} alt="" /></span>
-                      </div>
-                  </div>
-                  <div className="mt-4">
-                      <h3 className="font-semibold text-lg">{dish.Food_name}</h3>
-                      <p className="text-gray-500 text-sm">{dish.Food_detail}</p>
-                      <div className="flex relative justify-between items-center mt-2">
-                          <span className="text-red-500 font-semibold">{dish.Price.toLocaleString()} VND</span>
-                          <button onClick={(e) => { e.preventDefault(); handleAddToCart(dish); }}>
-                              <img className='w-[30px] absolute right-0 bottom-0 h-[30px]' src={IconAddCart} alt="icon_add_cart" />
-                          </button>
-                      </div>
-                  </div>
-                  </Link>
+                  <div className="border border-[#f1b452] hover:ring-[#e67350] flex flex-col h-full hover:outline-none p-3 rounded-lg shadow-sm transition-transform duration-250 transform hover:scale-105">
+                    <Link to={`/product-detail`} state={ {productId : dish._id} } key={dish._id} className="relative">
+                        <img src={dish.Food_picture} alt={dish.Food_name} className="w-full h-[150px] object-cover" />
+                        <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">
+                            <span className="text-black font-semibold">{dish.rating}</span>
+                            <span className="ml-1"><img src={IconRating} alt="" /></span>
+                        </div>
+                    </Link>
+                    <div className="mt-4 flex-grow">
+                        <h3 className="font-semibold text-lg line-clamp-2">{dish.Food_name} - {dish.storeName}</h3>
+                        <p className="text-gray-500 text-sm line-clamp-1">{dish.Food_detail}</p>
+                    </div>
+                    <div className="flex relative justify-between text-center items-center mt-2">
+                        <span className="text-red-500 font-semibold">
+                            {dish.Price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
+                        </span>
+                        <button 
+                            onClick={(e) => { e.preventDefault(); handleAddToCart(dish); }}
+                        >
+                            <img className='w-[30px] absolute right-0 bottom-[-3px] h-[30px]' src={IconAddCart} alt="" />
+                        </button>
+                    </div>
+                </div>
                 ))}
               </div>
             </section>
 
             <section id="mon2" className="mt-8">
               <h2 className="text-2xl font-semibold mb-4">Món phụ</h2>
-              <div className="grid grid-cols-3 gap-6">
+              <div className="grid sm:grid-cols-3 gap-6">
                 {toppings && toppings.map((dish, index) => (
-                  <Link to='/product-detail' key={index} className="border border-[#F8E7CC] hover:ring-[#e67350] hover:outline-none hover:ring-2 p-3 rounded-lg shadow-sm">
-                  <div className="relative">
+                  <div to='/product-detail' key={index} className="border border-[#f1b452] hover:ring-[#e67350] flex flex-col h-full hover:outline-none p-3 rounded-lg shadow-sm transition-transform duration-250 transform hover:scale-105">
+                  <Link className="relative">
                       <img src={dish.toppingImage} alt={dish.toppingName} className="w-full h-[150px] object-cover" />
                       <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">
                         <span className="text-black font-semibold">{dish.rating}</span>
                         <span className="ml-1"><img src={IconRating} alt="" /></span>
                       </div>
-                  </div>
+                  </Link>
                   <div className="mt-4">
-                    <h3 className="font-semibold text-lg">{dish.toppingName}</h3>
+                    <h3 className="font-semibold text-lg line-clamp-2">{dish.toppingName}</h3>
                     <div className="flex relative justify-between items-center mt-2">
                       <span className="text-red-500 font-semibold">{dish.toppingPrice.toLocaleString()} VND</span>
                       <button onClick={(e) => { e.preventDefault(); handleAddToCart(dish); }}>
@@ -274,7 +276,30 @@ useEffect(() => {
                       </button>
                     </div>
                   </div>
-                  </Link>
+                  </div>
+                //   <div className="border border-[#f1b452] hover:ring-[#e67350] flex flex-col h-full hover:outline-none p-3 rounded-lg shadow-sm transition-transform duration-250 transform hover:scale-105">
+                //     <Link to={`/product-detail`} state={ {productId : product._id} } key={product._id} className="relative">
+                //         <img src={product.Food_picture} alt={product.Food_name} className="w-full h-[150px] object-cover" />
+                //         <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">
+                //             <span className="text-black font-semibold">{product.rating}</span>
+                //             <span className="ml-1"><img src={IconRating} alt="" /></span>
+                //         </div>
+                //     </Link>
+                //     <div className="mt-4 flex-grow">
+                //         <h3 className="font-semibold text-lg line-clamp-2">{product.Food_name} - {product.storeName}</h3>
+                //         <p className="text-gray-500 text-sm line-clamp-1">{product.Food_detail}</p>
+                //     </div>
+                //     <div className="flex relative justify-between text-center items-center mt-2">
+                //         <span className="text-red-500 font-semibold">
+                //             {product.Price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
+                //         </span>
+                //         <button 
+                //             onClick={(e) => { e.preventDefault(); handleAddToCart(product); }}
+                //         >
+                //             <img className='w-[30px] absolute right-0 bottom-[-3px] h-[30px]' src={IconAddCart} alt="" />
+                //         </button>
+                //     </div>
+                // </div>
                 ))}
               </div>
             </section>

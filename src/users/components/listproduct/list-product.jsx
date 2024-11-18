@@ -59,7 +59,7 @@ function ListProduct() {
     }, []);
 
     if (loading) {
-        return <p className='text-center'>Loading...</p>;
+        return <p className='text-[18px] flex justify-center items-center'>Bạn đợi chút nhé...</p>;
     }
 
     if (error) {
@@ -76,25 +76,29 @@ function ListProduct() {
             <div className='mt-10'>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {products.map((product) => (
-                        <Link to={`/product-detail`} state={ {productId : product._id} } key={product._id} className="border border-[#F8E7CC] hover:ring-[#e67350] hover:outline-none hover:ring-2 p-3 rounded-lg shadow-sm">
-                            <div className="relative">
+                        <div className="border border-[#f1b452] hover:ring-[#e67350] flex flex-col h-full hover:outline-none p-3 rounded-lg shadow-sm transition-transform duration-250 transform hover:scale-105">
+                            <Link to={`/product-detail`} state={ {productId : product._id} } key={product._id} className="relative">
                                 <img src={product.Food_picture} alt={product.Food_name} className="w-full h-[150px] object-cover" />
                                 <div className="absolute w-fit top-0 right-0 rounded-bl-md flex px-2 py-1 bg-slate-100 items-center justify-end text-sm text-white">
                                     <span className="text-black font-semibold">{product.rating}</span>
                                     <span className="ml-1"><img src={IconRating} alt="" /></span>
                                 </div>
+                            </Link>
+                            <div className="mt-4 flex-grow">
+                                <h3 className="font-semibold text-lg line-clamp-2">{product.Food_name} - {product.storeName}</h3>
+                                <p className="text-gray-500 text-sm line-clamp-1">{product.Food_detail}</p>
                             </div>
-                            <div className="mt-4">
-                                <h3 className="font-semibold text-lg">{product.Food_name} - {product.storeName}</h3>
-                                <p className="text-gray-500 text-sm">{product.Food_detail}</p>
-                                <div className="flex relative justify-between items-center mt-2">
-                                    <span className="text-red-500 font-semibold">
-                                        {product.Price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
-                                    </span>
-                                    <button onClick={(e) => { e.preventDefault(); handleAddToCart(product); }}><img className='w-[30px] absolute right-0 bottom-0 h-[30px]' src={IconAddCart} alt="" /></button>
-                                </div>
+                            <div className="flex relative justify-between text-center items-center mt-2">
+                                <span className="text-red-500 font-semibold">
+                                    {product.Price.toLocaleString('it-IT', { style: 'currency', currency: 'VND' })}
+                                </span>
+                                <button 
+                                    onClick={(e) => { e.preventDefault(); handleAddToCart(product); }}
+                                >
+                                    <img className='w-[30px] absolute right-0 bottom-[-3px] h-[30px]' src={IconAddCart} alt="" />
+                                </button>
                             </div>
-                        </Link>
+                        </div>
                     ))}
                 </div>
             </div>

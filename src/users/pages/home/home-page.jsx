@@ -31,7 +31,7 @@ const HomePage = () => {
   return (
     <div className="md:px-0">
       <HeaderHC1 />
-      <div className="w-full px-3 sm:px-0  my-10 max-w-[1200px] justify-between mx-auto flex flex-col md:flex-row">
+      <div className="w-full px-3 sm:px-0 my-10 max-w-[1200px] justify-between mx-auto flex flex-col md:flex-row">
         <div className="relative overflow-hidden max-w-[880px]">
           <img
             src={images[currentIndex]}
@@ -64,16 +64,16 @@ const HomePage = () => {
           </div>
         </div>
         <div className='mt-3 md:mt-0 flex flex-col'> 
-          <div>
-            <img className='h-[160px] w-full sm:w-[310px] object-cover rounded-md' src="https://down-tx-vn.img.susercontent.com/vn-11134513-7r98o-lsv9c7ybqhzt32@resize_ss280x175!@crop_w280_h175_cT" alt="" />
+          <div className=''>
+            <img className='h-[160px] w-full sm:w-[310px] border object-cover rounded-md' src="https://food-cms.grab.com/compressed_webp/merchants/5-C6WFNP6CGAKVGX/hero/843f7929b66e48e5a2fa4c98b6961c23_1726657138029678869.webp" alt="" />
           </div>
           <div className='mt-[10px]'>
-            <img className='h-[160px] w-full sm:w-[310px] object-cover rounded-md' src="https://down-tx-vn.img.susercontent.com/vn-11134513-7r98o-lsv9c7ybqhzt32@resize_ss280x175!@crop_w280_h175_cT" alt="" />  
+            <img className='h-[160px] w-full sm:w-[310px] border object-cover rounded-md' src="https://png.pngtree.com/png-vector/20240321/ourlarge/pngtree-cute-chefs-make-bread-png-image_12021205.png" alt="" />  
           </div>
         </div>
       </div>
 
-      <div className='px-3'>
+      <div className='px-6'>
         <ListProduct />
       </div>
       
