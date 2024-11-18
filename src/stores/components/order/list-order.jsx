@@ -12,7 +12,6 @@ function ListOrder() {
   const [showPrintInvoice, setShowPrintInvoice] = useState(false);
   const confirmationRef = useRef(null);
   const detailRef = useRef(null);
-
   const filteredOrders = orders.filter(order => {
     if (activeTab === 'Đang làm món') {
       return ['Cửa hàng xác nhận', 'Đang tìm tài xế', 'Đã tìm thấy tài xế'].includes(order.status);
@@ -111,10 +110,44 @@ function ListOrder() {
     setSelectedOrder(order);
     setShowPrintInvoice(true);
   };
+
   const handleConfirmPrint = () => {
-    setShowPrintInvoice(false);
-    toast.success("In hóa đơn thành công!")
+    const printContents = detailRef.current.innerHTML;
+    const printWindow = window.open("", "_blank");
+  
+    // Viết nội dung cho cửa sổ in
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Hóa đơn</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+            .print-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            .print-table th, .print-table td { border: 1px solid #ddd; padding: 8px; }
+            .print-table th { background-color: #f4f4f4; text-align: left; }
+            .no-print { display: none; } /* Ẩn các phần tử khi in */
+          </style>
+        </head>
+        <body>${printContents}</body>
+      </html>
+    `);
+  
+    printWindow.document.close();
+    printWindow.focus();
+  
+    // Xử lý sau khi hộp thoại in đóng
+    printWindow.onafterprint = () => {
+      printWindow.close();
+      toast.success("In hóa đơn thành công!");
+      setShowPrintInvoice(false);
+    };
+  
+    printWindow.print();
+
   };
+  
+  
+  
 
   return (
     <div className="max-w-[1200px] mx-auto p-4">
@@ -281,50 +314,50 @@ function ListOrder() {
 
       {showPrintInvoice && selectedOrder && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full" ref={detailRef}>
-            <h2 className="text-lg font-semibold mb-4 text-center">Thông tin đơn hàng</h2>
-            <p>Mã vận đơn: {selectedOrder._id}</p>
-            <p>Tên người nhận: {selectedOrder.deliveryInfo.name}</p>
-            <p>Địa chỉ: {selectedOrder.deliveryInfo.address}</p>
-            <p>Số điện thoại: {selectedOrder.deliveryInfo.phonenumber}</p>
-            <table className="w-full text-left mt-4">
-              <thead>
-                <tr>
-                  <th>STT</th>
-                  <th>Tên món</th>
-                  <th>SL</th>
-                  <th>Thành tiền</th>
-                </tr>
-              </thead>
-              <tbody>
-                {selectedOrder.cart.map((item, index) => (
-                  <tr key={item.productId}>
-                    <td>{index + 1}</td>
-                    <td>{item.name}</td>
-                    <td>{item.quantity}</td>
-                    <td>{(item.price * item.quantity).toLocaleString()} VND</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <p className="mt-4">Tổng tiền: {selectedOrder.totalPrice.toLocaleString()} VND</p>
-            <p>Phí vận chuyển: {selectedOrder.totalShip.toLocaleString()} VND</p>
-            <p>Tổng tiền thanh toán: {(selectedOrder.totalPrice + selectedOrder.totalShip).toLocaleString()} VND</p>
-            <div className="flex justify-center gap-3 mt-4">
-              <button
-                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-                onClick={() => setShowPrintInvoice(false)}
-              >
-                Đóng
-              </button>
-              <button
-                className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                onClick={() => handleConfirmPrint()}
-              >
-                In hóa đơn
-              </button>
-            </div>
-          </div>
+         <div className="bg-white rounded-lg p-6 max-w-md w-full" ref={detailRef}>
+           <h2 className="text-lg font-semibold mb-4 text-center">Thông tin đơn hàng</h2>
+           <p>Mã vận đơn: {selectedOrder._id}</p>
+           <p>Tên người nhận: {selectedOrder.deliveryInfo.name}</p>
+           <p>Địa chỉ: {selectedOrder.deliveryInfo.address}</p>
+           <p>Số điện thoại: {selectedOrder.deliveryInfo.phonenumber}</p>
+           <table className="w-full text-left mt-4 print-table">
+             <thead>
+               <tr>
+                 <th>STT</th>
+                 <th>Tên món</th>
+                 <th>SL</th>
+                 <th>Thành tiền</th>
+               </tr>
+             </thead>
+             <tbody>
+               {selectedOrder.cart.map((item, index) => (
+                 <tr key={item.productId}>
+                   <td>{index + 1}</td>
+                   <td>{item.name}</td>
+                   <td>{item.quantity}</td>
+                   <td>{(item.price * item.quantity).toLocaleString()} VND</td>
+                 </tr>
+               ))}
+             </tbody>
+           </table>
+           <p className="mt-4">Tổng tiền: {selectedOrder.totalPrice.toLocaleString()} VND</p>
+           <p>Phí vận chuyển: {selectedOrder.totalShip.toLocaleString()} VND</p>
+           <p>Tổng tiền thanh toán: {(selectedOrder.totalPrice + selectedOrder.totalShip).toLocaleString()} VND</p>
+           <div className="flex justify-center gap-3 mt-4 no-print">
+             <button
+               className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+               onClick={() => setShowPrintInvoice(false)}
+             >
+               Đóng
+             </button>
+             <button
+               className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+               onClick={handleConfirmPrint}
+             >
+               In hóa đơn
+             </button>
+           </div>
+         </div>
         </div>
       )}
 

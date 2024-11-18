@@ -56,7 +56,8 @@ function HeaderHC4() {
     const confirmLogout = () => {
         localStorage.removeItem('authToken');
         localStorage.setItem('loggedOut', 'true');
-        navigate('/');
+        navigate('/sign-in');
+
     };
 
     const cancelLogout = () => {

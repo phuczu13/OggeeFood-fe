@@ -58,7 +58,8 @@ function HeaderHC2() {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         localStorage.setItem('loggedOut', 'true'); // Đặt cờ trạng thái đăng xuất
-        navigate('/');
+        navigate('/sign-in');
+
     };
 
     const cancelLogout = () => {

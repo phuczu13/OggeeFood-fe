@@ -30,8 +30,8 @@ function HeaderHP() {
             <div className="flex justify-between items-center">
                 <img src={LogoWeb} alt="Logo Web" className="w-24 sm:w-auto" /> 
                 <div className="flex gap-2 sm:gap-4 items-center">
-                    <span className="text-[#ff7e00] text-sm sm:text-base font-bold">Chào khách hàng </span> 
-                    <img className="w-10 sm:w-[50px] h-10 sm:h-[50px] border rounded-full" src={VietNam} alt="Việt Nam" /> 
+                    <span className="text-[#ff7e00] text-sm sm:text-base font-bold">Chào khách hàng Oggee</span> 
+                    <img className="w-10 sm:w-[50px] h-10 sm:h-[50px] border rounded-full" src='https://i.pinimg.com/736x/cf/34/23/cf3423911ad1d5852e34c9312b87c277.jpg' alt="Việt Nam" /> 
                 </div>
             </div>
         </div>

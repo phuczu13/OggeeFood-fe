@@ -24,9 +24,9 @@ const Dashboard = () => {
     { day: 'Sun', revenue: 220000 },
   ];
   const statistics = [
-    { title: "Doanh thu hôm nay", value: 5000000 , color: "text-blue-600", isCurrency: true },
-    { title: "Đơn hàng mới", value: 155, color: "text-green-600", isCurrency: false },
-    { title: "Đơn hủy", value: 21, color: "text-red-600", isCurrency: false },
+    { title: "Doanh thu hôm nay", value: 123456 , color: "text-blue-500", bg_color: "bg-blue-500", rating: '+15%', isCurrency: true },
+    { title: "Đơn hàng mới", value: 456, color: "text-green-500", bg_color: "bg-green-500", rating: '+25%', isCurrency: false },
+    { title: "Đơn hủy", value: 123, color: "text-red-500", bg_color: "bg-red-500", rating: '+0%', isCurrency: false },
   ];
   const [filteredData, setFilteredData] = useState(initialData);
 
@@ -138,29 +138,38 @@ const Dashboard = () => {
   ];
   
   return (
-    <div className="min-h-screen max-w-[1200px] my-10 mx-auto sm:p-0 p-4 bg-gray-50">
-      <header className="bg-[#F8E7CC] text-white p-4">
-        <div className="container mx-auto">
-          <h1 className="text-3xl text-[#ff7e00] font-semibold">Kết quả kinh doanh trong ngày</h1>
+    <div>
+      <div className="max-w-[1200px] border my-10 mx-auto sm:p-0 p-4 bg-gray-50">
+        <header className="bg-[#F8E7CC] text-white p-4">
+          <div className="container mx-auto">
+            <h1 className="text-3xl text-[#ff7e00] ml-2  font-semibold">Kết quả kinh doanh trong ngày</h1>
+          </div>
+        </header>
+        <div className="container mx-auto p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {statistics.map((stat, index) => (
+              <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+                <h2 className="text-xl flex justify-between font-semibold">
+                  {stat.title}
+                  <p className={`${stat.bg_color} text-white rounded-full px-2 text-[16px]`}>{stat.rating}</p>
+                </h2>
+                <div className="flex justify-between">
+                  <p className={`text-2xl font-bold ${stat.color}`}>
+                    {stat.isCurrency 
+                      ? stat.value.toLocaleString("vi-VN", { style: "currency", currency: "VND" }) 
+                      : stat.value}
+                  </p>
+                  <p>Hôm qua</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </header>
+      </div>
 
-      <div className="container mx-auto p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {statistics.map((stat, index) => (
-            <div key={index} className="bg-white p-6 rounded-lg shadow-md text-center">
-              <h2 className="text-xl font-semibold">{stat.title}</h2>
-              <p className={`text-2xl font-bold ${stat.color}`}>
-                {stat.isCurrency 
-                  ? stat.value.toLocaleString("vi-VN", { style: "currency", currency: "VND" }) 
-                  : stat.value}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <div className="flex gap-6 w-full mt-6">
-          <div className="bg-white p-6 rounded-lg shadow-md w-2/3">
+      <div className="max-w-[1200px] border my-10 mx-auto sm:p-6 p-5 bg-gray-50">
+        <div className="flex sm:flex-row flex-col gap-6 w-full">
+          <div className="bg-white p-6 rounded-lg shadow-md sm:w-2/3 w-full">
             <h2 className="text-xl font-semibold text-center mb-6">Doanh thu bán hàng</h2>
             <div className="flex justify-center mb-4">
                 <button 
@@ -187,7 +196,7 @@ const Dashboard = () => {
               </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow-md w-1/3">
+          <div className="bg-white p-6 rounded-lg shadow-md sm:w-1/3 w-full">
             <h2 className="text-xl font-semibold text-center mb-6">Tỷ trọng bán hàng</h2>
             <div className='flex justify-center' style={{ width: '100%', height: '300px', margin: '0 auto' }}>
               <Doughnut data={doughnutData} />
@@ -195,7 +204,13 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+        <div className="text-center mt-6">
+          <p className="text-lg text-[#ef4b2c] font-semibold">
+            Tổng doanh thu: <span className="text-2xl font-bold">Jack 5 củ</span>
+          </p>
+        </div>
+
+        <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mt-6">
           <h2 className="text-xl font-bold mb-4">Top sản phẩm nổi bật</h2>
           <table className="min-w-full bg-white border border-gray-200">
             <thead>
@@ -221,12 +236,6 @@ const Dashboard = () => {
               ))}
             </tbody>
           </table>
-        </div>
-
-        <div className="text-center mt-6">
-          <p className="text-lg font-semibold">
-            Tổng doanh thu: <span className="text-2xl font-bold">Jack 5 củ</span>
-          </p>
         </div>
       </div>
     </div>
