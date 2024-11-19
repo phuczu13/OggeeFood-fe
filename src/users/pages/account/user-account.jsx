@@ -14,7 +14,8 @@ const UserAccount = () => {
     address: '',
     phoneNumber: '',
     email: '',
-    introduce: ''
+    introduce: '',
+    avatar: ''
   });
 
   const [isEdited, setIsEdited] = useState(false);
@@ -75,7 +76,7 @@ const UserAccount = () => {
         <div className="max-w-[800px] mx-auto bg-white p-6 rounded-lg shadow-lg border my-10">
           <h1 className="text-2xl font-bold mt-2 mb-4 text-center text-[#ff7e00]">Thông Tin Tài Khoản</h1>
           <div className='flex flex-col items-center text-center mx-auto justify-center'>
-          <img className="w-[100px] object-cover border rounded-full h-[100px]" src={image} alt="Uploaded" />
+          <img className="w-[100px] object-cover border rounded-full h-[100px]" src={thongTin.avatar} alt="Uploaded" />
             <label
               htmlFor="file-upload"
               className="mt-4 px-3 py-1 border border-[#525252] rounded-lg cursor-pointer"
