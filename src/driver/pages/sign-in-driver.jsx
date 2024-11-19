@@ -49,8 +49,8 @@ function LoginDriver() {
             window.location.href = '/order-driver';
         } else {
             // Nếu không có token, chuyển hướng đến trang xác thực
-            // window.location.href = `https://sso-pointer.vercel.app/authorize?clientId=673397680b536ec12230126c`;
-            window.location.href = `https://sso-pointer.vercel.app/authorize?clientId=673512cf8b450a678f26e7e2`;
+            window.location.href = `https://sso-pointer.vercel.app/authorize?clientId=673397680b536ec12230126c`;
+            // window.location.href = `https://sso-pointer.vercel.app/authorize?clientId=673512cf8b450a678f26e7e2`;
 
         }
     };

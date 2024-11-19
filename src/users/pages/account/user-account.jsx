@@ -190,7 +190,7 @@ const UserAccount = () => {
               onClick={handleSave}
               className="mt-6 w-full bg-[#ff7e00] text-white py-2 rounded-md hover:bg-[#ff6200] transition-all"
             >
-              Lưussssssssss
+              Lưu
             </button>
           )}
         </div>
