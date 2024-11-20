@@ -94,7 +94,7 @@ function App() {
             < Route path='product' element={<Product/>} />
             < Route path='product-detail' element={<ProductDetail/>} />
             < Route path='payment' element={<Payment/>} />
-            < Route path='payment-status/:id' element={<PaymentStatus/>} />
+            < Route path='payment-status/:storeId' element={<PaymentStatus/>} />
 
             < Route path='sign-up' element={<SignUp/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
