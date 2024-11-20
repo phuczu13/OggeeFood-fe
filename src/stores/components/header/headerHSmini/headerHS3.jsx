@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import LogoStore from '../../../assets/svg/icon_logoStore.svg';
-import IconLogout from '../../../assets/svg/icon_Logout.svg';
+import { Toaster, toast } from 'react-hot-toast';
 import { useLocation } from "react-router-dom";
+import IconLogout2 from '../../../assets/svg/icon_Logout2.svg';
+import IconNext from '../../../assets/svg/icon_next.svg'
 
 
-function HeaderHS1() {
+
+function HeaderHS3() {
     const location = useLocation();
     const storeId = location.state?.storeId;
+    const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+
+    //const storeId = localStorage.getItem('storeId');
+
+    console.log("storeId is "+storeId)
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -15,11 +23,15 @@ function HeaderHS1() {
         setIsModalOpen(true);
     };
 
+    
     const confirmLogout = () => {
         localStorage.removeItem('authToken');
         localStorage.removeItem('storeId');
+        localStorage.setItem('loggedOut', 'true'); // Đặt cờ trạng thái đăng xuất
         navigate('/signin-store');
     };
+     
+    
 
     const cancelLogout = () => {
         setIsModalOpen(false);
@@ -31,6 +43,34 @@ function HeaderHS1() {
         }
     };
 
+    // Xử lý khi click vào profile để mở/đóng menu
+    const toggleProfileMenu = () => {
+        setIsProfileMenuOpen(!isProfileMenuOpen);
+    };
+
+    // Ẩn menu Profile khi click ra ngoài
+    const handleClickOutside = (e) => {
+        if (!e.target.closest('.profile-menu') && !e.target.closest('.profile-btn')) {
+            setIsProfileMenuOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        if (isProfileMenuOpen) {
+            window.addEventListener('click', handleClickOutside);
+        } else {
+            window.removeEventListener('click', handleClickOutside);
+        }
+        return () => {
+            window.removeEventListener('click', handleClickOutside);
+        };
+    }, [isProfileMenuOpen]);
+
+    // Toggle menu mobile
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
+
     return (
         <>
             <div className="px-4 sm:px-[150px] py-[15px] border-b bg-white">
@@ -40,33 +80,94 @@ function HeaderHS1() {
                     </Link>
                     <div className="flex flex-col sm:flex-row gap-4 sm:gap-12 items-center">
                         <div className='flex flex-col sm:flex-row gap-4 sm:gap-8'>
-                            <Link to='/home-store' className='hover:text-[#ef4c2b] font-semibold' state={{ storeId }}>
-                                Món ăn
-                            </Link>
-                            <Link className='hover:text-[#ef4c2b] font-semibold' to='/topping-store' state={{ storeId }}>
-                                Món phụ
-                            </Link>
-                            <Link className='text-[#ef4c2b] font-semibold border-b-2 border-[#ef4c2b] rounded-sm' to='/order-store' state={{ storeId }}>
-                                Đơn hàng
-                            </Link>
-                            <Link className='hover:text-[#ef4c2b] font-semibold' to='/revenue-store' state={{ storeId }}>
-                                Doanh số
-                            </Link>
-                            <Link className='hover:text-[#ef4c2b] font-semibold' to='/infor-store' state={{ storeId }}>
-                                Thông tin cửa hàng
-                            </Link>
+                        <Link className='hover:text-[#ef4c2b] font-semibold' to='/home-store' state={{ storeId }}>
+                            Món ăn
+                        </Link>
+                        <Link to='/topping-store' className='hover:text-[#ef4c2b] font-semibold' state={{ storeId }}>     
+                            Món phụ
+                        </Link>
+                        <Link className='text-[#ef4c2b] font-semibold border-b-2 border-[#ef4c2b] rounded-sm' to='/order-store' state={{ storeId }}>
+                            Đơn hàng
+                        </Link>
+                        <Link className='hover:text-[#ef4c2b] font-semibold' to='/revenue-store' state={{ storeId }}>
+                            Doanh số
+                        </Link>
                         </div>
-                        <div className='mt-2 sm:mt-0'>
-                            <button 
-                                onClick={handleLogout} 
-                                className='flex items-center gap-2 text-white bg-[#ff7e00] hover:bg-[#ef4c2b] py-3 font-medium px-4 rounded-md'>
-                                Đăng xuất
-                                <img className='w-[16px] h-[16px]' src={IconLogout} alt="Logout Icon" />
-                            </button>
+                        <div className='relative'>
+                            <img
+                                onClick={toggleProfileMenu}
+                                className='w-10 rounded-full cursor-pointer hover:ring profile-btn'
+                                // src={userData?.avatar || "default-profile.jpg"}
+                                src=''
+                                alt="Profile"
+                            />
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div className="flex gap-4 items-center sm:hidden">
+                <button onClick={toggleMenu} className="text-gray-800 hover:text-gray-500 focus:outline-none">
+                    ☰
+                </button>
+                <img
+                    onClick={toggleProfileMenu}
+                    className='w-10 rounded-full cursor-pointer profile-btn'
+                    // src={userData?.avatar || "default-profile.jpg"}
+                    src=''
+                    alt="Profile"
+                />
+            </div>
+
+            {isProfileMenuOpen && (
+                <div className="fixed top-17 right-4 bg-opacity-50 flex justify-end items-start z-50">
+                    <div className="bg-[#ffffff] rounded-md w-[200px] p-4 h-fit" style={{ boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)" }}>
+                        {/* <h2 className="text-xl font-semibold mb-4 text-center">{storeInfo.storeName}</h2> */}
+                        <h2 className="text-xl font-semibold mb-4 text-center">Tên cửa hàng</h2>
+                        <div className='bg-gray-400 h-[1px] w-full mb-4'></div>
+                        <ul className="flex flex-col font-semibold">
+                            <li>
+                                <Link to="/infor-store" state={{ storeId }} className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                                    <div className='flex items-center justify-between'>
+                                        Tài khoản của tôi <span><img src={IconNext} alt="" /></span>
+                                    </div>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/pointer-wallet" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                                    <div className='flex items-center justify-between'>
+                                        Ví Pointer <span><img src={IconNext} alt="" /></span>
+                                    </div>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/doanhthu" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                                    <div className='flex items-center justify-between'>
+                                        Doanh thu <span><img src={IconNext} alt="" /></span>
+                                    </div>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link to="/transaction-history" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                                    <div className='flex items-center justify-between'>
+                                        Lịch sử giao dịch <span><img src={IconNext} alt="" /></span>
+                                    </div>
+                                </Link>
+                            </li>
+                            <li>
+                                <button
+                                    onClick={handleLogout}
+                                    className="block px-4 w-full py-2 text-gray-800 hover:bg-gray-200"
+                                >
+                                    <div className='flex w-full items-center justify-between'>
+                                        Đăng xuất <span><img src={IconLogout2} alt="" /></span>
+                                    </div>
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            )}
 
             {isModalOpen && (
                 <div 
@@ -90,8 +191,9 @@ function HeaderHS1() {
                     </div>
                 </div>
             )}
+            <Toaster position='top-right' />
         </>
     );
 }
 
-export default HeaderHS1;
+export default HeaderHS3;
