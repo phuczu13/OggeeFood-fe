@@ -75,7 +75,6 @@ function HeaderHC1() {
     // Xử lý khi click vào profile để mở/đóng menu
     const toggleProfileMenu = () => {
         setIsProfileMenuOpen(!isProfileMenuOpen);
-        
     };
 
     // Ẩn menu Profile khi click ra ngoài

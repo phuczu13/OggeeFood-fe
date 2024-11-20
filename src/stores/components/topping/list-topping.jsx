@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { Toaster, toast } from "react-hot-toast";
 import IconRating from "../../assets/svg/icon_rating.svg";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -363,7 +363,7 @@ function ListTopping() {
                 </div>
             )}
 
-            <ToastContainer />
+            <Toaster position="bottom-right"/>
         </>
     );
 }

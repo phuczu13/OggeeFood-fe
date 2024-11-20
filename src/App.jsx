@@ -50,6 +50,11 @@ import VerifyStoreRegister from './stores/pages/auth/verify-store-res';
 import PaymentStatus from './users/pages/payment/paymentStatus';
 import SearchResults from './users/components/listproduct/SearchResults';
 
+import DoanhThu from './stores/pages/home/doanhthu';
+import TransactionHistory from './stores/pages/home/transaction-history';
+import PointerWallet from './stores/pages/home/pointer-wallet';
+
+
 
 // ------------------------------------------------------- //
 //////Flow Driver
@@ -61,18 +66,31 @@ import CallbackPageDriver from './driver/pages/CallbackPageDriver';
 import InforDriver from './driver/pages/register-driver';
 import CallbackPageStore from './stores/components/form/CallbackPageStore';
 
+// ------------------------------------------------------- //
+//////Flow Admin
+
+import Home from './admin/pages/dashboard/home';
+import Store from './admin/pages/dashboard/store';
+import Driver from './admin/pages/dashboard/driver';
+import Revenue from './admin/pages/dashboard/revenue';
+
+
+
 
 
 
 // ------------------------------------------------------- //
 
 function App() {
-  
+
   return (
     <div>
       <StoreProvider>
         <Router>
           <Routes>
+
+
+            ////Flow User
             < Route path='/' element={<IntroPage/>} />
             < Route path='sign-in' element={<SignIn/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
@@ -100,8 +118,9 @@ function App() {
             < Route path='verify-form' element={<VerifyForm/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
 
-
-
+            ---------------------------------------------------------------------------------
+            ////Flow Store
+            
             < Route path='signin-store' element={<SignInStore/>} />
             < Route path='verify-store' element={<VerifyStoreLogin/>} />
             < Route path='verify-store-res' element={<VerifyStoreRegister/>} />
@@ -121,13 +140,27 @@ function App() {
             {/* < Route path='verify-store' element={<VerifyStore/>} /> */}
             < Route path='infor-newstore' element={<InforNewStore/>} />
 
+            < Route path='pointer-wallet' element={<PointerWallet/>} />
+            < Route path='transaction-history' element={<TransactionHistory/>} />
+            < Route path='doanhthu' element={<DoanhThu/>} />
 
+
+            ---------------------------------------------------------------------------------
+            ////Flow Driver
             <Route path="order-driver" element={<OrderDriver></OrderDriver>}/>
             <Route path="profile-driver" element={<ProfileDriver></ProfileDriver>}/>
             <Route path="signin-driver" element={<LoginDriver></LoginDriver>}/>
             <Route path="/auth-driver/callback" element={<CallbackPageDriver />} />
             <Route path="/register-driver" element={<InforDriver />} />
 
+            ---------------------------------------------------------------------------------
+            ////Flow Admin
+
+            <Route path="/admin" element={<Home />}>
+              <Route path="store" element={<Store />} />
+              <Route path="driver" element={<Driver />} />
+              <Route path="revenue" element={<Revenue />} />
+            </Route>
 
 
           </Routes>
@@ -136,5 +169,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;
