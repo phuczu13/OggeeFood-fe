@@ -4,7 +4,7 @@ import axios from 'axios';
 
 function PaymentStatus() {
     const location = useLocation();
-    const { id } = useParams(); // Lấy orderId từ URL
+    // const { id } = useParams(); // Lấy orderId từ URL
     const [status, setStatus] = useState('Đang xử lý...');
     const urlParams = new URLSearchParams(window.location.search);
     const storeId = urlParams.get('storeId');
