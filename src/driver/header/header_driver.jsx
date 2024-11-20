@@ -55,7 +55,7 @@ function HeaderDriver() {
                                 </div>
                                 <img 
                                     className='w-[50px] border rounded-full h-[50px]' 
-                                    src={driverInfo.avatar || 'URL_HINH_ANH_MAC_DINH'} 
+                                    src={driverInfo.avatar || 'https://i.pinimg.com/736x/4c/0c/c5/4c0cc5ffc23b1a6329d4e3f5d803c006.jpg'} 
                                     alt="User Icon" 
                                 />
                             </div>
