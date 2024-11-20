@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';   // Import CSS cho toastify
 
 
 const UserAccount = () => {
+  const [isUploading, setIsUploading] = useState(false); // Trạng thái upload ảnh
   const [thongTin, setThongTin] = useState({
     name: '',
     dateOfBirth: '',
@@ -48,26 +49,54 @@ const UserAccount = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put(`https://be-order-food.vercel.app/api/user/update/${userId}`, thongTin); // API cập nhật thông tin user
-      setIsEdited(false); // Ẩn nút "Lưu" sau khi lưu thành công
-      toast.success('Cập nhật thành công!');
+      const formData = new FormData();
+      formData.append("name", thongTin.name); // Gửi tên
+      formData.append("dateOfBirth", thongTin.dateOfBirth); // Gửi ngày sinh
+      formData.append("gender", thongTin.gender); // Gửi giới tính
+      formData.append("address", thongTin.address); // Gửi địa chỉ
+      formData.append("phoneNumber", thongTin.phoneNumber); // Gửi số điện thoại
+      formData.append("introduce", thongTin.introduce); // Gửi giới thiệu
+  
+      // Nếu có thay đổi ảnh, gửi file ảnh
+      if (imageUser instanceof File) {
+        formData.append("imageUser", imageUser); 
+      }
+  
+      // Gửi dữ liệu lên server
+      const response = await axios.put(
+        `https://be-order-food.vercel.app/api/user/update/${userId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Đảm bảo gửi đúng header
+          },
+        }
+      );
+  
+      // Cập nhật lại thông tin người dùng trong state
+      setThongTin(response.data);
+      setIsEdited(false);
+      toast.success("Cập nhật thành công!");
     } catch (error) {
-      console.error('Error updating user info', error);
-      toast.error('Cập nhật thất bại!');
+      console.error("Error updating user info", error);
+      toast.error("Cập nhật thất bại!");
     }
   };
+  
+  
 
   //////ảnh đại diện
-  const [image, setImage] = useState("https://i.pinimg.com/736x/65/2a/fa/652afa0a7cf9bac3e8af32384e34068e.jpg");
+  const [imageUser, setImage] = useState(null);
   const handleImageChange = (event) => {
-    const file = event.target.files[0]; // Lấy file người dùng chọn
-    if (file && file.type.startsWith("image/")) { // Kiểm tra xem file có phải ảnh không
-      const imageUrl = URL.createObjectURL(file); // Tạo URL tạm thời cho ảnh
-      setImage(imageUrl); // Cập nhật URL vào state
+    const file = event.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      setImage(file); // Cập nhật file ảnh vào state
+      setIsEdited(true); // Hiển thị nút "Lưu" khi có thay đổi
     } else {
       toast.warning("Vui lòng chọn một tệp ảnh hợp lệ!");
     }
   };
+  
 
   return (
     <div>
@@ -76,7 +105,15 @@ const UserAccount = () => {
         <div className="max-w-[800px] mx-auto bg-white p-6 rounded-lg shadow-lg border my-10">
           <h1 className="text-2xl font-bold mt-2 mb-4 text-center text-[#ff7e00]">Thông Tin Tài Khoản</h1>
           <div className='flex flex-col items-center text-center mx-auto justify-center'>
-          <img className="w-[100px] object-cover border rounded-full h-[100px]" src={thongTin.avatar} alt="Uploaded" />
+          <img
+            className="w-[100px] object-cover border rounded-full h-[100px]"
+            src={
+              imageUser instanceof File
+                ? URL.createObjectURL(imageUser) // Hiển thị ảnh mới
+                : thongTin.avatar || "https://via.placeholder.com/100"
+            }
+            alt="Avatar"
+          />
             <label
               htmlFor="file-upload"
               className="mt-4 px-3 py-1 border border-[#525252] rounded-lg cursor-pointer"

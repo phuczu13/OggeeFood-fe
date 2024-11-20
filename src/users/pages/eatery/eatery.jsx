@@ -20,7 +20,9 @@ const Eatery = () => {
     try {
         const response = await axios.get('https://be-order-food.vercel.app/api/store/random'); // API URL từ backend
         console.log(response.data.data);
-        setTopStores(response.data.data); // Cập nhật sản phẩm
+        const filteredStores = response.data.data.filter(store => 
+          store.storeName && store.storeAddress && store.avatar && store.email);
+        setTopStores(filteredStores); // Cập nhật sản phẩm
         setLoading(false); // Tắt loading sau khi có dữ liệu
     } catch (error) {
         setError(error.message);
@@ -38,7 +40,9 @@ const Eatery = () => {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            setStores(data.data); // Assuming the API response contains a 'data' field
+            const filteredStores = data.data.filter(store => 
+              store.storeName && store.storeAddress && store.avatar && store.email); // Kiểm tra các trường bắt buộc
+            setStores(filteredStores);
             setLoading(false); // Tắt loading sau khi có dữ liệu
         } catch (error) {
             setError(error.message);

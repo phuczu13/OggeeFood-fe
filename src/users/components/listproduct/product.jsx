@@ -25,7 +25,9 @@ function Product() {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                setProducts(data.data); // Assuming the API response contains a 'data' field
+                const filteredProducts = data.data.filter(product => 
+                    product.Food_name && product.Food_detail && product.Price && product.Food_picture);
+                setProducts(filteredProducts); // Assuming the API response contains a 'data' field
                 setLoading(false); // Tắt loading sau khi có dữ liệu
             } catch (error) {
                 setError(error.message);

@@ -17,7 +17,9 @@ function ListProduct() {
         try {
             const response = await axios.get('https://be-order-food.vercel.app/api/product/get-randompro'); // API URL từ backend
             console.log(response.data.data);
-            setProducts(response.data.data); // Cập nhật sản phẩm
+            const filteredProducts = response.data.data.filter(product => 
+                product.Food_name && product.Food_detail && product.Price && product.Food_picture);
+            setProducts(filteredProducts); // Cập nhật sản phẩm
             setLoading(false); // Tắt loading sau khi có dữ liệu
         } catch (error) {
             setError(error.message);

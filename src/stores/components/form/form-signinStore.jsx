@@ -64,8 +64,8 @@ function FormSignInStore() {
             window.location.href = '/home-store';
         } else {
             // Nếu không có token, chuyển hướng đến trang xác thực
-            window.location.href = `https://sso-pointer.vercel.app/authorize?clientId=673397680b536ec12230126c`;
-            // window.location.href = `https://sso-pointer.vercel.app/authorize?clientId=673625cb84ba6c16e51eba2d`;
+            // window.location.href = `https://sso-pointer.vercel.app/authorize?clientId=673397680b536ec12230126c`;
+            window.location.href = `https://sso-pointer.vercel.app/authorize?clientId=673625cb84ba6c16e51eba2d`;
 
         }
     };

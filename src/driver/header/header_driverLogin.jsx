@@ -41,7 +41,7 @@ function HeaderDriverLogin() {
                     <div className="flex flex-col sm:flex-row gap-4 sm:gap-12 items-center relative">
                         <div className='mt-2 sm:mt-0 flex items-center gap-2'>
                             <div className='text-[#ff7e00] font-semibold text-xl'>Chào tài xế Ogge</div>
-                            <img className='w-[50px] border rounded-full h-[50px]' src='https://i.pinimg.com/736x/4c/0c/c5/4c0cc5ffc23b1a6329d4e3f5d803c006.jpg' alt="User Icon" />
+                            <img className='w-[50px] border rounded-full h-[50px]' src={driverInfo.avatar || 'https://i.pinimg.com/736x/4c/0c/c5/4c0cc5ffc23b1a6329d4e3f5d803c006.jpg'} alt="User Icon" />
                         </div>
                         {isOpen && (
                             <div className="absolute top-14 right-auto w-48 bg-white shadow-lg space-y-2 rounded-lg p-4 text-black">

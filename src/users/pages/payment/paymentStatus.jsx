@@ -6,6 +6,9 @@ function PaymentStatus() {
     const location = useLocation();
     const { id } = useParams(); // Lấy orderId từ URL
     const [status, setStatus] = useState('Đang xử lý...');
+    const urlParams = new URLSearchParams(window.location.search);
+    const storeId = urlParams.get('storeId');
+    console.log(storeId)
 
     
 
@@ -20,7 +23,7 @@ function PaymentStatus() {
                 
                 <h2 className="text-3xl font-semibold my-4">Thanh toán thành công</h2>
                 <div>
-                <div className='text-xl'>Mã đơn hàng của bạn là <span className='text-[#ff7e00] font-semibold'>abc123</span>.</div>
+                <div className='text-xl'>Mã đơn hàng của bạn là <span className='text-[#ff7e00] font-semibold'>{storeId}</span>.</div>
                 </div>
                 <div className="mt-6 flex justify-center gap-4">
                 <button 

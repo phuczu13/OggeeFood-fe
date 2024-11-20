@@ -10,6 +10,10 @@ const Dashboard = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const storeId = localStorage.getItem('storeId');
+  const totalRevenue = chartData.reduce((sum, item) => sum + item.totalRevenue, 0).toLocaleString("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  });
   console.log(storeId)
   useEffect(() => {
     fetchData(timeFrame);
@@ -34,29 +38,58 @@ const Dashboard = () => {
     try {
       let url;
       switch (timeFrame) {
+        case 'day':
+          url = `https://be-order-food.vercel.app/api/order/revenue/daily/${storeId}`;
+          break;
         case 'week':
           url = `https://be-order-food.vercel.app/api/order/revenue/weekly/${storeId}`;
           break;
         case 'month':
           url = `https://be-order-food.vercel.app/api/order/revenue/monthly/${storeId}`;
           break;
-        case 'year':
-          url = `https://be-order-food.vercel.app/api/order/revenue/yearly/${storeId}`;
-          break;
         default:
-          url = `https://be-order-food.vercel.app/api/order/revenue/weekly/${storeId}`;
+          url = `https://be-order-food.vercel.app/api/order/revenue/daily/${storeId}`;
       }
+  
       const response = await axios.get(url);
-      setChartData(response.data);
+      const data = response.data;
+  
+      if (timeFrame === 'day') {
+        // Dữ liệu theo ngày
+        setChartData(data.map(item => ({
+          hour: item.hour,
+          totalRevenue: item.totalRevenue,
+        })));
+      } else if (timeFrame === 'week') {
+        // Dữ liệu đã được chuẩn hóa từ API
+        setChartData(data.map(item => ({
+          day: item.day,
+          totalRevenue: item.totalRevenue,
+        })));
+      } else if (timeFrame === 'month') {
+        // Chuẩn hóa dữ liệu tháng từ API
+        setChartData(data.map(item => ({
+          month: item.month,
+          totalRevenue: item.totalRevenue,
+        })));
+      }
     } catch (error) {
       console.error('Error fetching data', error);
     }
   };
+  
+  
   const handleTimeFrameChange = (frame) => {
     setTimeFrame(frame);
   };
   const barData = {
-    labels: chartData.map(data => data._id),
+    labels: timeFrame === 'day' 
+      ? chartData.map(data => `${data.hour}h`)  // Lấy giờ trong ngày
+      : timeFrame === 'week'
+      ? chartData.map(data => data.day)  // Lấy tên các ngày trong tuần
+      : timeFrame === 'month'
+      ? chartData.map(data => `Tháng ${data.month}`)  // Lấy tên các tháng
+      : chartData.map(data => data._id),  // Lấy năm hoặc giá trị khác (nếu cần)
     datasets: [
       {
         label: 'Doanh thu',
@@ -67,6 +100,9 @@ const Dashboard = () => {
       },
     ],
   };
+  
+  
+  
 
   const doughnutData = {
     labels: ['Bún Bò', 'Bánh Mì', 'Hủ Tiếu', 'Phở Nam Vang', 'Mì Quảng'],
@@ -173,6 +209,12 @@ const Dashboard = () => {
             <h2 className="text-xl font-semibold text-center mb-6">Doanh thu bán hàng</h2>
             <div className="flex justify-center mb-4">
                 <button 
+                  className={`px-4 py-2 ${timeFrame === 'day' ? 'bg-blue-500 text-white' : 'bg-gray-200'} rounded mr-2`}
+                  onClick={() => handleTimeFrameChange('day')}
+                >
+                  Ngày
+                </button>
+                <button 
                   className={`px-4 py-2 ${timeFrame === 'week' ? 'bg-blue-500 text-white' : 'bg-gray-200'} rounded mr-2`}
                   onClick={() => handleTimeFrameChange('week')}
                 >
@@ -183,12 +225,6 @@ const Dashboard = () => {
                   onClick={() => handleTimeFrameChange('month')}
                 >
                   Tháng
-                </button>
-                <button 
-                  className={`px-4 py-2 ${timeFrame === 'year' ? 'bg-blue-500 text-white' : 'bg-gray-200'} rounded`}
-                  onClick={() => handleTimeFrameChange('year')}
-                >
-                  Năm
                 </button>
               </div>
               <div className="flex justify-center" style={{ width: '100%', height: '300px', margin: '0 auto' }}>
@@ -206,7 +242,7 @@ const Dashboard = () => {
 
         <div className="text-center mt-6">
           <p className="text-lg text-[#ef4b2c] font-semibold">
-            Tổng doanh thu: <span className="text-2xl font-bold">Jack 5 củ</span>
+            Tổng doanh thu: <span className="text-2xl font-bold">{totalRevenue}</span>
           </p>
         </div>
 
