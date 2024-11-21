@@ -15,6 +15,31 @@ function HeaderHS2() {
 
     //const storeId = localStorage.getItem('storeId');
 
+    const [userData, setUserData] = useState(null)
+    useEffect(() => {
+    
+        if (storeId) {
+            // Gọi API để lấy thông tin cửa hàng
+            fetch(`https://be-order-food.vercel.app/api/store/getInforStore/${storeId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error fetching store info');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'OK' && data.data) {
+                        setUserData(data.data); // Lưu thông tin cửa hàng vào state
+                    } else {
+                        console.error('Store data not found');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching store info:', error);
+                    toast.error('Error fetching store info');
+                });
+        }
+    }, []);
     console.log("storeId is "+storeId)
     const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -97,8 +122,8 @@ function HeaderHS2() {
                             <img
                                 onClick={toggleProfileMenu}
                                 className='w-10 rounded-full cursor-pointer hover:ring profile-btn'
-                                // src={userData?.avatar || "default-profile.jpg"}
-                                src=''
+                                src={userData?.avatar || "default-profile.jpg"}
+                                // src=''
                                 alt="Profile"
                             />
                         </div>
@@ -113,8 +138,8 @@ function HeaderHS2() {
                 <img
                     onClick={toggleProfileMenu}
                     className='w-10 rounded-full cursor-pointer profile-btn'
-                    // src={userData?.avatar || "default-profile.jpg"}
-                    src=''
+                    src={userData?.avatar || "default-profile.jpg"}
+                    // src=''
                     alt="Profile"
                 />
             </div>
@@ -123,7 +148,7 @@ function HeaderHS2() {
                 <div className="fixed top-17 right-4 bg-opacity-50 flex justify-end items-start z-50">
                     <div className="bg-[#ffffff] rounded-md w-[200px] p-4 h-fit" style={{ boxShadow: "0 4px 20px rgba(0, 0, 0, 0.2)" }}>
                         {/* <h2 className="text-xl font-semibold mb-4 text-center">{storeInfo.storeName}</h2> */}
-                        <h2 className="text-xl font-semibold mb-4 text-center">Tên cửa hàng</h2>
+                        <h2 className="text-xl font-semibold mb-4 text-center">{userData.storeName}</h2>
                         <div className='bg-gray-400 h-[1px] w-full mb-4'></div>
                         <ul className="flex flex-col font-semibold">
                             <li>
