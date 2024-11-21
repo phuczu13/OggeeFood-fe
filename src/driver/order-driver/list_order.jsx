@@ -280,13 +280,7 @@ function ListOrderDriver() {
             <p className="text-center">
               Bạn có chắc chắn muốn {confirmationAction === 'cancel' ? 'hủy' : confirmationAction === 'accept' ? 'nhận' : confirmationAction === 'takeaway' ? 'lấy' : 'hoàn thành'} đơn hàng <span className="font-bold">{selectedOrder.id}</span>?
             </p>
-            <div className="flex justify-around mt-4">
-              <button
-                className={`px-4 py-2 ${confirmationAction === 'cancel' ? 'bg-red-500' : confirmationAction === 'accept' ? 'bg-green-500' : confirmationAction === 'takeaway' ? 'bg-yellow-500' : 'bg-blue-500'} text-white rounded hover:bg-${confirmationAction === 'cancel' ? 'red-600' : confirmationAction === 'accept' ? 'green-600' : 'blue-600'}`}
-                onClick={() => handleConfirmAction(confirmationAction)}
-              >
-                Đồng ý
-              </button>
+            <div className="flex justify-center gap-3 mt-4">
                 <button
                   className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
                   onClick={() => {
@@ -295,6 +289,12 @@ function ListOrderDriver() {
                   }}
                 >
                   Đóng
+                </button>
+                <button
+                  className={`px-4 py-2 ${confirmationAction === 'cancel' ? 'bg-red-500' : confirmationAction === 'accept' ? 'bg-green-500' : confirmationAction === 'takeaway' ? 'bg-yellow-500' : 'bg-blue-500'} text-white rounded hover:bg-${confirmationAction === 'cancel' ? 'red-600' : confirmationAction === 'accept' ? 'green-600' : 'blue-600'}`}
+                  onClick={() => handleConfirmAction(confirmationAction)}
+                >
+                  Đồng ý
                 </button>
             </div>
           </div>
