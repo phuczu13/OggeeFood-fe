@@ -247,8 +247,8 @@ const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
                 <p className="text-gray-500 mb-2">{store.storeAddress}</p>
                 {Array.isArray(store.items) && store.items.length > 0 ? (
                   store.items.map((item) => (
-                    <div key={item._id} className="border-b py-4 pr-4 flex items-center justify-between">
-                      <div className="flex items-center p-4">
+                    <div key={item._id} className="border-b py-4 pr-4 flex items-center w-full justify-between">
+                      <div className="flex items-center p-4 w-full">
                         <input
                           type="checkbox"
                           className="mr-5 h-4 w-4"
@@ -263,8 +263,8 @@ const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
                           </div>
                         </div>
                       </div>
-                      <div className="flex flex-col sm:flex-row items-center sm:mr-10">
-                        <div className="flex items-center justify-between w-full max-w-[100px] px-2">
+                      <div className="flex flex-col sm:flex-row items-center sm:mr-10 w-full">
+                        <div className="flex items-center justify-between w-[100px] px-2">
                           <button 
                             className='border-2 flex justify-center text-center items-center rounded-full h-6 w-6 border-[#ff7e00]' 
                             onClick={() => handleQuantityChange(store.storeId, item.productId._id, 'decrease')}>
@@ -279,11 +279,11 @@ const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
                             <img src={IconPlus} alt="plus" />
                           </button>
                         </div>
-                        <div className="text-lg font-semibold text-[#ff7e00] flex max-w-[150px] justify-center w-full">
+                        <div className="text-lg font-semibold text-[#ff7e00] flex w-[150px] justify-center">
                           {(item.price * item.quantity).toLocaleString()} VND
                         </div>
                         <button
-                          className="font-semibold text-red-500 max-w-[50px] w-full"
+                          className="font-semibold text-red-500 w-[50px]"
                           onClick={() => deleteProduct(store.storeId, item.productId._id)}>
                           Xóa
                         </button>
