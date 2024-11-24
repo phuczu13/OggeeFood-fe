@@ -181,9 +181,9 @@ function DoanhThu() {
                     </div>
                 </div>
                 </div>
+
+
             </div>
         </div>
-    );
-}
-
-export default DoanhThu
+        )}
+export default DoanhThu;
