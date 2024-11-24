@@ -20,6 +20,7 @@ function Cart() {
     fetchCartData();
   }, []);
 
+  
   const fetchCartData = async () => {
     try {
       const response = await axios.get(`https://be-order-food.vercel.app/api/cart/get-cart?userId=${userId}`);
@@ -85,35 +86,33 @@ function Cart() {
         console.error('Error updating quantity or deleting item:', error);
         toast.error('Lỗi khi cập nhật số lượng hoặc xóa sản phẩm');
     }
-};
+  };
 
-// Function to handle when user clicks to increase or decrease quantity
-const handleQuantityChange = (storeId, productId, action) => {
-  const newCartItems = (Array.isArray(cartItems) ? cartItems : []).map((store) => {
-        if (store.storeId === storeId) {
-            return {
-                ...store,
-                items: store.items.map((item) => {
-                    if (item.productId._id === productId) {
-                        const newQuantity = action === 'increase' 
-                            ? item.quantity + 1 
-                            : Math.max(0, item.quantity - 1); // Allow quantity to decrease to 0
+  // Function to handle when user clicks to increase or decrease quantity
+  const handleQuantityChange = (storeId, productId, action) => {
+    const newCartItems = (Array.isArray(cartItems) ? cartItems : []).map((store) => {
+          if (store.storeId === storeId) {
+              return {
+                  ...store,
+                  items: store.items.map((item) => {
+                      if (item.productId._id === productId) {
+                          const newQuantity = action === 'increase' 
+                              ? item.quantity + 1 
+                              : Math.max(0, item.quantity - 1); // Allow quantity to decrease to 0
 
-                        updateQuantity(userId, storeId, productId, newQuantity); // Call update or delete
-                        console.log(userId, productId, newQuantity)
-                        return { ...item, quantity: newQuantity };
-                    }
-                    return item;
-                }).filter(item => item.quantity > 0), // Filter out items with quantity 0
-            };
-        }
-        return store;
-    });
+                          updateQuantity(userId, storeId, productId, newQuantity); // Call update or delete
+                          console.log(userId, productId, newQuantity)
+                          return { ...item, quantity: newQuantity };
+                      }
+                      return item;
+                  }).filter(item => item.quantity > 0), // Filter out items with quantity 0
+              };
+          }
+          return store;
+      });
 
-    setCartItems(newCartItems); // Update the UI immediately
-};
-
-
+      setCartItems(newCartItems); // Update the UI immediately
+  };
 
   const handleSelectAllItems = () => {
     const newSelection = new Set();
@@ -129,72 +128,64 @@ const handleQuantityChange = (storeId, productId, action) => {
       });      
         setSelectedItems(newSelection);
     }
-};
-const handleSelectItem = (storeId, productId) => {
-  const itemKey = `${storeId}-${productId}`;
-  const newSelectedItems = new Set(selectedItems);
+  };
+  const handleSelectItem = (storeId, productId) => {
+    const itemKey = `${storeId}-${productId}`;
+    const newSelectedItems = new Set(selectedItems);
 
-  if (newSelectedItems.has(itemKey)) {
-    newSelectedItems.delete(itemKey);
-  } else {
-    newSelectedItems.add(itemKey);
-  }
+    if (newSelectedItems.has(itemKey)) {
+      newSelectedItems.delete(itemKey);
+    } else {
+      newSelectedItems.add(itemKey);
+    }
 
-  setSelectedItems(newSelectedItems);
-};
+    setSelectedItems(newSelectedItems);
+  };
 
-const calculateSelectedTotalItems = () => {
-  return Array.from(selectedItems).reduce((acc, itemKey) => {
-      const [storeId, productId] = itemKey.split('-');
-      const store = cartItems.find(store => store.storeId === storeId);
-      const item = store?.items?.find(item => item._id === productId);
-      return acc + (item ? item.quantity : 0);
-  }, 0);
-};
+  const calculateSelectedTotalItems = () => {
+    return Array.from(selectedItems).reduce((acc, itemKey) => {
+        const [storeId, productId] = itemKey.split('-');
+        const store = cartItems.find(store => store.storeId === storeId);
+        const item = store?.items?.find(item => item._id === productId);
+        return acc + (item ? item.quantity : 0);
+    }, 0);
+  };
 
-const calculateSelectedTotalPrice = () => {
-  return Array.from(selectedItems).reduce((acc, itemKey) => {
-      const [storeId, productId] = itemKey.split('-');
-      const store = cartItems.find(store => store.storeId === storeId);
-      const item = store?.items?.find(item => item._id === productId);
-      return acc + (item ? item.price * item.quantity : 0);
-  }, 0);
-};
-
-
-// Call these functions when rendering to get the latest totals
-const selectedTotalItems = calculateSelectedTotalItems();
-const selectedTotalPrice = calculateSelectedTotalPrice();
+  const calculateSelectedTotalPrice = () => {
+    return Array.from(selectedItems).reduce((acc, itemKey) => {
+        const [storeId, productId] = itemKey.split('-');
+        const store = cartItems.find(store => store.storeId === storeId);
+        const item = store?.items?.find(item => item._id === productId);
+        return acc + (item ? item.price * item.quantity : 0);
+    }, 0);
+  };
 
 
-const totalItems = (Array.isArray(cartItems) ? cartItems : []).reduce(
-  (total, store) =>
-    total +
-    (store.items?.reduce(
-      (storeTotal, item) => (item.selected ? storeTotal + item.quantity : storeTotal),
-      0
-    ) || 0),
-  0
-);
+  // Call these functions when rendering to get the latest totals
+  const selectedTotalItems = calculateSelectedTotalItems();
+  const selectedTotalPrice = calculateSelectedTotalPrice();
 
-const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
-  (total, store) =>
-    total +
-    (store.items?.reduce(
-      (storeTotal, item) =>
-        item.selected ? storeTotal + item.price * item.quantity : storeTotal,
-      0
-    ) || 0),
-  0
-);
 
-  // if (loading) {
-  //   return <p>Loading...</p>;
-  // }
+  const totalItems = (Array.isArray(cartItems) ? cartItems : []).reduce(
+    (total, store) =>
+      total +
+      (store.items?.reduce(
+        (storeTotal, item) => (item.selected ? storeTotal + item.quantity : storeTotal),
+        0
+      ) || 0),
+    0
+  );
 
-  // if (error) {
-  //   return <p>Error: {error}</p>;
-  // }
+  const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
+    (total, store) =>
+      total +
+      (store.items?.reduce(
+        (storeTotal, item) =>
+          item.selected ? storeTotal + item.price * item.quantity : storeTotal,
+        0
+      ) || 0),
+    0
+  );
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F5F5]">
@@ -349,7 +340,7 @@ const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
             Đặt ngay
         </button>                                             
       </div>
-    )}
+      )}
       <Footer />
     </div>
   );
