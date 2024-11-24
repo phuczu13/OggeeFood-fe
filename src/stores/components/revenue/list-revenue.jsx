@@ -5,34 +5,98 @@ import axios from 'axios';
 ChartJS.register(BarElement, CategoryScale, LinearScale, ArcElement, Tooltip, Legend);
 
 const Dashboard = () => {
-  const [timeFrame, setTimeFrame] = useState('week'); // week, month, year
+  const [timeFrame, setTimeFrame] = useState('day'); // week, month, year
   const [chartData, setChartData] = useState([]);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
   const storeId = localStorage.getItem('storeId');
+  const [orderCompleted, setOrderCompleted] = useState("");
+  const [orderCancel, setOrderCancel] = useState("");
+  const [percentageChangeCompleted, setPercentageChangeCompleted] = useState("");
+  const [percentageChangeCancel, setPercentageChangeCancel] = useState("");
+  const [top5Products, setTop5Products] = useState([])
+  const [doughnutData, setDoughnutData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: 'Tỷ trọng bán hàng',
+        data: [],
+        backgroundColor: [],
+        borderColor: [],
+        borderWidth: 1,
+      },
+    ],
+  });
+  
+
   const totalRevenue = chartData.reduce((sum, item) => sum + item.totalRevenue, 0).toLocaleString("vi-VN", {
     style: "currency",
     currency: "VND",
   });
   console.log(storeId)
   useEffect(() => {
-    fetchData(timeFrame);
+    fetchData(timeFrame),fetchDataOrder(timeFrame);
   }, [timeFrame]);
-  const initialData = [
-    { day: 'Mon', revenue: 123456 },
-    { day: 'Tue', revenue: 234567 },
-    { day: 'Wed', revenue: 504000 },
-    { day: 'Thu', revenue: 230000 },
-    { day: 'Fri', revenue: 220000 },
-    { day: 'Sat', revenue: 280000 },
-    { day: 'Sun', revenue: 220000 },
-  ];
+
+  const fetchDataOrder = async (timeFrame) => {
+    try {
+      let url;
+      switch (timeFrame) {
+        case 'day':
+          url = `https://be-order-food.vercel.app/api/order/order-of-day/${storeId}`;
+          break;
+        case 'week':
+          url = `https://be-order-food.vercel.app/api/order/order-of-week/${storeId}`;
+          break;
+        case 'month':
+          url = `https://be-order-food.vercel.app/api/order/order-of-month/${storeId}`;
+          break;
+        default:
+          url = `https://be-order-food.vercel.app/api/order/order-of-day/${storeId}`;
+      }
+  
+      const response = await axios.get(url);
+      const data = response.data;
+      
+      // Duyệt qua danh sách trả về từ API
+    data.forEach((item) => {
+      if (item.status === 'Hoàn thành') {
+        if (timeFrame === 'day') {
+          setOrderCompleted(item.thisDayCount);
+          setPercentageChangeCompleted(item.percentageChange);
+        } else if (timeFrame === 'week') {
+          setOrderCompleted(item.thisWeekCount);
+          setPercentageChangeCompleted(item.percentageChange);
+        } else if (timeFrame === 'month') {
+          setOrderCompleted(item.thisMonthCount);
+          setPercentageChangeCompleted(item.percentageChange);
+        }
+      } else if (item.status === 'Đã hủy') {
+        if (timeFrame === 'day') {
+          setOrderCancel(item.thisDayCount);
+          setPercentageChangeCancel(item.percentageChange);
+        } else if (timeFrame === 'week') {
+          setOrderCancel(item.thisWeekCount);
+          setPercentageChangeCancel(item.percentageChange);
+        } else if (timeFrame === 'month') {
+          setOrderCancel(item.thisMonthCount);
+          setPercentageChangeCancel(item.percentageChange);
+        }
+      }
+    });
+    } catch (error) {
+      console.error('Error fetching data', error);
+    }
+  };
+  const formatPercentage = (value) => {
+    const number = parseFloat(value);
+    if (isNaN(number)) return "0%"; // Nếu không phải số, trả về "0%"
+    return number > 0 ? `+${number}%` : `${number}%`; // Thêm dấu "+" nếu số dương
+  };
+  
   const statistics = [
-    { title: "Doanh thu hôm nay", value: 123456 , color: "text-blue-500", bg_color: "bg-blue-500", rating: '+15%', isCurrency: true },
-    { title: "Đơn hàng mới", value: 456, color: "text-green-500", bg_color: "bg-green-500", rating: '+25%', isCurrency: false },
-    { title: "Đơn hủy", value: 123, color: "text-red-500", bg_color: "bg-red-500", rating: '+0%', isCurrency: false },
+    { title: "Doanh thu", value: totalRevenue , color: "text-blue-500", bg_color: "bg-blue-500", rating: '+10%', isCurrency: true },
+    { title: "Đơn hàng mới", value: orderCompleted, color: "text-green-500", bg_color: "bg-green-500", rating: formatPercentage(percentageChangeCompleted), isCurrency: false },
+    { title: "Đơn hủy", value: orderCancel, color: "text-red-500", bg_color: "bg-red-500", rating: formatPercentage(percentageChangeCancel), isCurrency: false },
   ];
-  const [filteredData, setFilteredData] = useState(initialData);
 
   const fetchData = async (timeFrame) => {
     try {
@@ -78,7 +142,6 @@ const Dashboard = () => {
     }
   };
   
-  
   const handleTimeFrameChange = (frame) => {
     setTimeFrame(frame);
   };
@@ -100,34 +163,62 @@ const Dashboard = () => {
       },
     ],
   };
-  
-  
-  
 
-  const doughnutData = {
-    labels: ['Bún Bò', 'Bánh Mì', 'Hủ Tiếu', 'Phở Nam Vang', 'Mì Quảng'],
-    datasets: [
-      {
-        label: 'Tỷ trọng bán hàng',
-        data: [46, 22, 13, 6, 6],
-        backgroundColor: [
-          'rgba(255, 99, 132, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(255, 206, 86, 0.6)',
-          'rgba(75, 192, 192, 0.6)',
-          'rgba(153, 102, 255, 0.6)',
-        ],
-        borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-        ],
-        borderWidth: 1,
-      },
-    ],
-  };
+  useEffect(() => {
+    const fetchDoughnutData = async () => {
+      try {
+        const response = await axios.get(`https://be-order-food.vercel.app/api/order/top-5-product/${storeId}`);
+  
+        const data = response.data;
+        // Lấy topProducts và xử lý
+      const topProducts = data[0]?.topProducts || [];
+      setTop5Products(topProducts)
+      const othersSales = data[0]?.others && data[0]?.others.length > 0 ? data[0]?.others[0]?.totalSold : 0;
+      
+      // Lấy tên sản phẩm và số lượng bán
+      const labels = topProducts.map((product) => product.name);
+      const sales = topProducts.map((product) => product.totalSold);
+
+      // Nếu có sản phẩm "Other", thêm vào cuối mảng
+      if (othersSales > 0) {
+        labels.push('Các món khác');
+        sales.push(othersSales);
+      }
+  
+        // Cập nhật dữ liệu biểu đồ
+        setDoughnutData({
+          labels: labels,
+          datasets: [
+            {
+              label: 'Tỷ trọng bán hàng',
+              data: sales,
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.6)', // Màu cho sản phẩm đầu tiên
+                'rgba(54, 162, 235, 0.6)', // Màu cho sản phẩm thứ hai
+                'rgba(255, 206, 86, 0.6)', // Màu cho sản phẩm thứ ba
+                'rgba(75, 192, 192, 0.6)', // Màu cho sản phẩm thứ tư
+                'rgba(153, 102, 255, 0.6)', // Màu cho sản phẩm thứ năm
+                'rgba(255, 159, 64, 0.6)', // Màu cho các món khác
+              ],
+              borderColor: [
+                'rgba(255, 99, 132, 1)', 
+                'rgba(54, 162, 235, 1)', 
+                'rgba(255, 206, 86, 1)', 
+                'rgba(75, 192, 192, 1)', 
+                'rgba(153, 102, 255, 1)', 
+                'rgba(255, 159, 64, 1)', // Màu cho các món khác
+              ],
+              borderWidth: 1,
+            },
+          ],
+        });
+      } catch (error) {
+        console.error('Error fetching sales data', error);
+      }
+    };
+  
+    fetchDoughnutData();
+  }, [storeId]); 
 
   const barOptions = {
     responsive: true,
@@ -178,7 +269,12 @@ const Dashboard = () => {
       <div className="max-w-[1200px] border my-10 mx-auto sm:p-0 p-4 bg-gray-50">
         <header className="bg-[#F8E7CC] text-white p-4">
           <div className="container mx-auto">
-            <h1 className="text-3xl text-[#ff7e00] ml-2  font-semibold">Kết quả kinh doanh trong ngày</h1>
+            <h1 className="text-3xl text-[#ff7e00] ml-2 font-semibold">
+              {timeFrame === "day" && "Kết quả kinh doanh trong ngày"}
+              {timeFrame === "week" && "Kết quả kinh doanh trong tuần"}
+              {timeFrame === "month" && "Kết quả kinh doanh trong tháng"}
+              {timeFrame === "year" && "Kết quả kinh doanh trong năm"}
+            </h1>
           </div>
         </header>
         <div className="container mx-auto p-6">
@@ -187,20 +283,28 @@ const Dashboard = () => {
               <div key={index} className="bg-white p-6 rounded-lg shadow-md">
                 <h2 className="text-xl flex justify-between font-semibold">
                   {stat.title}
-                  <p className={`${stat.bg_color} text-white rounded-full px-2 text-[16px]`}>{stat.rating}</p>
+                  <p className={`${stat.bg_color} text-white rounded-full px-2 text-[16px]`}>
+                    {stat.rating}
+                  </p>
                 </h2>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <p className={`text-2xl font-bold ${stat.color}`}>
-                    {stat.isCurrency 
-                      ? stat.value.toLocaleString("vi-VN", { style: "currency", currency: "VND" }) 
+                    {stat.isCurrency
+                      ? stat.value.toLocaleString("vi-VN", { style: "currency", currency: "VND" })
                       : stat.value}
                   </p>
-                  <p>Hôm qua</p>
+                  <p>
+                    {timeFrame === "day" && "Hôm qua"}
+                    {timeFrame === "week" && "Tuần qua"}
+                    {timeFrame === "month" && "Tháng qua"}
+                    {timeFrame === "year" && "Năm qua"}
+                  </p>
                 </div>
               </div>
             ))}
           </div>
         </div>
+
       </div>
 
       <div className="max-w-[1200px] border my-10 mx-auto sm:p-6 p-5 bg-gray-50">
@@ -233,7 +337,7 @@ const Dashboard = () => {
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow-md sm:w-1/3 w-full">
-            <h2 className="text-xl font-semibold text-center mb-6">Tỷ trọng bán hàng</h2>
+            <h2 className="text-xl font-semibold text-center mb-6">Tỷ trọng bán hàng tháng này</h2>
             <div className='flex justify-center' style={{ width: '100%', height: '300px', margin: '0 auto' }}>
               <Doughnut data={doughnutData} />
             </div>
@@ -247,7 +351,7 @@ const Dashboard = () => {
         </div>
 
         <div className="bg-white p-4 sm:p-6 rounded-lg shadow-md mt-6">
-          <h2 className="text-xl font-bold mb-4">Top sản phẩm nổi bật</h2>
+          <h2 className="text-xl font-bold mb-4">Top sản phẩm nổi bật tháng này</h2>
           <table className="min-w-full bg-white border border-gray-200">
             <thead>
               <tr>
@@ -255,19 +359,19 @@ const Dashboard = () => {
                 <th className="py-2 px-4 font-semibold border-b">Tên món ăn</th>
                 <th className="py-2 px-4 font-semibold border-b">Số lượng bán được</th>
                 <th className="py-2 px-4 font-semibold border-b">Doanh thu</th>
-                <th className="py-2 px-4 font-semibold border-b">Thông tin khác</th>
+                {/* <th className="py-2 px-4 font-semibold border-b">Thông tin khác</th> */}
               </tr>
             </thead>
             <tbody>
-              {topProducts.map((product, index) => (
+              {top5Products.map((product, index) => (
                 <tr key={index} className="text-center">
                   <td className="py-2 px-4 border-b justify-center flex"><img className='w-16 h-16' src={product.photo} alt="" /></td>
-                  <td className="py-2 px-4 border-b">{product.nameStore}</td>
-                  <td className="py-2 px-4 border-b">{product.quantity}</td>
-                  <td className="py-2 px-4 border-b">{product.revenue}</td>
-                  <td className="py-2 px-4 border-b">
+                  <td className="py-2 px-4 border-b">{product.name}</td>
+                  <td className="py-2 px-4 border-b">{product.totalSold}</td>
+                  <td className="py-2 px-4 border-b">{(product.price*product.totalSold).toLocaleString()} VNĐ</td>
+                  {/* <td className="py-2 px-4 border-b">
                     <button className="text-blue-600 hover:underline">...</button>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>
