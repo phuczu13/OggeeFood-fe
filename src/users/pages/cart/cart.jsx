@@ -264,7 +264,7 @@ const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
                         </div>
                       </div>
                       <div className="flex flex-col sm:flex-row items-center sm:mr-10">
-                        <div className="flex items-center justify-between w-full sm:w-[150px] px-2">
+                        <div className="flex items-center justify-between w-full max-w-[150px] px-2">
                           <button 
                             className='border-2 flex justify-center text-center items-center rounded-full h-6 w-6 border-[#ff7e00]' 
                             onClick={() => handleQuantityChange(store.storeId, item.productId._id, 'decrease')}>
@@ -279,7 +279,7 @@ const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
                             <img src={IconPlus} alt="plus" />
                           </button>
                         </div>
-                        <div className="text-lg font-semibold text-[#ff7e00] max-w-[150px] w-full">
+                        <div className="text-lg font-semibold text-[#ff7e00] flex max-w-[150px] justify-center w-full">
                           {(item.price * item.quantity).toLocaleString()} VND
                         </div>
                         <button
