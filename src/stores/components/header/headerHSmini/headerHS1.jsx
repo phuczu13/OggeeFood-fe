@@ -168,17 +168,17 @@ function HeaderHS1() {
                             <li>
                                 <Link to="/doanhthu" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
                                     <div className='flex items-center justify-between'>
-                                        Doanh thu <span><img src={IconNext} alt="" /></span>
+                                        Tài chính <span><img src={IconNext} alt="" /></span>
                                     </div>
                                 </Link>
                             </li>
-                            <li>
+                            {/* <li>
                                 <Link to="/transaction-history" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
                                     <div className='flex items-center justify-between'>
                                         Lịch sử giao dịch <span><img src={IconNext} alt="" /></span>
                                     </div>
                                 </Link>
-                            </li>
+                            </li> */}
                             <li>
                                 <button
                                     onClick={handleLogout}

@@ -113,8 +113,6 @@ const handleQuantityChange = (storeId, productId, action) => {
     setCartItems(newCartItems); // Update the UI immediately
 };
 
-
-
   const handleSelectAllItems = () => {
     const newSelection = new Set();
     if (selectedItems.size === totalItems) {
@@ -187,14 +185,6 @@ const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
     ) || 0),
   0
 );
-
-  // if (loading) {
-  //   return <p>Loading...</p>;
-  // }
-
-  // if (error) {
-  //   return <p>Error: {error}</p>;
-  // }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F5F5]">
