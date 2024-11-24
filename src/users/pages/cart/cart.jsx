@@ -264,7 +264,7 @@ const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
                         </div>
                       </div>
                       <div className="flex flex-col sm:flex-row items-center sm:mr-10 w-full">
-                        <div className="flex items-center justify-between w-[100px] px-2">
+                        <div className="flex items-center justify-between w-[100px]">
                           <button 
                             className='border-2 flex justify-center text-center items-center rounded-full h-6 w-6 border-[#ff7e00]' 
                             onClick={() => handleQuantityChange(store.storeId, item.productId._id, 'decrease')}>
