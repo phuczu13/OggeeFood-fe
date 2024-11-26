@@ -19,7 +19,7 @@ function Payment() {
   const [paymentMethod, setPaymentMethod] = useState('Payment');
   const [orderItems, setOrderItems] = useState([]);
   const [userData, setUserData] = useState(null);
-  const [signature, setSignature] = useState('')
+  const [signature, setSignature] = useState(null)
   const navigate = useNavigate();
 
   const userId = localStorage.getItem('userId');
@@ -29,15 +29,19 @@ function Payment() {
     const getSignature = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`https://be-order-food.vercel.app/api/payment/wallet/${userId}`)
-        setSignature(response.data.signature);
+        const response = await axios.get(`https://be-order-food.vercel.app/api/payment/wallet/${userId}`);
+        setSignature(response.data.signature); // Nếu có signature, lưu vào state
       } catch (err) {
-        setError(err.message || 'Failed to fetch signature');
+        if (err.response && err.response.status === 404) {
+          setSignature(null); // Nếu lỗi 404, đặt signature là null
+        } else {
+          setError(err.message || 'Failed to fetch signature'); // Xử lý lỗi khác
+        }
       } finally {
         setLoading(false);
       }
     };
-
+  
     getSignature();
   }, [userId]);
   console.log("chu ky:" + signature)
