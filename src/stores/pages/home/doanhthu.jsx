@@ -4,13 +4,22 @@ import axios from 'axios';
 import { Button, Modal } from 'antd';
 import toast from 'react-hot-toast';
 function DoanhThu() {
-    const [totalRevenue, setData] = useState(null)
+    const [totalRevenue, settotalRevenue] = useState(null)
     const [currentPage, setCurrentPage] = useState(1);
+    const [data, setData] = useState(1);
+
     const itemsPerPage = 5;
     const storeId = localStorage.getItem('storeId')
+    const fetchsettotalRevenue = async () => {
+        const response = await axios.get(`https://be-order-food.vercel.app/api/order/store-revenue/${storeId}`);
+        settotalRevenue(response.data.balance); // Assuming the API returns products in 'data'
+    }
+    useEffect(() => {
+        fetchsettotalRevenue()
+    }, [])
     const fetchData = async () => {
         const response = await axios.get(`https://be-order-food.vercel.app/api/order/store-revenue/${storeId}`);
-        setData(response.data.balance); // Assuming the API returns products in 'data'
+        setData(response.data); // Assuming the API returns products in 'data'
     }
     useEffect(() => {
         fetchData()
