@@ -4,18 +4,17 @@ import axios from 'axios';
 import { Button, Modal } from 'antd';
 import toast from 'react-hot-toast';
 function DoanhThu() {
-    const [data, setData] = useState([])
+    const [totalRevenue, setData] = useState(null)
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
     const storeId = localStorage.getItem('storeId')
     const fetchData = async () => {
         const response = await axios.get(`https://be-order-food.vercel.app/api/order/store-revenue/${storeId}`);
-        setData(response.data); // Assuming the API returns products in 'data'
+        setData(response.data.balance); // Assuming the API returns products in 'data'
     }
     useEffect(() => {
         fetchData()
     }, [])
-    const totalRevenue = data.balance;
     const [email, setEmail] = useState('');
     const [amount, setAmount] = useState('');
 
