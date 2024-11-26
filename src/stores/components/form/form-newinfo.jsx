@@ -33,7 +33,7 @@ function FormNewInfo() {
     };
 
     try {
-      const response = await fetch('https://be-order-food.vercel.app/api/store/update-store-info', {
+      const response = await fetch(`https://be-order-food.vercel.app/api/store/update-store-info/${storeId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
