@@ -11,14 +11,14 @@ function DoanhThu() {
     const itemsPerPage = 5;
     const storeId = localStorage.getItem('storeId')
     const fetchsettotalRevenue = async () => {
-        const response = await axios.get(`http://localhost:3002/api/order/store-revenue/${storeId}`);
+        const response = await axios.get(`https://be-order-food.vercel.app/api/order/store-revenue/${storeId}`);
         settotalRevenue(response.data.balance); // Assuming the API returns products in 'data'
     }
     useEffect(() => {
         fetchsettotalRevenue()
     }, [])
     const fetchData = async () => {
-        const response = await axios.get(`http://localhost:3002/api/order/store-revenueex/${storeId}`);
+        const response = await axios.get(`https://be-order-food.vercel.app/api/order/store-revenueex/${storeId}`);
         setData(response.data); // Assuming the API returns products in 'data'
     }
     useEffect(() => {
