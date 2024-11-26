@@ -15,7 +15,7 @@ function DoanhThu() {
     useEffect(() => {
         fetchData()
     }, [])
-    let totalRevenue = data.reduce((sum, item) => sum + item.storeRevenue, 0);
+    const totalRevenue = data.balance;
     const [email, setEmail] = useState('');
     const [amount, setAmount] = useState('');
 
@@ -44,16 +44,16 @@ function DoanhThu() {
         console.log("email: "+email )
         console.log("amount: "+amount )
         //Rút tiền
-        const rs = axios.post('https://be-order-food.vercel.app/api/payment/with-draw',
-            {email: email,
-            currency: 'VND',
-            amount : amount}
-        )
-        if(rs.data === 200){
-            totalRevenue = totalRevenue - amount
-            toast.success('Rút tiền thành công')
-        }else{
-            toast.error('Có lỗi xảy ra')
+        try{
+            const rs = axios.post('https://be-order-food.vercel.app/api/payment/with-draw',
+                {email: email,
+                currency: 'VND',
+                amount : amount}
+            )
+                axios.put(`https://be-order-food.vercel.app/api/store/update-balance/${storeId}`,amount)
+                toast.success('Rút tiền thành công')
+        }catch{
+            toast.error('Lỗi')
         }
         setIsModalOpen(false);
     };
