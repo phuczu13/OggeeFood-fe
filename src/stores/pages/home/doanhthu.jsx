@@ -6,24 +6,25 @@ import toast from 'react-hot-toast';
 function DoanhThu() {
     const [totalRevenue, settotalRevenue] = useState(null)
     const [currentPage, setCurrentPage] = useState(1);
-    const [data, setData] = useState(1);
+    const [data, setData] = useState([]);
 
     const itemsPerPage = 5;
     const storeId = localStorage.getItem('storeId')
     const fetchsettotalRevenue = async () => {
-        const response = await axios.get(`https://be-order-food.vercel.app/api/order/store-revenue/${storeId}`);
+        const response = await axios.get(`http://localhost:3002/api/order/store-revenue/${storeId}`);
         settotalRevenue(response.data.balance); // Assuming the API returns products in 'data'
     }
     useEffect(() => {
         fetchsettotalRevenue()
     }, [])
     const fetchData = async () => {
-        const response = await axios.get(`https://be-order-food.vercel.app/api/order/store-revenueex/${storeId}`);
+        const response = await axios.get(`http://localhost:3002/api/order/store-revenueex/${storeId}`);
         setData(response.data); // Assuming the API returns products in 'data'
     }
     useEffect(() => {
         fetchData()
     }, [])
+
     const [email, setEmail] = useState('');
     const [amount, setAmount] = useState('');
 
@@ -82,7 +83,7 @@ function DoanhThu() {
                             <h1 class="text-xl font-bold pl-10">Tài Chính</h1>
                             <p class="mt-2 pl-20">Tổng số dư:</p>
                             <div class="flex items-center justify-between mt-2">
-                                <p class="text-lg font-semibold pl-24">{totalRevenue.toLocaleString()} VNĐ</p>
+                                <p class="text-lg font-semibold pl-24">{totalRevenue?.toLocaleString()} VNĐ</p>
                                 <button onClick={showModal} class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                                     Rút tiền
                                 </button>
@@ -111,7 +112,7 @@ function DoanhThu() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {currentData.map((item, index) => (
+                                        {currentData?.map((item, index) => (
                                             <tr key={index} className={index % 2 === 0 ? "" : "bg-gray-50"}>
                                                 <td className="border border-gray-200 px-4 py-2">{item.orderId}</td>
                                                 <td className="border border-gray-200 px-4 py-2 text-right">
