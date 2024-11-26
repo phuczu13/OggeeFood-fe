@@ -46,7 +46,7 @@ const CallbackPageStore = () => {
                              
                              // Kiểm tra xem tài xế có thông tin đầy đủ không
                              const requiredFields = [
-                                 'storeName', 'email', 'avatar', 'phoneNumber', 'storeAddress', 'openingTime', 'closingTime','storeStatus'
+                                 'storeName', 'email', 'avatar', 'phoneNumber', 'storeAddress', 'openingTime', 'closingTime'
                              ];
 
                              // Kiểm tra các trường cần thiết
