@@ -9,8 +9,11 @@ function ListOrder() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [confirmationAction, setConfirmationAction] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
-  const [reorderConfirmation, setReorderConfirmation] = useState(null); 
+  const [reorderConfirmation, setReorderConfirmation] = useState(null);
   const [rebuyConfirmation, setRebuyConfirmation] = useState(false);
+  const [isLoading, setLoading] = useState(false)
+  const [isError, setError] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -18,20 +21,44 @@ function ListOrder() {
   const [showRatingModal, setShowRatingModal] = useState(false);
 
   const ratingRef = useRef(null);
-  const confirmationRef = useRef(null);  
-  const detailRef = useRef(null);  
-  const reorderConfirmationRef = useRef(null);  
+  const confirmationRef = useRef(null);
+  const detailRef = useRef(null);
+  const reorderConfirmationRef = useRef(null);
   const rebuyConfirmationRef = useRef(null);
-  const [ratedOrders, setRatedOrders] = useState({}); 
+  const [ratedOrders, setRatedOrders] = useState({});
 
   const filteredOrders = orders.filter(order => {
     if (activeTab === 'Chờ lấy hàng1') {
-      return ['Cửa hàng xác nhận', 'Đang tìm tài xế', 'Đã tìm thấy tài xế','Chờ lấy hàng'].includes(order.status);
+      return ['Cửa hàng xác nhận', 'Đang tìm tài xế', 'Đã tìm thấy tài xế', 'Chờ lấy hàng'].includes(order.status);
     }
     return order.status === activeTab;
   });
   const userId = localStorage.getItem('userId');
+  const handleCancelRefund = async (orderId) => {
+    try {
+      const res = await axios.post(`https://be-order-food.vercel.app/api/payment/refund-money/${orderId}`);
+      setLoading(true);
+      if (res.status === 200) {
+        toast.success("Hủy đơn hàng thành công!");
+        setLoading(false);
+      } else {
+        toast.error("Có lỗi xảy ra!");
+        setError(true);
+      }
+    } catch (error) {
+      toast.error("Có lỗi xảy ra!");
+      setError(true);
+      setLoading(false);
+    }
+  };
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   useEffect(() => {
     const fetchOrderInfo = async () => {
       try {
@@ -46,7 +73,7 @@ function ListOrder() {
       fetchOrderInfo();
     }
   }, [userId]);
- 
+
 
   const handleShowDetail = (order) => {
     setSelectedOrder(order);
@@ -58,11 +85,11 @@ function ListOrder() {
     setConfirmationAction('cancel');
     try {
       const response = await axios.put(`https://be-order-food.vercel.app/api/order/orders/${order._id}/cancel`);
-      console.log(response.data.message); 
+      console.log(response.data.message);
       const updatedOrdersResponse = await axios.get(`https://be-order-food.vercel.app/api/order/get-order/${userId}`);
       setOrders(updatedOrdersResponse.data);
     } catch (error) {
-        console.error(error.response ? error.response.data.error : 'An error occurred while canceling the order.');
+      console.error(error.response ? error.response.data.error : 'An error occurred while canceling the order.');
     }
   };
 
@@ -86,10 +113,10 @@ function ListOrder() {
   const handleRebuy = (order) => {
     setSelectedOrder(order);
     setReorderConfirmation(false);
-    setConfirmationAction(null); 
-    setRebuyConfirmation(true); 
+    setConfirmationAction(null);
+    setRebuyConfirmation(true);
   };
-  
+
   const confirmRebuy = () => {
     setOrders(prevOrders =>
       prevOrders.map(order =>
@@ -98,10 +125,10 @@ function ListOrder() {
     );
     setRebuyConfirmation(false);
     setSelectedOrder(null);
-  
+
     toast.success("Mua lại đơn hàng thành công!");
   };
-  
+
 
   const confirmReorder = () => {
     setOrders(prevOrders =>
@@ -126,8 +153,8 @@ function ListOrder() {
     if (reorderConfirmationRef.current && !reorderConfirmationRef.current.contains(event.target)) {
       setReorderConfirmation(false);
     }
-    if (rebuyConfirmationRef.current && !rebuyConfirmationRef.current.contains(event.target)) { 
-      setRebuyConfirmation(false); 
+    if (rebuyConfirmationRef.current && !rebuyConfirmationRef.current.contains(event.target)) {
+      setRebuyConfirmation(false);
     }
     if (ratingRef.current && !ratingRef.current.contains(event.target)) { // Add this condition
       setShowRatingModal(false);
@@ -143,42 +170,42 @@ function ListOrder() {
 
   // Hàm form rating
   const handleRating = (order) => {
-  setSelectedOrder(order);
-  setRating(0);
-  setComment('');
-  setImages([]);
-  setShowRatingModal(true);
+    setSelectedOrder(order);
+    setRating(0);
+    setComment('');
+    setImages([]);
+    setShowRatingModal(true);
   };
 
   const handleStarClick = (productId, star) => {
     setRating((prev) => ({ ...prev, [productId]: star })); // Cập nhật đánh giá cho sản phẩm
   };
-  
+
   const handleCommentChange = (e, productId) => {
     setComment((prev) => ({ ...prev, [productId]: e.target.value })); // Lưu bình luận cho sản phẩm
   };
-  
+
   const handleImageChange = (e, productId) => {
     const files = Array.from(e.target.files);
     setImages((prev) => ({ ...prev, [productId]: files })); // Lưu hình ảnh cho sản phẩm
   };
-  
+
   const handleRatingSubmit = async () => {
     const promises = selectedOrder.cart.map(async (product) => {
       const productRating = rating[product.productId];
       const productComment = comment[product.productId];
       const productImages = images[product.productId] || [];
-  
+
       console.log('Product ID:', product.productId); // In ID sản phẩm
       console.log('Rating:', productRating); // In giá trị rating
       console.log('Comment:', productComment); // In giá trị comment
       console.log('Images:', productImages); // In giá trị images
-  
+
       if (!productRating) {
         toast.warning(`Bạn cần đánh giá ít nhất 1 sao cho sản phẩm ${product.name}!`);
         return;
       }
-  
+
       const formData = new FormData();
       formData.append('orderId', selectedOrder._id);
       formData.append('productId', product.productId); // Lưu ID sản phẩm
@@ -186,14 +213,14 @@ function ListOrder() {
       formData.append('rating', productRating);
       formData.append('comment', productComment);
       productImages.forEach(image => formData.append('images', image));
-  
+
       try {
         const response = await axios.post('https://be-order-food.vercel.app/api/rating/add', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
-  
+
         if (response.status === 201) {
           await axios.put(`https://be-order-food.vercel.app/api/order/${selectedOrder._id}/rate`, {
             hasRated: true
@@ -205,15 +232,16 @@ function ListOrder() {
         console.error(error);
       }
     });
-  
+
     await Promise.all(promises);
     setShowRatingModal(false);
     setRating({});
     setComment({});
     setImages({});
   };
-  
-  
+
+  if (isLoading) return 'Loading...'
+  if (isError) return 'Error....'
 
   return (
     <div className="max-w-[1200px] mx-auto p-4">
@@ -267,10 +295,38 @@ function ListOrder() {
                 <>
                   <button
                     className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                    onClick={() => handleConfirmCancel(order)}
+                    onClick={openModal}
                   >
                     Hủy đơn
                   </button>
+                  {/* Modal xác nhận */}
+                  {isModalOpen && (
+                    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+                      <div className="bg-white p-6 rounded shadow-lg max-w-sm w-full">
+                        <h3 className="text-lg font-semibold">Bạn muốn hủy đơn này không?</h3>
+                        <p className="mt-2 text-sm">Nếu hủy, bạn sẽ được hoàn tiền.</p>
+                        <div className="mt-4 flex justify-end space-x-2">
+                          {/* Nút Cancel */}
+                          <button
+                            onClick={closeModal}
+                            className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+                          >
+                            Hủy
+                          </button>
+                          {/* Nút Xác nhận */}
+                          <button
+                            onClick={() => {
+                              handleCancelRefund(order._id);
+                              closeModal(); // Đóng modal sau khi hủy
+                            }}
+                            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                          >
+                            Xác nhận
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   <button
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                     onClick={() => handleShowDetail(order)}
@@ -438,85 +494,85 @@ function ListOrder() {
 
 
       {reorderConfirmation && selectedOrder && (
-      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-        <div className="bg-white rounded-lg p-6" ref={reorderConfirmationRef}>
-          <h2 className="text-lg font-semibold mb-2 text-center">Xác nhận đặt lại đơn hàng</h2>
-          <p className="text-center">
-            Bạn có chắc chắn muốn đặt lại đơn hàng <span className="font-bold">{selectedOrder._id}</span>?
-          </p>
-          <div className="flex justify-center gap-4 mt-5">
-            <button
-              className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
-              onClick={() => setReorderConfirmation(null)}
-            >
-              Đóng
-            </button>
-            <button
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-              onClick={confirmReorder}
-            >
-              Đặt hàng
-            </button>
-          </div>
-        </div>
-      </div>
-    )}
-    
-    {showRatingModal && selectedOrder && (
-      <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-        <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full" ref={ratingRef}>
-          <h2 className="text-lg font-semibold mb-4 text-center">Đánh giá đơn hàng</h2>
-          
-          {selectedOrder.cart.map((product, index) => (
-            <div key={product.productId} className="mb-4">
-              <h3 className="font-semibold">{product.name}</h3>
-              <div className="flex justify-center gap-1 mb-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <span
-                    key={star}
-                    className={`cursor-pointer text-2xl ${rating[product.productId] >= star ? 'text-yellow-500' : 'text-gray-400'}`}
-                    onClick={() => handleStarClick(product.productId, star)} // Gọi hàm với ID sản phẩm
-                  >
-                    ★
-                  </span>
-                ))}
-              </div>
-
-              <textarea
-                className="w-full border rounded p-2 mb-2 h-16 resize-none"
-                placeholder="Đánh giá về sản phẩm này"
-                value={comment[product.productId] || ''} // Lưu trữ bình luận cho sản phẩm
-                onChange={(e) => handleCommentChange(e, product.productId)} // Gọi hàm với ID sản phẩm
-              />
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={(e) => handleImageChange(e, product.productId)} // Gọi hàm với ID sản phẩm
-                className="mb-2 border rounded p-2"
-              />
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white rounded-lg p-6" ref={reorderConfirmationRef}>
+            <h2 className="text-lg font-semibold mb-2 text-center">Xác nhận đặt lại đơn hàng</h2>
+            <p className="text-center">
+              Bạn có chắc chắn muốn đặt lại đơn hàng <span className="font-bold">{selectedOrder._id}</span>?
+            </p>
+            <div className="flex justify-center gap-4 mt-5">
+              <button
+                className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+                onClick={() => setReorderConfirmation(null)}
+              >
+                Đóng
+              </button>
+              <button
+                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                onClick={confirmReorder}
+              >
+                Đặt hàng
+              </button>
             </div>
-          ))}
-
-          <div className="flex justify-between mt-4">
-            <button
-              className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 transition"
-              onClick={() => setShowRatingModal(false)}
-            >
-              Đóng
-            </button>
-            <button
-              className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
-              onClick={handleRatingSubmit}
-            >
-              Đánh giá
-            </button>
           </div>
         </div>
-      </div>
-    )}
+      )}
 
-    
+      {showRatingModal && selectedOrder && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full" ref={ratingRef}>
+            <h2 className="text-lg font-semibold mb-4 text-center">Đánh giá đơn hàng</h2>
+
+            {selectedOrder.cart.map((product, index) => (
+              <div key={product.productId} className="mb-4">
+                <h3 className="font-semibold">{product.name}</h3>
+                <div className="flex justify-center gap-1 mb-2">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      className={`cursor-pointer text-2xl ${rating[product.productId] >= star ? 'text-yellow-500' : 'text-gray-400'}`}
+                      onClick={() => handleStarClick(product.productId, star)} // Gọi hàm với ID sản phẩm
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+
+                <textarea
+                  className="w-full border rounded p-2 mb-2 h-16 resize-none"
+                  placeholder="Đánh giá về sản phẩm này"
+                  value={comment[product.productId] || ''} // Lưu trữ bình luận cho sản phẩm
+                  onChange={(e) => handleCommentChange(e, product.productId)} // Gọi hàm với ID sản phẩm
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={(e) => handleImageChange(e, product.productId)} // Gọi hàm với ID sản phẩm
+                  className="mb-2 border rounded p-2"
+                />
+              </div>
+            ))}
+
+            <div className="flex justify-between mt-4">
+              <button
+                className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400 transition"
+                onClick={() => setShowRatingModal(false)}
+              >
+                Đóng
+              </button>
+              <button
+                className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+                onClick={handleRatingSubmit}
+              >
+                Đánh giá
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
     </div>
   );
 }

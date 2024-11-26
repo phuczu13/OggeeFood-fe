@@ -19,10 +19,29 @@ function Payment() {
   const [paymentMethod, setPaymentMethod] = useState('Payment');
   const [orderItems, setOrderItems] = useState([]);
   const [userData, setUserData] = useState(null);
+  const [signature, setSignature] = useState('')
   const navigate = useNavigate();
 
   const userId = localStorage.getItem('userId');
-    // Fetch user information
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const getSignature = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`https://be-order-food.vercel.app/api/payment/wallet/${userId}`)
+        setSignature(response.data.signature);
+      } catch (err) {
+        setError(err.message || 'Failed to fetch signature');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getSignature();
+  }, [userId]);
+  console.log("chu ky:" + signature)
+  // Fetch user information
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -43,8 +62,8 @@ function Payment() {
     }
   }, [userId]);
 
-   // Fetch order items from local storage
-   useEffect(() => {
+  // Fetch order items from local storage
+  useEffect(() => {
     const items = JSON.parse(localStorage.getItem('selectedItems')) || [];
     setCartInfo(items.map(item => ({
       productId: item.productId._id,
@@ -56,8 +75,8 @@ function Payment() {
     })));
   }, []);
 
-   // Fetch order items from local storage
-   useEffect(() => {
+  // Fetch order items from local storage
+  useEffect(() => {
     const items = JSON.parse(localStorage.getItem('selectedItems')) || [];
     setOrderInfo(items.map(item => ({
       name: item.name,
@@ -75,7 +94,7 @@ function Payment() {
 
       const cartItems = JSON.parse(localStorage.getItem('selectedItems')) || [];
       const storeId = cartItems[0]?.storeId;
-      
+
       const orderData = {
         customerId: userId,
         cart: cartInfo,
@@ -93,12 +112,12 @@ function Payment() {
         const orderId = response.data.data._id;
         if (paymentMethod === 'Pointer') {
           const data = {
-            amount: grandTotal, 
-            currency: 'VND', 
-            message: `Thanh toán đơn hàng ${orderId}`, 
-            userID: userId, 
+            amount: grandTotal,
+            currency: 'VND',
+            message: `Thanh toán đơn hàng ${orderId}`,
+            userID: userId,
             orderID: orderId,
-            returnUrl: `https://oggee-food-fe.vercel.app/payment-status/${orderId}`, 
+            returnUrl: `https://oggee-food-fe.vercel.app/payment-status/${orderId}`,
             orders: orderInfo,
           };
           try {
@@ -107,7 +126,38 @@ function Payment() {
           } catch (error) {
             console.error('Error creating payment:', error);
           }
-        } else {
+        } else if (paymentMethod === 'Ví Pointer') {
+          // Kiểm tra signature trước khi thực hiện thanh toán
+          if (!signature) {
+            toast.error("Bạn chưa liên kết ví");
+            return;
+          }
+          const data = {
+            signature: signature,
+            amount: grandTotal,
+            currency: 'VND',
+            message: `Thanh toán đơn hàng ${orderId}`,
+            userID: userId,
+            orderID: orderId,
+            providerID: storeId,
+            returnUrl: `https://oggee-food-fe.vercel.app/payment-status/${orderId}`,
+            orders: orderInfo,
+          };
+          try {
+            const response = await axios.post('https://be-order-food.vercel.app/api/payment/pay-with-connect-wallet', data);
+            console.log('Payment Response:', response); // Xem toàn bộ phản hồi từ API
+            if (response.status === 200) {
+              console.log('Navigating to payment status page...');
+              navigate(`/payment-status/${orderId}`);
+              toast.success("Thanh toán thành công")
+            } else {
+              toast.error("Có lỗi xảy ra")
+            }
+          } catch (error) {
+            console.error('Error creating payment:', error);
+          }
+        }
+        else {
           navigate('/home-page');
         }
       }
@@ -147,7 +197,8 @@ function Payment() {
     (total, store) => total + store.storeTotal + shippingCost,
     0
   );
-
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
   return (
     <div className="">
       <ToastContainer />
@@ -264,6 +315,7 @@ function Payment() {
             >
               <option value="COD">Tiền mặt</option>
               <option value="Pointer">Pointer</option>
+              <option value="Ví Pointer">Ví Pointer</option>
             </select>
           </div>
 

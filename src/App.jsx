@@ -73,6 +73,7 @@ import Home from './admin/pages/dashboard/home';
 import Store from './admin/pages/dashboard/store';
 import Driver from './admin/pages/dashboard/driver';
 import Revenue from './admin/pages/dashboard/revenue';
+import PointerWalletUser from './users/connect-wallet/pointer-wallet';
 
 
 
@@ -117,6 +118,8 @@ function App() {
             < Route path='sign-up' element={<SignUp/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
+            < Route path='pointer-wallet-user' element={<PointerWalletUser/>} />
+
 
             ---------------------------------------------------------------------------------
             ////Flow Store

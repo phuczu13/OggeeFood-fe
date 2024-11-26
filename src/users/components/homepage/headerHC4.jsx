@@ -222,6 +222,13 @@ function HeaderHC4() {
                                 </Link>
                             </li>
                             <li>
+                                <Link to="/pointer-wallet-user" className="block px-4 py-2 text-gray-800 hover:bg-gray-200">
+                                    <div className='flex items-center justify-between'>
+                                        Ví Pointer <span><img src={IconNext} alt="" /></span>
+                                    </div>
+                                </Link>
+                            </li>
+                            <li>
                                 <button
                                     onClick={handleLogout}
                                     className="block px-4 w-full py-2 text-gray-800 hover:bg-gray-200"

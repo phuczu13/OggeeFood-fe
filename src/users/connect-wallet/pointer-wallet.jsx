@@ -1,9 +1,10 @@
 import React from 'react';
-import HeaderHS5 from '../../components/header/headerHSmini/headerHS5';
 import axios from 'axios';
+import HeaderHC3 from '../components/homepage/headerHC3';
+import HeaderHC4 from '../components/homepage/headerHC4';
 
-function PointerWallet() {
-    const userId = localStorage.getItem('storeId')
+function PointerWalletUser() {
+    const userId = localStorage.getItem('userId')
     // const [accWallet, setAccWallet] = useState([]);
     // Dữ liệu giả
     const wallets = [
@@ -32,14 +33,14 @@ function PointerWallet() {
             balance: '2.000.000'
         }
     ];
-    const returnUrl = encodeURIComponent('https://oggee-food-fe.vercel.app/pointer-wallet');
+    const returnUrl = encodeURIComponent('https://oggee-food-fe.vercel.app/pointer-wallet-user');
     const handleConnect = () =>{
         window.location.href = `https://wallet.pointer.io.vn/connect-app?partnerId=66a78d1bc49d6f5b6a59e303&returnUrl=${returnUrl}&userId=${userId}`; // Chuyển hướng đến trang liên kết
     }
     return (
         <div className="bg-[#ffffff] w-full h-screen">
             <div className="mb-5">
-                <HeaderHS5 />
+                <HeaderHC4 />
             </div>
             <div className="px-5">
                 <h2 className="text-xl font-bold mb-4">Danh sách ví</h2>
@@ -79,4 +80,4 @@ function PointerWallet() {
     );
 }
 
-export default PointerWallet;
+export default PointerWalletUser;
