@@ -57,7 +57,7 @@ const CallbackPageStore = () => {
                                  navigate('/home-store', { state: { storeId } });
                              } else {
                                  // Nếu thiếu thông tin, chuyển đến trang register-driver
-                                 navigate('/infor-newstore');
+                                 navigate('/infor-newstore', { state: { storeId } });
                              }
                          })
                          .catch(error => {
