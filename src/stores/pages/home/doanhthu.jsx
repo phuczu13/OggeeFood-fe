@@ -49,20 +49,26 @@ function DoanhThu() {
         setIsModalOpen(true);
     };
 
-    const handleOk = () => {
-        console.log("email: "+email )
-        console.log("amount: "+amount )
-        //Rút tiền
-        try{
-            const rs = axios.post('https://be-order-food.vercel.app/api/payment/with-draw',
-                {email: email,
+    const handleOk = async () => {
+        console.log("email: "+email );
+        console.log("amount: "+amount );  // Debug amount
+        try {
+            // Gửi yêu cầu rút tiền
+            const withdrawResponse = await axios.post('https://be-order-food.vercel.app/api/payment/with-draw', {
+                email: email,
                 currency: 'VND',
-                amount : amount}
-            )
-                axios.put(`https://be-order-food.vercel.app/api/store/update-balance/${storeId}`,amount)
-                toast.success('Rút tiền thành công')
-        }catch{
-            toast.error('Lỗi')
+                amount: amount,  // Kiểm tra xem amount có đúng không
+            });
+    
+            // Cập nhật số dư cửa hàng
+            const updateBalanceResponse = await axios.put(`https://be-order-food.vercel.app/api/store/update-balance/${storeId}`, { amount: amount });
+            console.log(updateBalanceResponse);  // Xem phản hồi từ API
+    
+            fetchsettotalRevenue();
+            toast.success('Rút tiền thành công');
+        } catch (error) {
+            console.error(error);  // Kiểm tra lỗi
+            toast.error('Lỗi');
         }
         setIsModalOpen(false);
     };
