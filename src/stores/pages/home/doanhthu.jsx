@@ -26,7 +26,7 @@ function DoanhThu() {
     }, [])
 
     const [email, setEmail] = useState('');
-    const [amount, setAmount] = useState('');
+    const [amount, setAmount] = useState();
 
     // Tính toán dữ liệu phân trang
     const indexOfLastItem = currentPage * itemsPerPage;
