@@ -90,11 +90,11 @@ function DoanhThu() {
                                 <Modal title="Bạn muốn rút tiền?" centered open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                                     <div>
                                     <label htmlFor="">Nhập email: </label>
-                                    <input onChange={(e)=>setEmail(e.target.value)} value={email} type="email" placeholder='abc@gmail.com' className='border ml-6 px-5 py-1'/>
+                                    <input onChange={(e)=>setEmail(e.target.value)} type="email" placeholder='abc@gmail.com' className='border ml-6 px-5 py-1'/>
                                     </div>
                                     <div className='mt-4'>
                                     <label htmlFor="">Nhập số tiền muốn rút: </label>
-                                    <input onChange={(e)=>setAmount(e.target.value)} value={amount} type="text" placeholder='100.000 VND' className='border ml-6 px-5 py-1'/>
+                                    <input onChange={(e)=>setAmount(e.target.value)} type="text" placeholder='100.000 VND' className='border ml-6 px-5 py-1'/>
                                     </div>
                                 </Modal>
                             </div>
