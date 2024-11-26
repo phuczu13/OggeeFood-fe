@@ -18,7 +18,7 @@ function DoanhThu() {
         fetchsettotalRevenue()
     }, [])
     const fetchData = async () => {
-        const response = await axios.get(`https://be-order-food.vercel.app/api/order/store-revenue/${storeId}`);
+        const response = await axios.get(`https://be-order-food.vercel.app/api/order/store-revenueex/${storeId}`);
         setData(response.data); // Assuming the API returns products in 'data'
     }
     useEffect(() => {
@@ -174,54 +174,6 @@ function DoanhThu() {
                                     <p class="text-gray-500 text-sm">2024-11-22 16:00:33</p>
                                 </div>
                                 <p class="text-red-500 font-bold">-40,000</p>
-                            </div>
-                            <div class="flex items-center">
-                                <img
-                                    src="https://via.placeholder.com/40"
-                                    alt="Logo giao dịch"
-                                    class="w-10 h-10 rounded-full mr-4"
-                                />
-                                <div class="flex-1">
-                                    <p class="font-semibold">Rút tiền về ví</p>
-                                    <p class="text-gray-500 text-sm">2024-11-22 14:32:42</p>
-                                </div>
-                                <p class="text-red-500 font-bold">-35,000</p>
-                            </div>
-                            <div class="flex items-center">
-                                <img
-                                    src="https://via.placeholder.com/40"
-                                    alt="Logo giao dịch"
-                                    class="w-10 h-10 rounded-full mr-4"
-                                />
-                                <div class="flex-1">
-                                    <p class="font-semibold">Rút tiền về ví</p>
-                                    <p class="text-gray-500 text-sm">2024-11-20 18:45:39</p>
-                                </div>
-                                <p class="text-red-500 font-bold">-35,000</p>
-                            </div>
-                            <div class="flex items-center">
-                                <img
-                                    src="https://via.placeholder.com/40"
-                                    alt="Logo giao dịch"
-                                    class="w-10 h-10 rounded-full mr-4"
-                                />
-                                <div class="flex-1">
-                                    <p class="font-semibold">Rút tiền về ví</p>
-                                    <p class="text-gray-500 text-sm">2024-11-20 18:05:50</p>
-                                </div>
-                                <p class="text-red-500 font-bold">-35,000</p>
-                            </div>
-                            <div class="flex items-center">
-                                <img
-                                    src="https://via.placeholder.com/40"
-                                    alt="Logo giao dịch"
-                                    class="w-10 h-10 rounded-full mr-4"
-                                />
-                                <div class="flex-1">
-                                    <p class="font-semibold">Rút tiền về ví</p>
-                                    <p class="text-gray-500 text-sm">2024-11-20 17:53:13</p>
-                                </div>
-                                <p class="text-red-500 font-bold">-35,000</p>
                             </div>
                         </div>
                     </div>
