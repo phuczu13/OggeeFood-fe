@@ -41,7 +41,7 @@ function Payment() {
         setLoading(false);
       }
     };
-  
+
     getSignature();
   }, [userId]);
   console.log("chu ky:" + signature)
@@ -319,7 +319,7 @@ function Payment() {
             >
               <option value="COD">Tiền mặt</option>
               <option value="Pointer">Pointer</option>
-              <option value="Ví Pointer">Ví Pointer</option>
+              <option value="Ví Pointer" disabled={!signature}>Ví Pointer</option>
             </select>
           </div>
 
