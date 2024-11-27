@@ -42,15 +42,10 @@ function PointerWalletUser() {
 
     useEffect(() => {
         const fetchAccountData = async () => {
-            try {
-                setLoading(true);
+            setLoading(true);
                 const res = await axios.get(`https://be-order-food.vercel.app/api/payment/account/${userId}`);
                 setAccount(res.data); // Lưu dữ liệu vào state
-            } catch (err) {
-                setError("Không thể tải dữ liệu tài khoản");
-            } finally {
-                setLoading(false);
-            }
+                setLoading(false)
         };
 
         fetchAccountData();
