@@ -33,8 +33,8 @@ function PointerWalletUser() {
         }
     ];
     const [account, setAccount] = useState(null); // Lưu dữ liệu trả về
-    const [loading, setLoading] = useState(true); // Trạng thái loading
-    const [error, setError] = useState(null); // Trạng thái lỗi
+    // const [loading, setLoading] = useState(true); // Trạng thái loading
+    // const [error, setError] = useState(null); // Trạng thái lỗi
     const returnUrl = encodeURIComponent('https://oggee-food-fe.vercel.app/pointer-wallet-user');
     const handleConnect = () => {
         window.location.href = `https://wallet.pointer.io.vn/connect-app?partnerId=66a78d1bc49d6f5b6a59e303&returnUrl=${returnUrl}&userId=${userId}`; // Chuyển hướng đến trang liên kết
@@ -45,14 +45,14 @@ function PointerWalletUser() {
             setLoading(true);
                 const res = await axios.get(`https://be-order-food.vercel.app/api/payment/account/${userId}`);
                 setAccount(res.data); // Lưu dữ liệu vào state
-                setLoading(false)
+                // setLoading(false)
         };
 
         fetchAccountData();
     }, [userId]);
 
-    if (loading) return <CircularProgress />;
-    if (error) return <Alert severity="error">{error}</Alert>;
+    // if (loading) return <CircularProgress />;
+    // if (error) return <Alert severity="error">{error}</Alert>;
      // Chỉ hiển thị 4 ký tự đầu, phần còn lại là dấu *
      const maskedSignature = account?.signature
      ? account.signature.substring(0, 4) + '****' 
