@@ -132,15 +132,21 @@ const handleQuantityChange = (storeId, productId, action) => {
     }
 };
 const handleSelectItem = (storeId, productId) => {
+  console.log(storeId,selectStore)
   const itemKey = `${storeId}-${productId}`;
   const newSelectedItems = new Set(selectedItems);
-  if(selectStore){
-    return
+  if(selectStore != null){
+    if(selectStore != storeId){
+      return
+    }
   }
   setSelecteStore(storeId)
 
   if (newSelectedItems.has(itemKey)) {
     newSelectedItems.delete(itemKey);
+    if(newSelectedItems.size===0){
+      setSelecteStore(null)
+    }
   } else {
     newSelectedItems.add(itemKey);
   }
