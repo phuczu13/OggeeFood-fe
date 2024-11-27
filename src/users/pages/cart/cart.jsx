@@ -13,6 +13,7 @@ function Cart() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true); // Trạng thái loading
   const [selectedItems, setSelectedItems] = useState(new Set());
+  const [selectStore,setSelecteStore] = useState(null);
   const [productToDelete, setProductToDelete] = useState(null);
   const userId = localStorage.getItem('userId');
   const navigate = useNavigate();
@@ -38,7 +39,9 @@ function Cart() {
     }
   };
   
-  
+  const handleSelectStore = (storeId) =>{
+    
+  }
   const deleteProduct = async (storeId, productId) => {
     try {
       console.log( userId, storeId, productId)
@@ -131,6 +134,10 @@ const handleQuantityChange = (storeId, productId, action) => {
 const handleSelectItem = (storeId, productId) => {
   const itemKey = `${storeId}-${productId}`;
   const newSelectedItems = new Set(selectedItems);
+  if(selectStore){
+    return
+  }
+  setSelecteStore(storeId)
 
   if (newSelectedItems.has(itemKey)) {
     newSelectedItems.delete(itemKey);
@@ -185,7 +192,7 @@ const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
     ) || 0),
   0
 );
-
+if(loading) return <p className='flex justify-center items-center h-screen text-orange-500 font-bold text-lg'>Chờ chút nhé :3</p>
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F5F5]">
       <div>
