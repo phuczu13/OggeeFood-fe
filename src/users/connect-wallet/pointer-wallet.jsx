@@ -1,8 +1,7 @@
-import React from 'react';
-import axios from 'axios';
-import HeaderHC3 from '../components/homepage/headerHC3';
 import HeaderHC4 from '../components/homepage/headerHC4';
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Card, CardContent, Typography, CircularProgress, Alert } from "@mui/material";
 function PointerWalletUser() {
     const userId = localStorage.getItem('userId')
     // const [accWallet, setAccWallet] = useState([]);
@@ -33,48 +32,84 @@ function PointerWalletUser() {
             balance: '2.000.000'
         }
     ];
+    const [account, setAccount] = useState(null); // Lưu dữ liệu trả về
+    const [loading, setLoading] = useState(true); // Trạng thái loading
+    const [error, setError] = useState(null); // Trạng thái lỗi
     const returnUrl = encodeURIComponent('https://oggee-food-fe.vercel.app/pointer-wallet-user');
-    const handleConnect = () =>{
+    const handleConnect = () => {
         window.location.href = `https://wallet.pointer.io.vn/connect-app?partnerId=66a78d1bc49d6f5b6a59e303&returnUrl=${returnUrl}&userId=${userId}`; // Chuyển hướng đến trang liên kết
     }
+
+    useEffect(() => {
+        const fetchAccountData = async () => {
+            try {
+                setLoading(true);
+                const res = await axios.get(`https://be-order-food.vercel.app/api/payment/account/${userId}`);
+                setAccount(res.data); // Lưu dữ liệu vào state
+            } catch (err) {
+                setError("Không thể tải dữ liệu tài khoản");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAccountData();
+    }, [userId]);
+
+    if (loading) return <CircularProgress />;
+    if (error) return <Alert severity="error">{error}</Alert>;
+     // Chỉ hiển thị 4 ký tự đầu, phần còn lại là dấu *
+     const maskedSignature = account?.signature
+     ? account.signature.substring(0, 4) + '****' 
+     : 'Không tìm thấy tài khoản';
+
+     const maskedUserId = account?.userId
+     ? account.userId.substring(0, 4) + '****' 
+     : 'Không tìm thấy tài khoản';
+
+     const maskedId = account?._id
+     ? account._id.substring(0, 4) + '****' 
+     : 'Không tìm thấy tài khoản';
     return (
         <div className="bg-[#ffffff] w-full h-screen">
             <div className="mb-5">
                 <HeaderHC4 />
             </div>
             <div className="px-5">
-                <h2 className="text-xl font-bold mb-4">Danh sách ví</h2>
-                <table className="w-full border-collapse">
-                    <thead>
-                        <tr className="bg-orange-500 text-white">
-                            <th className="border border-gray-300 px-4 py-2">Loại ví</th>
-                            <th className="border border-gray-300 px-4 py-2">Số ví</th>
-                            <th className="border border-gray-300 px-4 py-2">Tên chủ ví</th>
-                            <th className="border border-gray-300 px-4 py-2">Số dư</th>
-                            <th className="border border-gray-300 px-4 py-2">Hủy liên kết</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {wallets.map((wallet, index) => (
-                            <tr key={index} className="text-center">
-                                <td className="border border-gray-300 px-4 py-2">{wallet.type}</td>
-                                <td className="border border-gray-300 px-4 py-2">{wallet.walletId}</td>
-                                <td className="border border-gray-300 px-4 py-2">{wallet.owner}</td>
-                                <td className="border border-gray-300 px-4 py-2">{wallet.balance}</td>
-                                <td className="border border-gray-300 px-4 py-2">
-                                    <button className="text-red-500 hover:text-red-700">
-                                        <i className="fas fa-trash-alt"></i> {/* Hoặc thêm icon tùy ý */}
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <div className="mt-4 text-right">
+                <div className="mt-4 center">
+                    <Card sx={{ maxWidth: 400, margin: "20px auto" }}>
+                        <CardContent>
+                            <Typography variant="h5" component="div" gutterBottom>
+                                Chi tiết tài khoản
+                            </Typography>
+                            {account ? (
+                                <ul style={{ listStyleType: "none", padding: 0 }}>
+                                    <li>
+                                        <Typography>
+                                            <strong>Mã tài khoản (_id):</strong> {maskedId}
+                                        </Typography>
+                                    </li>
+                                    <li>
+                                        <Typography>
+                                            <strong>User ID:</strong> {maskedUserId}
+                                        </Typography>
+                                    </li>
+                                    <li>
+                                        <Typography>
+                                            <strong>Chữ ký (Signature):</strong> {maskedSignature}
+                                        </Typography>
+                                    </li>
+                                </ul>
+                            ) : (
+                                <Typography>Không tìm thấy tài khoản</Typography>
+                            )}
+                        </CardContent>
+                    </Card>
                     <button onClick={handleConnect} className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">
                         Liên kết ví mới
                     </button>
                 </div>
+
             </div>
         </div>
     );

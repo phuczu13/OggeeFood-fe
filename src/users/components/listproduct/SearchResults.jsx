@@ -18,14 +18,16 @@ function SearchResults() {
         const query = new URLSearchParams(location.search).get('query');
         const fetchProducts = async () => {
             try {
-                const response = await axios.get(`https://be-order-food.vercel.app/api/product/search?query=${query}`);
-                if (response.data.length === 0) {
-                    setProducts([]);
+                const response = await axios.get(`https://be-order-food.vercel.app/api/product/search?keyword=${query}`);
+                
+                // Kiểm tra kết quả trả về
+                if (response.data.success && response.data.data.length > 0) {
+                    setProducts(response.data.data);  // Lấy dữ liệu sản phẩm từ response.data.data
+                    setLoading(false);
+                } else {
+                    setProducts([]);  // Nếu không có sản phẩm
                     setLoading(false);
                     toast.error("No products found.");
-                } else {
-                    setProducts(response.data);
-                    setLoading(false);
                 }
             } catch (error) {
                 console.error("Error fetching products:", error);
@@ -38,6 +40,7 @@ function SearchResults() {
             fetchProducts();
         }
     }, [location.search]);
+    
     
 
     if (loading) {

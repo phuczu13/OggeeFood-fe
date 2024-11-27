@@ -228,68 +228,69 @@ const totalPrice = (Array.isArray(cartItems) ? cartItems : []).reduce(
           </div>
         ) : (
           <div>
-            <div className="text-xl font-bold mb-4 text-[#ff7e00]">Sản phẩm</div>
+  <div className="text-xl font-bold mb-4 text-[#ff7e00]">Sản phẩm</div>
 
-            {Array.isArray(cartItems) && cartItems.length > 0 ? (
-            cartItems.map((store) => (
-              <div key={store.storeId} className="mt-5 border shadow-sm bg-white p-4">
-                <h2 className="text-lg font-semibold">{store.storeName}</h2>
-                <p className="text-gray-500 mb-2">{store.storeAddress}</p>
-                {Array.isArray(store.items) && store.items.length > 0 ? (
-                  store.items.map((item) => (
-                    <div key={item._id} className="border-b py-4 pr-4 flex items-center justify-between">
-                      <div className="flex items-center p-4">
-                        <input
-                          type="checkbox"
-                          className="mr-5 h-4 w-4"
-                          checked={selectedItems.has(`${store.storeId}-${item._id}`)} // Kiểm tra món đã được chọn hay chưa
-                          onChange={() => handleSelectItem(store.storeId, item._id)} // Thay đổi trạng thái chọn
-                        />
-                        <div className="flex gap-5 items-center">
-                          <img className="w-20 h-20 object-cover" src={item.imageUrl} alt="product" />
-                          <div>
-                            <div className="font-semibold">{item.name}</div>
-                            <div className="text-gray-500">{item.description}</div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-col sm:flex-row items-center sm:mr-10">
-                        <div className="flex items-center justify-between w-full sm:w-[110px] px-2">
-                          <button 
-                            className='border-2 flex justify-center text-center items-center rounded-full h-6 w-6 border-[#ff7e00]' 
-                            onClick={() => handleQuantityChange(store.storeId, item.productId._id, 'decrease')}>
-                            <img src={IconMinus} alt="minus" />
-                          </button>
-                          <span className="border-2 border-[#ff7e00] rounded-lg px-2 text-[#ff7e00]">
-                            {item.quantity}
-                          </span>
-                          <button 
-                            className="border-2 rounded-full h-6 w-6 border-[#ff7e00] flex items-center justify-center" 
-                            onClick={() => handleQuantityChange(store.storeId, item.productId._id, 'increase')}>
-                            <img src={IconPlus} alt="plus" />
-                          </button>
-                        </div>
-                        <div className="text-lg font-semibold text-[#ff7e00]">
-                          {(item.price * item.quantity).toLocaleString()} VND
-                        </div>
-                        <button
-                          className="font-semibold text-red-500 ml-4"
-                          onClick={() => deleteProduct(store.storeId, item.productId._id)}>
-                          Xóa
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p>Không có sản phẩm nào trong cửa hàng</p>
-                )}
+  {Array.isArray(cartItems) && cartItems.length > 0 ? (
+    cartItems.map((store) => (
+      // Kiểm tra store.items có phải là mảng và không rỗng
+      Array.isArray(store.items) && store.items.length > 0 ? (
+        <div key={store.storeId} className="mt-5 border shadow-sm bg-white p-4">
+          {/* Hiển thị thông tin cửa hàng */}
+          <h2 className="text-lg font-semibold">{store.storeName}</h2>
+          <p className="text-gray-500 mb-2">{store.storeAddress}</p>
+
+          {store.items.map((item) => (
+            <div key={item._id} className="border-b py-4 pr-4 flex items-center justify-between">
+              <div className="flex items-center p-4">
+                <input
+                  type="checkbox"
+                  className="mr-5 h-4 w-4"
+                  checked={selectedItems.has(`${store.storeId}-${item._id}`)} // Kiểm tra món đã được chọn hay chưa
+                  onChange={() => handleSelectItem(store.storeId, item._id)} // Thay đổi trạng thái chọn
+                />
+                <div className="flex gap-5 items-center">
+                  <img className="w-20 h-20 object-cover" src={item.imageUrl} alt="product" />
+                  <div>
+                    <div className="font-semibold">{item.name}</div>
+                    <div className="text-gray-500">{item.description}</div>
+                  </div>
+                </div>
               </div>
-            ))
-          ) : (
-            <p>Không có sản phẩm nào trong giỏ hàng</p>
-          )}
+              <div className="flex flex-col sm:flex-row items-center sm:mr-10">
+                <div className="flex items-center justify-between w-full sm:w-[110px] px-2">
+                  <button 
+                    className='border-2 flex justify-center text-center items-center rounded-full h-6 w-6 border-[#ff7e00]' 
+                    onClick={() => handleQuantityChange(store.storeId, item.productId._id, 'decrease')}>
+                    <img src={IconMinus} alt="minus" />
+                  </button>
+                  <span className="border-2 border-[#ff7e00] rounded-lg px-2 text-[#ff7e00]">
+                    {item.quantity}
+                  </span>
+                  <button 
+                    className="border-2 rounded-full h-6 w-6 border-[#ff7e00] flex items-center justify-center" 
+                    onClick={() => handleQuantityChange(store.storeId, item.productId._id, 'increase')}>
+                    <img src={IconPlus} alt="plus" />
+                  </button>
+                </div>
+                <div className="text-lg font-semibold text-[#ff7e00]">
+                  {(item.price * item.quantity).toLocaleString()} VND
+                </div>
+                <button
+                  className="font-semibold text-red-500 ml-4"
+                  onClick={() => deleteProduct(store.storeId, item.productId._id)}>
+                  Xóa
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : null // Nếu không có sản phẩm, không render phần cửa hàng
+    ))
+  ) : (
+    <p>Không có sản phẩm nào trong giỏ hàng</p>
+  )}
+</div>
 
-          </div>
         )}
       </div>
 
