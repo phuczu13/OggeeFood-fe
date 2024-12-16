@@ -23,7 +23,6 @@ function IntroPage() {
                             Bắt đầu ngay!
                         </Link>
                     </div>
-
                 </div>
             </div>
         </div>

@@ -27,7 +27,6 @@ import OrderInfo from './users/pages/order/order-info';
 import Order from './users/pages/order/order';
 import UserAccount from './users/pages/account/user-account';
 
-
 import SignUp from './users/pages/auth/sign-up';
 
 // ------------------------------------------------------- //
@@ -74,6 +73,7 @@ import Store from './admin/pages/dashboard/store';
 import Driver from './admin/pages/dashboard/driver';
 import Revenue from './admin/pages/dashboard/revenue';
 import PointerWalletUser from './users/connect-wallet/pointer-wallet';
+import Hihi from './users/pages/detailOfOrder';
 
 
 
@@ -119,7 +119,9 @@ function App() {
             < Route path='verify-form' element={<VerifyForm/>} />
             < Route path='verify-form' element={<VerifyForm/>} />
             < Route path='pointer-wallet-user' element={<PointerWalletUser/>} />
+            < Route path='detail-order' element={<Hihi/>} />
 
+            
 
             ---------------------------------------------------------------------------------
             ////Flow Store

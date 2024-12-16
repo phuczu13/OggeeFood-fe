@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'; // Use axios for API requests
 
 function ListOrder() {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [activeTab, setActiveTab] = useState('Chờ xác nhận');
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -191,6 +193,7 @@ function ListOrder() {
   };
 
   const handleRatingSubmit = async () => {
+    setLoading(true)
     const promises = selectedOrder.cart.map(async (product) => {
       const productRating = rating[product.productId];
       const productComment = comment[product.productId];
@@ -222,12 +225,14 @@ function ListOrder() {
         });
 
         if (response.status === 201) {
+          setLoading(false)
           await axios.put(`https://be-order-food.vercel.app/api/order/${selectedOrder._id}/rate`, {
             hasRated: true
           });
           toast.success(`Đánh giá thành công cho sản phẩm ${product.name}!`);
         }
       } catch (error) {
+        setLoading(false)
         toast.error(`Có lỗi xảy ra khi gửi đánh giá cho sản phẩm ${product.name}.`);
         console.error(error);
       }
@@ -240,7 +245,7 @@ function ListOrder() {
     setImages({});
   };
 
-  if (isLoading) return 'Loading...'
+  if (isLoading) return <p className='w-full text-[18px] font-semibold text-[#ff7e00] h-screen flex justify-center items-center'>Bạn đợi chút nhé :3</p>;
   if (isError) return 'Error....'
 
   return (
@@ -429,12 +434,19 @@ function ListOrder() {
             <p>Phí vận chuyển: {selectedOrder.totalShip.toLocaleString()} VND</p>
             <p>Tổng tiền thanh toán: {(selectedOrder.totalPrice + selectedOrder.totalShip).toLocaleString()} VND</p>
 
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-between mt-4">
               <button
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                 onClick={() => setShowDetail(false)}
               >
                 Đóng
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                onClick={() => navigate('/detail-order', { state: { orderId: selectedOrder._id } })} 
+                
+              >
+                Xem lộ trình đơn hàng
               </button>
             </div>
           </div>

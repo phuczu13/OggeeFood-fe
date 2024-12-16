@@ -6,6 +6,9 @@ import Footer from '../../components/homepage/footer';
 import IconBack from '../../assets/svg/icon_previos.svg';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { openConfirmForm } from '../../../redux/slices/confirmOrderSlice';
+import ConfirmOrder from '../../../users/components/ConfirmOrder';
 
 function Payment() {
   const [deliveryInfo, setDeliveryInfo] = useState({
@@ -13,7 +16,7 @@ function Payment() {
     phone: '',
     address: ''
   });
-
+  console.log(deliveryInfo+"thongtin")
   const [cartInfo, setCartInfo] = useState([]);
   const [orderInfo, setOrderInfo] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState('Payment');
@@ -82,6 +85,7 @@ function Payment() {
   // Fetch order items from local storage
   useEffect(() => {
     const items = JSON.parse(localStorage.getItem('selectedItems')) || [];
+    console.log("Local"+items)
     setOrderInfo(items.map(item => ({
       name: item.name,
       image: item.imageUrl,
@@ -93,6 +97,7 @@ function Payment() {
 
   const handleSubmit = async () => {
     try {
+      setLoading(true)
       const totalPrice = cartInfo.reduce((total, item) => total + item.price * item.quantity, 0);
       const totalShip = 20000;
 
@@ -151,6 +156,7 @@ function Payment() {
             const response = await axios.post('https://be-order-food.vercel.app/api/payment/pay-with-connect-wallet', data);
             console.log('Payment Response:', response); // Xem toàn bộ phản hồi từ API
             if (response.status === 200) {
+              setLoading(false)
               console.log('Navigating to payment status page...');
               navigate(`/payment-status/${orderId}`);
               toast.success("Thanh toán thành công")
@@ -162,6 +168,7 @@ function Payment() {
           }
         }
         else {
+          setLoading(false)
           navigate('/home-page');
         }
       }
@@ -201,7 +208,9 @@ function Payment() {
     (total, store) => total + store.storeTotal + shippingCost,
     0
   );
-  if (loading) return <p>Loading...</p>;
+
+  const dispatch = useDispatch();
+  if (loading) return <p className='w-full text-[18px] font-semibold text-[#ff7e00] h-screen flex justify-center items-center'>Bạn đợi chút nhé :3</p>;
   if (error) return <p>Error: {error}</p>;
   return (
     <div className="">
@@ -324,11 +333,13 @@ function Payment() {
           </div>
 
           <button
-            onClick={handleSubmit}
+            // onClick={handleSubmit}
+            onClick={() => dispatch(openConfirmForm())}
             className="bg-orange-500 text-white py-2 px-4 rounded w-full"
           >
             Thanh toán ngay
           </button>
+          <ConfirmOrder deliveryInfo={deliveryInfo} paymentMethod={paymentMethod} grandTotal={grandTotal} onConfirm={handleSubmit} />
         </div>
       </div>
       <Footer />

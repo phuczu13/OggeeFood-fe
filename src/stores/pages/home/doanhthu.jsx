@@ -7,6 +7,8 @@ function DoanhThu() {
     const [totalRevenue, settotalRevenue] = useState(null)
     const [currentPage, setCurrentPage] = useState(1);
     const [data, setData] = useState([]);
+    const [loading, setLoading] = useState();
+    const [error, setError] = useState(null);
 
     const itemsPerPage = 5;
     const storeId = localStorage.getItem('storeId')
@@ -50,22 +52,28 @@ function DoanhThu() {
     };
 
     const handleOk = async () => {
-        console.log("email: "+email );
-        console.log("amount: "+amount );  // Debug amount
+        console.log("email: " + email);
+        console.log("amount: " + amount);  // Debug amount
         try {
-            // Gửi yêu cầu rút tiền
-            const withdrawResponse = await axios.post('https://be-order-food.vercel.app/api/payment/with-draw', {
-                email: email,
-                currency: 'VND',
-                amount: amount,  // Kiểm tra xem amount có đúng không
-            });
-    
-            // Cập nhật số dư cửa hàng
-            const updateBalanceResponse = await axios.put(`https://be-order-food.vercel.app/api/store/update-balance/${storeId}`, { amount: amount });
-            console.log(updateBalanceResponse);  // Xem phản hồi từ API
-    
-            fetchsettotalRevenue();
-            toast.success('Rút tiền thành công');
+            if (amount > totalRevenue) {
+                toast.error("Số tiền rút lớn hơn số tiền hiện có")
+            } else {
+                setLoading(true)
+                // Gửi yêu cầu rút tiền
+                const withdrawResponse = await axios.post('https://be-order-food.vercel.app/api/payment/with-draw', {
+                    email: email,
+                    currency: 'VND',
+                    amount: amount,  // Kiểm tra xem amount có đúng không
+                });
+
+                // Cập nhật số dư cửa hàng
+                const updateBalanceResponse = await axios.put(`https://be-order-food.vercel.app/api/store/update-balance/${storeId}`, { amount: amount });
+                console.log(updateBalanceResponse);  // Xem phản hồi từ API
+                setLoading(false)
+                fetchsettotalRevenue();
+                toast.success('Rút tiền thành công');
+            }
+
         } catch (error) {
             console.error(error);  // Kiểm tra lỗi
             toast.error('Lỗi');
@@ -76,7 +84,8 @@ function DoanhThu() {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-
+    if (loading) return <p className='w-full text-[18px] font-semibold text-[#ff7e00] h-screen flex justify-center items-center'>Bạn đợi chút nhé :3</p>;
+    if (error) return <p>Error: {error}</p>;
     return (
         <div className="bg-[#ffffff] w-full h-screen">
             <div className='mb-5'>
@@ -95,12 +104,12 @@ function DoanhThu() {
                                 </button>
                                 <Modal title="Bạn muốn rút tiền?" centered open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                                     <div>
-                                    <label htmlFor="">Nhập email: </label>
-                                    <input onChange={(e)=>setEmail(e.target.value)} type="email" placeholder='abc@gmail.com' className='border ml-6 px-5 py-1'/>
+                                        <label htmlFor="">Nhập email: </label>
+                                        <input onChange={(e) => setEmail(e.target.value)} type="email" placeholder='abc@gmail.com' className='border ml-6 px-5 py-1' />
                                     </div>
                                     <div className='mt-4'>
-                                    <label htmlFor="">Nhập số tiền muốn rút: </label>
-                                    <input onChange={(e)=>setAmount(e.target.value)} type="text" placeholder='100.000 VND' className='border ml-6 px-5 py-1'/>
+                                        <label htmlFor="">Nhập số tiền muốn rút: </label>
+                                        <input onChange={(e) => setAmount(e.target.value)} type="text" placeholder='100.000 VND' className='border ml-6 px-5 py-1' />
                                     </div>
                                 </Modal>
                             </div>
@@ -150,8 +159,8 @@ function DoanhThu() {
                                         key={index}
                                         onClick={() => goToPage(index + 1)}
                                         className={`px-4 py-2 ${currentPage === index + 1
-                                                ? "bg-blue-500 text-white"
-                                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                                            ? "bg-blue-500 text-white"
+                                            : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                                             }`}
                                     >
                                         {index + 1}
@@ -189,7 +198,7 @@ function DoanhThu() {
 
             </div>
         </div>
-        
+
     )
 }
 export default DoanhThu;
