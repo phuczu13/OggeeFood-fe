@@ -114,7 +114,7 @@ function Hihi() {
         const fetchDriverInfo = async () => {
             if (driverId) { // Chỉ gọi API nếu driverId đã có giá trị
                 try {
-                    const response = await axios.get(`http://localhost:3002/api/driver/get-driver/${driverId}`);
+                    const response = await axios.get(`https://be-order-food.vercel.app/api/driver/get-driver/${driverId}`);
                     setDriverData(response.data.data);
                 } catch (err) {
                     setError(err.response?.data?.message || 'Something went wrong');
