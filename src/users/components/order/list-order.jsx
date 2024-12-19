@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'; // Use axios for API requests
+import { selectClasses } from '@mui/material';
 
 function ListOrder() {
   const navigate = useNavigate();
@@ -39,10 +40,8 @@ function ListOrder() {
   const handleCancelRefund = async (orderId) => {
     try {
       const res = await axios.post(`https://be-order-food.vercel.app/api/payment/refund-money/${orderId}`);
-      setLoading(true);
       if (res.status === 200) {
         toast.success("Hủy đơn hàng thành công!");
-        setLoading(false);
       } else {
         toast.error("Có lỗi xảy ra!");
         setError(true);
@@ -50,8 +49,7 @@ function ListOrder() {
     } catch (error) {
       toast.error("Có lỗi xảy ra!");
       setError(true);
-      setLoading(false);
-    }
+    }  
   };
 
   const openModal = () => {
